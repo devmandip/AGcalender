@@ -1,12 +1,15 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { HomeScreen } from './src/screens/home';
+import { NavigationContainer } from '@react-navigation/native';
+
 
 const App = () => {
-  return (
-    <View>
-      <Text>App</Text>
-    </View>
-  );
+    return (
+        <NavigationContainer>
+            <HomeScreen />
+        </NavigationContainer>
+    );
 };
 
 export default App;
