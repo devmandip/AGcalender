@@ -1,15 +1,15 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const HomeScreen = () => {
+const Signin = () => {
   return (
     <View style={styles.container}>
-      <Text>HomeScreen</Text>
+      <Text>Signin</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default Signin;
 
 const styles = StyleSheet.create({
   container: {
