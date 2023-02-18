@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { HomeScreen } from './src/screens/home';
 import { NavigationContainer } from '@react-navigation/native';
+import BottomTab from './src/navigation/BottomTab';
 
 
 const App = () => {
     return (
         <NavigationContainer>
-            <HomeScreen />
+            <BottomTab />
         </NavigationContainer>
     );
 };
