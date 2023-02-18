@@ -6,8 +6,10 @@ const theme = {
     josefinSans: 'JosefinSans',
   },
   colors: {
+    primary: '#56AB2F',
     white: '#FFFFFF',
     black: '#000000',
+    gray: '#D9D9D9',
   },
   SCREENWIDTH: width,
   SCREENHEIGHT: height,
