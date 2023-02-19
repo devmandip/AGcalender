@@ -1,38 +1,35 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import { Calendar } from 'react-native-calendars'
-import moment from 'moment'
+import {StyleSheet, View, ScrollView, FlatList} from 'react-native';
+import React from 'react';
+import {CalenderView, Header, PostSection, Story} from './components';
+import Posts from '../../dummyData/Posts';
+
+const renderItem = ({item}) => {
+  return (
+    <View>
+      <PostSection />
+    </View>
+  );
+};
 
 const HomeScreen = () => {
-    const today = moment().format('YYYY-MM-DD');
-    return (
-        <View style={styles.container}>
-            <Calendar
-                hideArrows={true}
-                markedDates={{
-                    [today]: { selected: true, selectedColor: '#56AB2F' },
-                }}
-                renderHeader={date => {
-                    /*Return JSX*/
-                }}
-                onDayPress={day => {
-                    console.log('selected day', day);
-                }}
-                theme={{
-                    selectedDayBackgroundColor: "#56AB2F",
-                    selectedDayTextColor: "white"
-                }}
-            />
-        </View>
-    )
-}
+  return (
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <Header />
+        <Story />
+        <CalenderView />
+        {/* <FlatList data={Posts} renderItem={renderItem} /> */}
+      </View>
+    </ScrollView>
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "white"
-    }
-})
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    // paddingHorizontal: 10,
+  },
+});

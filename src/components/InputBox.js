@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, TextInput, Text, StyleSheet} from 'react-native';
+import { View, TextInput, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon1 from 'react-native-vector-icons/Ionicons';
-import {scale, theme} from '../utils';
+import { scale, theme } from '../utils';
 
 const InputBox = props => {
   const {
