@@ -9,16 +9,24 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {scale, theme} from '../utils';
-import {Platform, Text, View} from 'react-native';
+import {Platform, SafeAreaView, Text, View} from 'react-native';
 import {Profile} from '../screens';
+import {Title} from '../components';
 
 const Tab = createBottomTabNavigator();
 
 const Comman = () => {
   return (
-    <View>
-      <Text>testing data </Text>
-    </View>
+    <SafeAreaView>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: theme.SCREENHEIGHT,
+        }}>
+        <Title title="Comeing soom" />
+      </View>
+    </SafeAreaView>
   );
 };
 
