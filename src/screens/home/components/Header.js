@@ -11,7 +11,7 @@ const Header = () => {
       <Image source={require(logoImg)} style={styles.logoImg_style} />
       <SearchBar />
       <TouchableOpacity onPress={() => {}}>
-        <FontAwesome5 name="shopping-basket" size={25} />
+        <FontAwesome5 name="shopping-basket" size={25} color="black" />
       </TouchableOpacity>
     </View>
   );
