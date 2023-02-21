@@ -7,7 +7,8 @@ export default Posts = [
       'Srinivas rao from Manvi cultivating Supreme varietyChilli in 4 ac. Expected to harvest 20 Quintalson/after 29-01-23',
     postedImages: [
       {id: 1, img: require('../assets/Images/postImages/post1.png')},
-      {id: 2, img: require('../assets/Images/postImages/post1.png')},
+      {id: 2, img: require('../assets/Images/postImages/post2.png')},
+      {id: 3, img: require('../assets/Images/postImages/post2.png')},
     ],
     likeCount: 167,
     ViewCount: 221,
@@ -24,7 +25,8 @@ export default Posts = [
       'Srinivas rao from Manvi cultivating Supreme varietyChilli in 4 ac. Expected to harvest 20 Quintalson/after 29-01-23',
     postedImages: [
       {id: 1, img: require('../assets/Images/postImages/post1.png')},
-      {id: 2, img: require('../assets/Images/postImages/post1.png')},
+      {id: 2, img: require('../assets/Images/postImages/post2.png')},
+      {id: 3, img: require('../assets/Images/postImages/post1.png')},
     ],
     likeCount: 167,
     ViewCount: 221,

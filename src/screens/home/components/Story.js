@@ -54,5 +54,6 @@ const styles = StyleSheet.create({
   },
   renderItem_txt: {
     marginTop: 2,
+    color: 'black',
   },
 });

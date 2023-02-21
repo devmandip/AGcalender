@@ -1,13 +1,20 @@
-import {StyleSheet, View, ScrollView, FlatList} from 'react-native';
+import {StyleSheet, View, ScrollView, FlatList, Text} from 'react-native';
 import React from 'react';
 import {CalenderView, Header, PostSection, Story} from './components';
 import Posts from '../../dummyData/Posts';
 
 const renderItem = ({item}) => {
+  console.log('this is post Data :', JSON.stringify(item, null, 4));
+
   return (
-    <View>
-      <PostSection />
-    </View>
+    <PostSection
+      postImages={item.postedImages}
+      proicePic={item.profileImg}
+      name={item.name}
+      description={item.description}
+      view_count={item.ViewCount}
+      like_count={item.likeCount}
+    />
   );
 };
 
@@ -18,7 +25,7 @@ const HomeScreen = () => {
         <Header />
         <Story />
         <CalenderView />
-        {/* <FlatList data={Posts} renderItem={renderItem} /> */}
+        <FlatList data={Posts} renderItem={renderItem} />
       </View>
     </ScrollView>
   );
@@ -30,6 +37,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    // paddingHorizontal: 10,
+    marginBottom: 60,
   },
 });
