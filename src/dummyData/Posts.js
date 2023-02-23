@@ -8,7 +8,10 @@ export default Posts = [
     postedImages: [
       {id: 1, img: require('../assets/Images/postImages/post1.png')},
       {id: 2, img: require('../assets/Images/postImages/post2.png')},
-      {id: 3, img: require('../assets/Images/postImages/post2.png')},
+      {id: 3, img: require('../assets/Images/postImages/post1.png')},
+      {id: 4, img: require('../assets/Images/postImages/post1.png')},
+      {id: 5, img: require('../assets/Images/postImages/post2.png')},
+      {id: 6, img: require('../assets/Images/postImages/post2.png')},
     ],
     likeCount: 167,
     ViewCount: 221,
