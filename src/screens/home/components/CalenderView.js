@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {Calendar} from 'react-native-calendars';
 import moment from 'moment';
 
@@ -24,12 +24,15 @@ const CalenderHeader = () => {
   );
 };
 
-const CalenderView = () => {
+const CalenderView = prpos => {
   const today = moment().format('YYYY-MM-DD');
+
+  const {showheader} = prpos;
 
   return (
     <View style={styles.container}>
-      <CalenderHeader />
+      {showheader === false ? null : <CalenderHeader />}
+
       <Calendar
         hideArrows={true}
         markedDates={{

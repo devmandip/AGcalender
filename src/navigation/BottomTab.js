@@ -12,6 +12,7 @@ import {scale, theme} from '../utils';
 import {Platform, SafeAreaView, Text, View} from 'react-native';
 import {Profile} from '../screens';
 import {Title} from '../components';
+import AddCropStack from './AddCropStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -131,7 +132,7 @@ const BottomTab = () => {
 
       <Tab.Screen
         name="Add"
-        component={Comman}
+        component={AddCropStack}
         options={{
           tabBarIcon: ({focused}) => {
             return (

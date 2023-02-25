@@ -6,13 +6,16 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PostHeader from './postComponents/PostHeader';
 import PostBottom from './postComponents/PostBottom';
 import {useNavigation} from '@react-navigation/core';
+import ImageView from 'react-native-image-viewing';
+
+const imgArr = [];
 
 const ImageSection = props => {
-  const {postImages, navigation} = props;
+  const {postImages, navigation, setIsVisible} = props;
   console.log('this is post images :', postImages);
 
   return (
@@ -21,21 +24,21 @@ const ImageSection = props => {
         <View>
           <View style={{flexDirection: 'row', marginBottom: 2}}>
             <Image
-              source={postImages[0].img}
+              source={{uri: postImages[0].uri}}
               style={{height: 200, width: '50%', marginRight: 2}}
             />
             <Image
-              source={postImages[1].img}
+              source={{uri: postImages[1].uri}}
               style={{height: 200, width: '50%'}}
             />
           </View>
           <View style={{flexDirection: 'row'}}>
             <Image
-              source={postImages[2].img}
+              source={{uri: postImages[2].uri}}
               style={{height: 200, width: '50%', marginRight: 2}}
             />
             <Image
-              source={postImages[3].img}
+              source={{uri: postImages[3].uri}}
               style={{height: 200, width: '50%'}}
             />
           </View>
@@ -44,37 +47,34 @@ const ImageSection = props => {
         <View>
           <View style={{flexDirection: 'row', marginBottom: 2}}>
             <Image
-              source={postImages[0].img}
+              source={{uri: postImages[0].uri}}
               style={{height: 200, width: '40%', marginRight: 2}}
             />
             <Image
-              source={postImages[1].img}
+              source={{uri: postImages[1].uri}}
               style={{height: 200, width: '60%', marginRight: 2}}
             />
           </View>
           <View style={{flexDirection: 'row', marginBottom: 2}}>
             <Image
-              source={postImages[2].img}
+              source={{uri: postImages[2].uri}}
               style={{height: 130, width: 157, marginRight: 2}}
             />
             <Image
-              source={postImages[3].img}
-              style={{height: 130, width: 116, marginRight: 3}}
+              source={{uri: postImages[3].uri}}
+              style={{height: 130, width: 116, marginRight: 2}}
             />
             <TouchableOpacity
-              onPress={() =>
-                postImages.length > 5 &&
-                navigation.navigate('ImageView', {item: postImages})
-              }>
+              onPress={() => postImages.length > 5 && setIsVisible(true)}>
               <Image
-                source={postImages[4].img}
+                source={{uri: postImages[4].uri}}
                 style={{height: 130, width: 116, backgroundColor: 'red'}}
               />
 
               {postImages.length > 5 && (
                 <View
                   style={{
-                    backgroundColor: 'rgba(52, 52, 52, 0.8)',
+                    backgroundColor: '#000000aa',
                     position: 'absolute',
                     height: 130,
                     width: 116,
@@ -101,10 +101,12 @@ const PostSection = props => {
 
   const navigation = useNavigation();
 
+  const [visible, setIsVisible] = useState(false);
+
   const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity style={styles.img_container}>
-        <Image source={item.img} style={styles.post_imgStyle} />
+        <Image source={{uri: item.uri}} style={styles.post_imgStyle} />
       </TouchableOpacity>
     );
   };
@@ -121,10 +123,22 @@ const PostSection = props => {
           showsHorizontalScrollIndicator={false}
         />
       ) : (
-        <ImageSection postImages={postImages} navigation={navigation} />
+        <ImageSection
+          postImages={postImages}
+          navigation={navigation}
+          setIsVisible={setIsVisible}
+        />
       )}
 
       <PostBottom like_count={like_count} view_count={view_count} />
+
+      <ImageView
+        images={postImages}
+        imageIndex={0}
+        visible={visible}
+        onRequestClose={() => setIsVisible(false)}
+        animationType="slide"
+      />
     </View>
   );
 };
@@ -140,7 +154,7 @@ const styles = StyleSheet.create({
     width: 171,
   },
   img_container: {
-    marginRight: 5,
+    marginRight: 2,
   },
 
   // image section
@@ -153,6 +167,6 @@ const styles = StyleSheet.create({
   txt1: {
     color: 'white',
     fontSize: 22,
-    top: 10,
+    top: 15,
   },
 });

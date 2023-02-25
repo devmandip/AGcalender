@@ -6,12 +6,30 @@ export default Posts = [
     description:
       'Srinivas rao from Manvi cultivating Supreme varietyChilli in 4 ac. Expected to harvest 20 Quintalson/after 29-01-23',
     postedImages: [
-      {id: 1, img: require('../assets/Images/postImages/post1.png')},
-      {id: 2, img: require('../assets/Images/postImages/post2.png')},
-      {id: 3, img: require('../assets/Images/postImages/post1.png')},
-      {id: 4, img: require('../assets/Images/postImages/post1.png')},
-      {id: 5, img: require('../assets/Images/postImages/post2.png')},
-      {id: 6, img: require('../assets/Images/postImages/post2.png')},
+      {
+        id: 1,
+        uri: 'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4',
+      },
+      {
+        id: 2,
+        uri: 'https://images.unsplash.com/photo-1573273787173-0eb81a833b34',
+      },
+      {
+        id: 3,
+        uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+      },
+      {
+        id: 4,
+        uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+      },
+      {
+        id: 5,
+        uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+      },
+      {
+        id: 6,
+        uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+      },
     ],
     likeCount: 167,
     ViewCount: 221,
@@ -19,6 +37,7 @@ export default Posts = [
       {id: 1, txt: 'this is comment'},
       {id: 2, txt: 'nice post'},
     ],
+    category: 'Garlic',
   },
   {
     id: 2,
@@ -27,9 +46,22 @@ export default Posts = [
     description:
       'Srinivas rao from Manvi cultivating Supreme varietyChilli in 4 ac. Expected to harvest 20 Quintalson/after 29-01-23',
     postedImages: [
-      {id: 1, img: require('../assets/Images/postImages/post1.png')},
-      {id: 2, img: require('../assets/Images/postImages/post2.png')},
-      {id: 3, img: require('../assets/Images/postImages/post1.png')},
+      {
+        id: 1,
+        uri: 'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4',
+      },
+      {
+        id: 2,
+        uri: 'https://images.unsplash.com/photo-1573273787173-0eb81a833b34',
+      },
+      {
+        id: 3,
+        uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+      },
+      {
+        id: 4,
+        uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+      },
     ],
     likeCount: 167,
     ViewCount: 221,
@@ -37,5 +69,6 @@ export default Posts = [
       {id: 1, txt: 'this is comment'},
       {id: 2, txt: 'nice post'},
     ],
+    category: 'Wheat',
   },
 ];
