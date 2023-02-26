@@ -65,5 +65,8 @@ const cropData = [
     ],
   },
 ];
-
-export {optionsData, chatData, cropData};
+const temars1 =
+  "     By visiting our App/Website you are agreeing to be bound by the following terms and conditions. We may change these terms and conditions at any time. Your continued use of AgMart means that you accept any new or modified terms and conditions that we come up with. Please re-visit the `Terms of Use' link at our site from time to time to stay abreast of any changes that we may introduce.";
+const temars2 =
+  "    If you continue to use this App/website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern AgMart's relationship with you in relation to this mobile app / website. If you disagree with any part of these terms and conditions, please do not useAgMart.";
+export {optionsData, chatData, cropData, temars1, temars2};

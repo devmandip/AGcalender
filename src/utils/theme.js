@@ -3,7 +3,14 @@ const {width, height} = Dimensions.get('window');
 
 const theme = {
   fonts: {
-    josefinSans: 'JosefinSans',
+    InterBlack: 'Inter-Black.ttf',
+    InterBold: 'Inter-Bold.ttf',
+    InterExtraBold: 'Inter-ExtraBold.ttf',
+    InterExtraLight: 'Inter-ExtraBold.ttf',
+    InterLight: 'Inter-Light.ttf',
+    InterMedium: 'Inter-Medium.ttf',
+    InterRegular: 'Inter-Regular.ttf',
+    InterThin: 'Inter-Thin.ttf',
   },
   colors: {
     primary: '#56AB2F',

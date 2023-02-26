@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, TextInput, Text, StyleSheet } from 'react-native';
+import {View, TextInput, Text, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon1 from 'react-native-vector-icons/Ionicons';
-import { scale, theme } from '../utils';
+import {scale, theme} from '../utils';
 
 const InputBox = props => {
   const {
@@ -110,12 +110,14 @@ const InputBox = props => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginHorizontal: scale(20),
+    // marginHorizontal: scale(20),
     marginBottom: scale(7),
-    height: theme.SCREENHEIGHT * 0.068,
+    height: theme.SCREENHEIGHT * 0.059,
     flexDirection: 'row',
-    borderBottomWidth: scale(0.8),
-    borderBottomColor: theme.colors.gray1,
+    borderWidth: scale(1.8),
+    borderColor: theme.colors.primary,
+    borderRadius: scale(9),
+    backgroundColor: theme.colors.white,
   },
   icon: {
     marginRight: scale(10),
@@ -124,9 +126,9 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: theme.SCREENHEIGHT * 0.068,
+    height: theme.SCREENHEIGHT * 0.055,
     // textAlign: 'center',
-    paddingHorizontal: scale(8),
+    paddingHorizontal: scale(10),
     fontSize: scale(14),
     color: theme.colors.black,
   },

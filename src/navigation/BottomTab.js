@@ -10,7 +10,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {scale, theme} from '../utils';
 import {Platform, SafeAreaView, Text, View} from 'react-native';
-import {Profile} from '../screens';
+import {ContactUs, Profile, TermsAndConditions} from '../screens';
 import {Title} from '../components';
 import AddCropStack from './AddCropStack';
 
@@ -32,46 +32,9 @@ const Comman = () => {
 };
 
 const BottomTab = () => {
-  //   return (
-  //     <Tab.Navigator
-  //       screenOptions={({route}) => ({
-  //         tabBarIcon: ({focused, color, size}) => {
-  //           let iconName;
-
-  //           if (route.name === 'Home') {
-  //             iconName = focused ? 'calendar' : 'calendar';
-  //           } else if (route.name === 'Profile') {
-  //             iconName = focused ? 'user' : 'user';
-  //           }
-  //           return <Feather name={iconName} size={size} color={color} />;
-  //         },
-  //         tabBarActiveTintColor: 'white',
-  //         tabBarInactiveTintColor: 'white',
-  //         tabBarStyle: {
-  //           backgroundColor: '#56AB2F',
-  //         },
-  //         tabBarLabel: () => {
-  //           return null;
-  //         },
-  //       })}>
-  //       <Tab.Screen
-  //         name="Home"
-  //         component={HomeStack}
-  //         options={{headerShown: false}}
-  //       />
-  //       <Tab.Screen
-  //         name="Profile"
-  //         component={ProfileStack}
-  //         options={{headerShown: false}}
-  //       />
-  //     </Tab.Navigator>
-  //   );
-  // };
-
-  // export default BottomTab;
   return (
     <Tab.Navigator
-      // initialRouteName="RISTORANTI"
+      initialRouteName="User"
       screenOptions={{
         tabBarHideOnKeyboard: true,
         headerShown: false,
@@ -116,7 +79,7 @@ const BottomTab = () => {
 
       <Tab.Screen
         name="Rupee"
-        component={Comman}
+        component={TermsAndConditions}
         options={{
           tabBarIcon: ({focused}) => {
             return (
@@ -147,7 +110,7 @@ const BottomTab = () => {
       />
       <Tab.Screen
         name="User"
-        component={Profile}
+        component={ContactUs}
         options={{
           tabBarIcon: ({focused}) => {
             return (
@@ -163,7 +126,7 @@ const BottomTab = () => {
 
       <Tab.Screen
         name="Share"
-        component={Comman}
+        component={TermsAndConditions}
         options={{
           tabBarIcon: ({focused}) => {
             return (

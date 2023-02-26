@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Signup, SignIn} from '../screens';
+import {Signup, Login} from '../screens';
 import BottomTab from './BottomTab';
+import LoginStack from '../screens/auth/AuthStack';
 
 const Stack = createNativeStackNavigator();
 
@@ -11,13 +12,13 @@ const MianStack = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen
-          name="Tab"
-          component={BottomTab}
+          name="authStack"
+          component={LoginStack}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="SignIn"
-          component={SignIn}
+          name="Tab"
+          component={BottomTab}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

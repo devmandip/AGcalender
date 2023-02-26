@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: scale(13),
     color: theme.colors.black,
+    fontFamily: theme.fonts.InterMedium,
   },
   title: {
     color: theme.colors.black,
