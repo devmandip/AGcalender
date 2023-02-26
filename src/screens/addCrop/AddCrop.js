@@ -3,6 +3,7 @@ import React from 'react';
 import {Header, SubmitBtn, TxtInput} from './addCrop_components';
 import {CalenderView} from '../home/components';
 import {useNavigation} from '@react-navigation/core';
+import {scale, theme} from '../../utils';
 
 const AddCrop = () => {
   const navigation = useNavigation();
@@ -13,27 +14,30 @@ const AddCrop = () => {
 
       <ScrollView style={styles.View1} showsVerticalScrollIndicator={false}>
         <View style={styles.input_view}>
-          <TxtInput width={170} title="Farmer’s Name" />
-          <TxtInput width={170} title="Mobile Number" />
+          <TxtInput width={theme.SCREENWIDTH * 0.43} title="Farmer’s Name" />
+          <TxtInput width={theme.SCREENWIDTH * 0.43} title="Mobile Number" />
         </View>
 
         <View style={styles.input_view}>
-          <TxtInput width={170} title="Farm Location" />
-          <TxtInput width={170} title="Crop Name" />
+          <TxtInput width={theme.SCREENWIDTH * 0.43} title="Farm Location" />
+          <TxtInput width={theme.SCREENWIDTH * 0.43} title="Crop Name" />
         </View>
 
         <View style={styles.input_view}>
-          <TxtInput width={190} title="Variety" />
-          <TxtInput width={120} title="Area" />
+          <TxtInput width={theme.SCREENWIDTH * 0.42} title="Variety" />
+          <TxtInput width={theme.SCREENWIDTH * 0.32} title="Area" />
           <Text style={styles.secondary_txt}>Ac.</Text>
         </View>
 
         <Text style={styles.calender_title}>Harvesting Date</Text>
         <CalenderView showheader={false} />
 
-        <View style={[styles.input_view, {marginTop: 20}]}>
-          <TxtInput width={210} title="Approximate Volume" />
-          <TxtInput width={130} title="Units" />
+        <View style={[styles.input_view, {marginTop: scale(10)}]}>
+          <TxtInput
+            width={theme.SCREENWIDTH * 0.43}
+            title="Approximate Volume"
+          />
+          <TxtInput width={theme.SCREENWIDTH * 0.43} title="Units" />
         </View>
 
         <SubmitBtn

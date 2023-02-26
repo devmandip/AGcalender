@@ -1,6 +1,7 @@
 import {StyleSheet, View, TextInput} from 'react-native';
 import React from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {scale, theme} from '../../../utils';
 
 const SearchBar = () => {
   return (
@@ -23,10 +24,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 15,
     backgroundColor: '#EAEAEA',
-    width: 280,
+    width: theme.SCREENWIDTH * 0.68,
   },
   TextInput_style: {
-    fontSize: 14,
+    fontSize: scale(13),
     paddingHorizontal: 15,
     paddingVertical: 5,
     width: '95%',

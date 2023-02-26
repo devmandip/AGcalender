@@ -34,7 +34,7 @@ const Comman = () => {
 const BottomTab = () => {
   return (
     <Tab.Navigator
-      initialRouteName="User"
+      // initialRouteName="User"
       screenOptions={{
         tabBarHideOnKeyboard: true,
         headerShown: false,

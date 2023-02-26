@@ -39,6 +39,15 @@
 	<string></string>
 	<key>UIAppFonts</key>
 	<array>
+	 <string>fonts/Inter-Black.ttf</string>
+	 <string>fonts/Inter-Bold.ttf</string>
+	 <string>fonts/Inter-ExtraBold.ttf</string>
+	 <string>fonts/Inter-ExtraLight.ttf</string>
+	 <string>fonts/Inter-Light.ttf</string>
+	 <string>fonts/Inter-Medium.ttf</string>
+	 <string>fonts/Inter-Regular.ttf</string>
+	 <string>fonts/Inter-SemiBold.ttf</string>
+	 <string>fonts/Inter-Thin.ttf</string>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>

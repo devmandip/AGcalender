@@ -5,6 +5,7 @@ import {useCamera} from 'react-native-camera-hooks';
 import Header from './Header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/core';
+import {scale} from '../../../utils';
 
 const Camera = () => {
   const [{cameraRef}, {takePicture}] = useCamera(null);
@@ -44,7 +45,7 @@ const Camera = () => {
       />
 
       <TouchableOpacity style={styles.icon_view} onPress={onClick}>
-        <AntDesign name="camerao" size={45} color="black" />
+        <AntDesign name="camerao" size={scale(20)} color="black" />
       </TouchableOpacity>
     </View>
   );
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   icon_view: {
-    marginTop: 15,
+    // marginTop: 15,
     alignItems: 'center',
   },
 });
