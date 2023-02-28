@@ -79,7 +79,7 @@ const BottomTab = () => {
 
       <Tab.Screen
         name="Rupee"
-        component={TermsAndConditions}
+        component={ContactUs}
         options={{
           tabBarIcon: ({focused}) => {
             return (
@@ -110,7 +110,7 @@ const BottomTab = () => {
       />
       <Tab.Screen
         name="User"
-        component={ContactUs}
+        component={Profile}
         options={{
           tabBarIcon: ({focused}) => {
             return (

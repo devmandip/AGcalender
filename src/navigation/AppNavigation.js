@@ -11,11 +11,11 @@ const MianStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen
+        {/* <Stack.Screen
           name="authStack"
           component={LoginStack}
           options={{headerShown: false}}
-        />
+        /> */}
         <Stack.Screen
           name="Tab"
           component={BottomTab}

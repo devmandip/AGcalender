@@ -51,7 +51,10 @@ const Profile = () => {
           </View>
         </View>
         <View style={styles.divider} />
-        <ScrollView horizontal style={styles.tabContainer}>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          horizontal
+          style={styles.tabContainer}>
           {optionsData?.map((item, idx) => {
             return (
               <TouchableOpacity

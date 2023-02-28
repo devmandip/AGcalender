@@ -4,8 +4,6 @@ import {CalenderView, Header, PostSection, Story} from './components';
 import Posts from '../../dummyData/Posts';
 
 const renderItem = ({item}) => {
-  console.log('this is post Data :', JSON.stringify(item, null, 4));
-
   return (
     <PostSection
       postImages={item.postedImages}
@@ -19,13 +17,33 @@ const renderItem = ({item}) => {
 };
 
 const HomeScreen = () => {
+  const [scrollPosition, setScrollPosition] = React.useState(0);
+  const handleScroll = event => {
+    // alert('call');
+    let yOffset = event.nativeEvent.contentOffset.y / 1;
+    setScrollPosition(yOffset);
+  };
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      onScroll={event => handleScroll(event)}>
       <View style={styles.container}>
         <Header />
         <Story />
-        <CalenderView />
-        <FlatList data={Posts} renderItem={renderItem} />
+        <CalenderView hideCal scrollPosition={scrollPosition} />
+        <FlatList
+          nestedScrollEnabled={true}
+          onScroll={event => handleScroll(event)}
+          // onScroll={event => {
+          //   alert('call');
+          //   console.log(
+          //     'current position <>> ',
+          //     event.nativeEvent.contentOffset.y,
+          //   );
+          // }}
+          data={Posts}
+          renderItem={renderItem}
+        />
       </View>
     </ScrollView>
   );

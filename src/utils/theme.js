@@ -3,14 +3,14 @@ const {width, height} = Dimensions.get('window');
 
 const theme = {
   fonts: {
-    InterBlack: 'Inter-Black.ttf',
+    InterBlack: 'Inter-Black',
     InterBold: 'Inter-Bold.ttf',
-    InterExtraBold: 'Inter-ExtraBold.ttf',
-    InterExtraLight: 'Inter-ExtraBold.ttf',
-    InterLight: 'Inter-Light.ttf',
-    InterMedium: 'Inter-Medium.ttf',
-    InterRegular: 'Inter-Regular.ttf',
-    InterThin: 'Inter-Thin.ttf',
+    InterExtraBold: 'Inter-ExtraBold',
+    InterExtraLight: 'Inter-ExtraBold',
+    InterLight: 'Inter-Light',
+    InterMedium: 'Inter-Medium',
+    InterRegular: 'Inter-Regular',
+    InterThin: 'Inter-Thin',
   },
   colors: {
     primary: '#56AB2F',

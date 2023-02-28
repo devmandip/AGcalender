@@ -3,9 +3,11 @@ import React from 'react';
 import {RNCamera} from 'react-native-camera';
 import {useCamera} from 'react-native-camera-hooks';
 import Header from './Header';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Icon1 from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/core';
-import {scale} from '../../../utils';
+import {scale, theme} from '../../../utils';
+import {cameraOptions} from '../../../utils/MockData';
 
 const Camera = () => {
   const [{cameraRef}, {takePicture}] = useCamera(null);
@@ -43,10 +45,29 @@ const Camera = () => {
         style={styles.cameraView}
         type={RNCamera.Constants.Type.back}
       />
-
-      <TouchableOpacity style={styles.icon_view} onPress={onClick}>
-        <AntDesign name="camerao" size={scale(20)} color="black" />
-      </TouchableOpacity>
+      <View style={styles.camerabtnView}>
+        {cameraOptions.map((item, index) => {
+          return (
+            <TouchableOpacity style={styles.icon_view} onPress={onClick}>
+              {item?.id !== 5 ? (
+                <Icon
+                  name={item.icon}
+                  key={index}
+                  size={scale(20)}
+                  color="black"
+                />
+              ) : (
+                <Icon1
+                  name={item.icon}
+                  key={index}
+                  size={scale(20)}
+                  color="black"
+                />
+              )}
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 };
@@ -64,14 +85,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   cameraView: {
-    height: 550,
+    height: theme.SCREENHEIGHT * 0.7,
     marginTop: 15,
   },
   txt: {
     color: 'black',
   },
+  camerabtnView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: scale(10),
+    alignItems: 'center',
+    height: scale(45),
+  },
   icon_view: {
-    // marginTop: 15,
+    borderWidth: scale(1.4),
+    borderColor: theme.colors.black,
+    height: scale(35),
+    width: scale(35),
+    borderRadius: scale(20),
+    justifyContent: 'center',
     alignItems: 'center',
   },
 });

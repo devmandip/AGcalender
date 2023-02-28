@@ -42,7 +42,7 @@ const Login = () => {
                   containerStyle={styles.textInputContainer}
                   textInputStyle={styles.roundedTextInput}
                   defaultValue=""
-                  inputCount={6}
+                  inputCount={4}
                   tintColor={theme.colors.primary}
                 />
               </>
