@@ -8,6 +8,22 @@ import Icon from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/core';
 import {scale, theme} from '../../../utils';
 import {cameraOptions} from '../../../utils/MockData';
+import ImagePicker from 'react-native-image-picker';
+
+const selectImage = () => {
+  ImagePicker.showImagePicker({}, response => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('ImagePicker Error: ', response.error);
+    } else if (response.customButton) {
+      console.log('User tapped custom button: ', response.customButton);
+    } else {
+      const source = {uri: response.uri};
+      // Do whatever you want with the source object, e.g. display it in an <Image> component
+    }
+  });
+};
 
 const ClickBtn = props => {
   const {Icon_name, onIcon_press, Icon_style, color, borderColor} = props;
@@ -36,8 +52,6 @@ const Camera = () => {
     useCamera(null);
 
   const [isRecording, setIsRecording] = useState(false);
-  const [record_time, setRecord_Time] = useState('');
-  const [video_url, setVideo_url] = useState('');
 
   const hour = new Date().getHours();
   const min = new Date().getMinutes();
@@ -66,7 +80,6 @@ const Camera = () => {
       } else {
         setIsRecording(true);
         const data = await recordVideo();
-        setRecord_Time(data.recordTime);
 
         navigation.navigate('ImageView', {
           videoURL: data.uri,
@@ -91,32 +104,9 @@ const Camera = () => {
         ref={cameraRef}
         style={styles.cameraView}
         type={RNCamera.Constants.Type.back}
-        ratio="4:3"
       />
       <View style={styles.camerabtnView}>
-        {/* {cameraOptions.map((item, index) => {
-          return (
-            <TouchableOpacity style={styles.icon_view} onPress={onClick}>
-              {item?.id !== 5 ? (
-                <Icon
-                  name={item.icon}
-                  key={index}
-                  size={scale(20)}
-                  color="black"
-                />
-              ) : (
-                <Icon1
-                  name={item.icon}
-                  key={index}
-                  size={scale(20)}
-                  color="black"
-                />
-              )}
-            </TouchableOpacity>
-          );
-        })} */}
-
-        <ClickBtn Icon_name="image" Icon_style={Icon1} />
+        <ClickBtn Icon_name="image" Icon_style={Icon1} color="black" />
 
         <ClickBtn
           Icon_name="video"
@@ -130,11 +120,16 @@ const Camera = () => {
           Icon_name="camera"
           Icon_style={Icon1}
           onIcon_press={onCpture_Click}
+          color="black"
         />
 
-        <ClickBtn Icon_name="zap" Icon_style={Icon} />
+        <ClickBtn Icon_name="zap" Icon_style={Icon} color="black" />
 
-        <ClickBtn Icon_name="camera-reverse-outline" Icon_style={Icon1} />
+        <ClickBtn
+          Icon_name="camera-reverse-outline"
+          Icon_style={Icon1}
+          color="black"
+        />
       </View>
     </View>
   );

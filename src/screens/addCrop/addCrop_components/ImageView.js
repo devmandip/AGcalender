@@ -29,7 +29,7 @@ const ImageView = ({route}) => {
       </View>
 
       {imgURI === undefined ? (
-        <View style={{marginHorizontal: 20}}>
+        <View style={{alignItems: 'center', marginTop: scale(15)}}>
           <Video
             source={{
               uri: videoURL,
@@ -67,9 +67,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   video_View: {
+    width: scale(230),
     height: scale(410),
-    marginTop: scale(15),
-    borderWidth: 1,
-    width: scale(315),
+    borderRadius: 15,
   },
 });

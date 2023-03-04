@@ -40,12 +40,11 @@ const ImageSection = props => {
           style={{height: scale(120), width: '35%', marginRight: 2}}
         />
         <TouchableOpacity
-          onPress={() => postImages.length >= 5 && setIsVisible(true)}
-          // onPress={() =>
-          //   postImages.length >= 5 &&
-          //   navigation.navigate('ImageView', {item: postImages})
-          // }
-        >
+          // onPress={() => postImages.length >= 5 && setIsVisible(true)}
+          onPress={() =>
+            postImages.length >= 5 &&
+            navigation.navigate('ImageView', {item: postImages})
+          }>
           <Image
             source={{uri: postImages[4].uri}}
             style={{
