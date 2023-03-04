@@ -1,6 +1,6 @@
 import {StyleSheet, View, ScrollView, FlatList, Text} from 'react-native';
 import React from 'react';
-import {CalenderView, Header, PostSection, Story} from './components';
+import {CalenderView, Header, PostSection, Story, YardVew} from './components';
 import Posts from '../../dummyData/Posts';
 
 const renderItem = ({item}) => {
@@ -31,6 +31,8 @@ const HomeScreen = () => {
         <Header />
         <Story />
         <CalenderView hideCal scrollPosition={scrollPosition} />
+        <YardVew />
+
         <FlatList
           nestedScrollEnabled={true}
           onScroll={event => handleScroll(event)}

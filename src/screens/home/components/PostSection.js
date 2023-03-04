@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import PostHeader from './postComponents/PostHeader';
 import PostBottom from './postComponents/PostBottom';
 import {useNavigation} from '@react-navigation/core';
@@ -20,81 +20,57 @@ const ImageSection = props => {
 
   return (
     <View>
-      {postImages.length === 4 ? (
-        <View>
-          <View style={{flexDirection: 'row', marginBottom: 2}}>
-            <Image
-              source={{uri: postImages[0].uri}}
-              style={{height: 200, width: '50%', marginRight: 2}}
-            />
-            <Image
-              source={{uri: postImages[1].uri}}
-              style={{height: 200, width: '50%'}}
-            />
-          </View>
-          <View style={{flexDirection: 'row'}}>
-            <Image
-              source={{uri: postImages[2].uri}}
-              style={{height: 200, width: '50%', marginRight: 2}}
-            />
-            <Image
-              source={{uri: postImages[3].uri}}
-              style={{height: 200, width: '50%'}}
-            />
-          </View>
-        </View>
-      ) : (
-        <View>
-          <View style={{flexDirection: 'row', marginBottom: 2}}>
-            <Image
-              source={{uri: postImages[0].uri}}
-              style={{height: scale(200), width: '40%', marginRight: 2}}
-            />
-            <Image
-              source={{uri: postImages[1].uri}}
-              style={{height: scale(200), width: '60%', marginRight: 2}}
-            />
-          </View>
-          <View style={{flexDirection: 'row', marginBottom: 2}}>
-            <Image
-              source={{uri: postImages[2].uri}}
-              style={{height: scale(120), width: '35%', marginRight: 2}}
-            />
-            <Image
-              source={{uri: postImages[3].uri}}
-              style={{height: scale(120), width: '35%', marginRight: 2}}
-            />
-            <TouchableOpacity
-              onPress={() => postImages.length > 5 && setIsVisible(true)}>
-              <Image
-                source={{uri: postImages[4].uri}}
-                style={{
-                  height: scale(120),
-                  width: '30%',
-                  backgroundColor: 'red',
-                }}
-              />
+      <View style={{flexDirection: 'row', marginBottom: 2}}>
+        <Image
+          source={{uri: postImages[0].uri}}
+          style={{height: scale(200), width: '40%', marginRight: 2}}
+        />
+        <Image
+          source={{uri: postImages[1].uri}}
+          style={{height: scale(200), width: '60%', marginRight: 2}}
+        />
+      </View>
+      <View style={{flexDirection: 'row', marginBottom: 2}}>
+        <Image
+          source={{uri: postImages[2].uri}}
+          style={{height: scale(120), width: '35%', marginRight: 2}}
+        />
+        <Image
+          source={{uri: postImages[3].uri}}
+          style={{height: scale(120), width: '35%', marginRight: 2}}
+        />
+        <TouchableOpacity
+          onPress={() => postImages.length >= 5 && setIsVisible(true)}
+          // onPress={() =>
+          //   postImages.length >= 5 &&
+          //   navigation.navigate('ImageView', {item: postImages})
+          // }
+        >
+          <Image
+            source={{uri: postImages[4].uri}}
+            style={{
+              height: scale(120),
+              width: '30%',
+              backgroundColor: 'red',
+            }}
+          />
 
-              {postImages.length > 5 && (
-                <View
-                  style={{
-                    backgroundColor: '#000000aa',
-                    position: 'absolute',
-                    height: scale(120),
-                    width: scale(95),
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={styles.txt1}>{`+ ${
-                    postImages.length - 5
-                  }`}</Text>
-                  <Text style={styles.txt1}>Images</Text>
-                </View>
-              )}
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
+          {postImages.length >= 5 && (
+            <View
+              style={{
+                backgroundColor: '#000000aa',
+                position: 'absolute',
+                height: scale(120),
+                width: scale(95),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.txt1}>{`+ ${postImages.length - 5}`}</Text>
+              <Text style={styles.txt1}>Images</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -119,7 +95,7 @@ const PostSection = props => {
     <View style={styles.container}>
       <PostHeader proicePic={proicePic} name={name} description={description} />
 
-      {postImages.length < 4 ? (
+      {postImages.length <= 4 ? (
         <FlatList
           data={postImages}
           renderItem={renderItem}
@@ -136,13 +112,13 @@ const PostSection = props => {
 
       <PostBottom like_count={like_count} view_count={view_count} />
 
-      <ImageView
+      {/* <ImageView
         images={postImages}
         imageIndex={0}
         visible={visible}
         onRequestClose={() => setIsVisible(false)}
         animationType="slide"
-      />
+      /> */}
     </View>
   );
 };

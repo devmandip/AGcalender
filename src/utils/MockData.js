@@ -92,4 +92,64 @@ const temars1 =
   "     By visiting our App/Website you are agreeing to be bound by the following terms and conditions. We may change these terms and conditions at any time. Your continued use of AgMart means that you accept any new or modified terms and conditions that we come up with. Please re-visit the `Terms of Use' link at our site from time to time to stay abreast of any changes that we may introduce.";
 const temars2 =
   "    If you continue to use this App/website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern AgMart's relationship with you in relation to this mobile app / website. If you disagree with any part of these terms and conditions, please do not useAgMart.";
-export {optionsData, chatData, cropData, temars1, temars2, cameraOptions};
+
+const YardData = [
+  {
+    id: 0,
+    location: {
+      landMark: 'Manvi',
+      km: 39,
+      state: 'karnataka',
+    },
+    date: '12-12-2023',
+    product: 'Other',
+    weight: '10.0 Tons',
+    price: {
+      RS: 1050,
+      Down: 1050,
+      up: 1050,
+    },
+  },
+  {
+    id: 1,
+    location: {
+      landMark: 'Chittapur',
+      km: 106,
+      state: 'karnataka',
+    },
+    date: '12-12-2023',
+    product: 'Local',
+    weight: '5.0 Tons',
+    price: {
+      RS: 2000,
+      Down: 2000,
+      up: 2000,
+    },
+  },
+  {
+    id: 2,
+    location: {
+      landMark: 'Bellary',
+      km: 126,
+      state: 'karnataka',
+    },
+    date: '12-12-2023',
+    product: 'Jowar Hybrid',
+    weight: '0.0 Tons',
+    price: {
+      RS: 2038,
+      Down: 1722,
+      up: 2366,
+    },
+  },
+];
+
+export {
+  optionsData,
+  chatData,
+  cropData,
+  temars1,
+  temars2,
+  cameraOptions,
+  YardData,
+};
