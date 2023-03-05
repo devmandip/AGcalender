@@ -1,9 +1,12 @@
 import {Image, StyleSheet, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import SearchBar from './SearchBar';
+import {scale, theme} from '../../../utils';
 
-const Header = () => {
+const Header = props => {
+  const {basket} = props;
   const logoImg = '../../../assets/Images/logo.png';
 
   return (
@@ -11,7 +14,16 @@ const Header = () => {
       <Image source={require(logoImg)} style={styles.logoImg_style} />
       <SearchBar />
       <TouchableOpacity onPress={() => {}}>
-        <Ionicons name="options-outline" size={30} color="black" />
+        {basket && (
+          <Fontisto
+            name="shopping-basket"
+            size={scale(22)}
+            color={theme.colors.gray2}
+          />
+        )}
+        {!basket && (
+          <Ionicons name="options-outline" size={scale(22)} color="black" />
+        )}
       </TouchableOpacity>
     </View>
   );

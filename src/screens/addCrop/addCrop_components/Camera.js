@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(10),
     alignItems: 'center',
     height: scale(80),
+    paddingBottom: scale(10),
   },
   icon_view: {
     borderColor: theme.colors.black,

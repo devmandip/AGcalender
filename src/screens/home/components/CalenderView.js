@@ -49,10 +49,12 @@ const CalenderHeader = props => {
       </View>
       {dateViewShow && (
         <Calendar
-          hideArrows={true}
+          hideArrows={false}
+          enableSwipeMonths={true}
           markedDates={{
             [today]: {selected: true, selectedColor: theme.colors.primary},
           }}
+          hideExtraDays={true}
           renderHeader={date => {}}
           onDayPress={day => {
             console.log('selected day', day);
@@ -80,7 +82,8 @@ const CalenderView = prpos => {
 
       {hideCal ? null : (
         <Calendar
-          hideArrows={true}
+          // hideArrows={false}
+          // enableSwipeMonths={true}
           markedDates={{
             [today]: {selected: true, selectedColor: '#56AB2F'},
           }}
@@ -92,6 +95,7 @@ const CalenderView = prpos => {
             selectedDayBackgroundColor: '#56AB2F',
             selectedDayTextColor: 'white',
           }}
+          headerStyle={{color: theme.colors.black}}
         />
       )}
     </View>

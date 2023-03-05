@@ -142,6 +142,102 @@ const YardData = [
       up: 2366,
     },
   },
+  {
+    id: 0,
+    location: {
+      landMark: 'Manvi',
+      km: 39,
+      state: 'karnataka',
+    },
+    date: '12-12-2023',
+    product: 'Other',
+    weight: '10.0 Tons',
+    price: {
+      RS: 1050,
+      Down: 1050,
+      up: 1050,
+    },
+  },
+  {
+    id: 1,
+    location: {
+      landMark: 'Chittapur',
+      km: 106,
+      state: 'karnataka',
+    },
+    date: '12-12-2023',
+    product: 'Local',
+    weight: '5.0 Tons',
+    price: {
+      RS: 2000,
+      Down: 2000,
+      up: 2000,
+    },
+  },
+  {
+    id: 2,
+    location: {
+      landMark: 'Bellary',
+      km: 126,
+      state: 'karnataka',
+    },
+    date: '12-12-2023',
+    product: 'Jowar Hybrid',
+    weight: '0.0 Tons',
+    price: {
+      RS: 2038,
+      Down: 1722,
+      up: 2366,
+    },
+  },
+  {
+    id: 0,
+    location: {
+      landMark: 'Manvi',
+      km: 39,
+      state: 'karnataka',
+    },
+    date: '12-12-2023',
+    product: 'Other',
+    weight: '10.0 Tons',
+    price: {
+      RS: 1050,
+      Down: 1050,
+      up: 1050,
+    },
+  },
+  {
+    id: 1,
+    location: {
+      landMark: 'Chittapur',
+      km: 106,
+      state: 'karnataka',
+    },
+    date: '12-12-2023',
+    product: 'Local',
+    weight: '5.0 Tons',
+    price: {
+      RS: 2000,
+      Down: 2000,
+      up: 2000,
+    },
+  },
+  {
+    id: 2,
+    location: {
+      landMark: 'Bellary',
+      km: 126,
+      state: 'karnataka',
+    },
+    date: '12-12-2023',
+    product: 'Jowar Hybrid',
+    weight: '0.0 Tons',
+    price: {
+      RS: 2038,
+      Down: 1722,
+      up: 2366,
+    },
+  },
 ];
 
 export {

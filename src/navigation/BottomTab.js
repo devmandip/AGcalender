@@ -13,6 +13,7 @@ import {Platform, SafeAreaView, Text, View} from 'react-native';
 import {ContactUs, Profile, TermsAndConditions} from '../screens';
 import {Title} from '../components';
 import AddCropStack from './AddCropStack';
+import {YardVew} from '../screens/home/components';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,15 +39,15 @@ const BottomTab = () => {
       screenOptions={{
         tabBarHideOnKeyboard: true,
         headerShown: false,
-        tabBarShowLabel: false,
-        tabBarActiveTintColor: theme.colors.purpal,
+        // tabBarShowLabel: false,
+        // tabBarActiveTintColor: theme.colors.green,
         tabBarInactiveTintColor: '#555',
-
+        // tabBarActiveBackgroundColor: theme.colors.green,
         tabBarStyle: {
           height: scale(55),
           position: 'absolute',
           backgroundColor: theme.colors.primary,
-          paddingTop: Platform.OS === 'ios' ? scale(5) : scale(0),
+          paddingVertical: Platform.OS === 'ios' ? scale(5) : scale(5),
           shadowColor: '#000',
           shadowOffset: {
             width: 2,
@@ -58,7 +59,8 @@ const BottomTab = () => {
           elevation: 5,
         },
         tabBarLabelStyle: {
-          fontSize: scale(10),
+          fontSize: scale(12),
+          color: theme.colors.white,
         },
       }}>
       <Tab.Screen
@@ -74,12 +76,13 @@ const BottomTab = () => {
               />
             );
           },
+          tabBarLabel: 'Calender',
         }}
       />
 
       <Tab.Screen
         name="Rupee"
-        component={ContactUs}
+        component={YardVew}
         options={{
           tabBarIcon: ({focused}) => {
             return (
@@ -90,6 +93,7 @@ const BottomTab = () => {
               />
             );
           },
+          tabBarLabel: 'APMC Rate',
         }}
       />
 
@@ -106,6 +110,7 @@ const BottomTab = () => {
               />
             );
           },
+          tabBarLabel: 'Add Crop',
         }}
       />
       <Tab.Screen
@@ -121,6 +126,7 @@ const BottomTab = () => {
               />
             );
           },
+          tabBarLabel: 'Profile',
         }}
       />
 
@@ -137,6 +143,7 @@ const BottomTab = () => {
               />
             );
           },
+          tabBarLabel: 'Share',
         }}
       />
     </Tab.Navigator>

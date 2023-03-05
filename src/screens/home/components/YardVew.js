@@ -1,8 +1,10 @@
-import {StyleSheet, Text, View, FlatList} from 'react-native';
+import {StyleSheet, Text, View, FlatList, SafeAreaView} from 'react-native';
 import React from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {YardData} from '../../../utils/MockData';
 import {scale, theme} from '../../../utils';
+import Header from './Header';
+import Story from './Story';
 
 const Yard_header = () => {
   return (
@@ -105,10 +107,21 @@ const renderItem = ({item}) => {
 
 const YardVew = () => {
   return (
-    <View style={styles.container}>
-      <Yard_header />
-      <FlatList data={YardData} renderItem={renderItem} />
-    </View>
+    <SafeAreaView>
+      <Header />
+      <Story />
+      <View style={{height: theme.SCREENHEIGHT * 0.58}}>
+        <View style={styles.container}>
+          <Yard_header />
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{paddingVertical: scale(10)}}
+            data={YardData}
+            renderItem={renderItem}
+          />
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -126,7 +139,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 1.62,
     backgroundColor: theme.colors.white,
-    elevation: 4,
+    elevation: scale(2),
     borderRadius: scale(10),
     paddingBottom: scale(10),
   },

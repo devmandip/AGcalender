@@ -28,21 +28,11 @@ const HomeScreen = () => {
       showsVerticalScrollIndicator={false}
       onScroll={event => handleScroll(event)}>
       <View style={styles.container}>
-        <Header />
+        <Header basket />
         <Story />
         <CalenderView hideCal scrollPosition={scrollPosition} />
-        <YardVew />
-
         <FlatList
           nestedScrollEnabled={true}
-          onScroll={event => handleScroll(event)}
-          // onScroll={event => {
-          //   alert('call');
-          //   console.log(
-          //     'current position <>> ',
-          //     event.nativeEvent.contentOffset.y,
-          //   );
-          // }}
           data={Posts}
           renderItem={renderItem}
         />

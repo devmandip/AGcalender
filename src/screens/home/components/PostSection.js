@@ -10,6 +10,7 @@ import React, {useState} from 'react';
 import PostHeader from './postComponents/PostHeader';
 import PostBottom from './postComponents/PostBottom';
 import {useNavigation} from '@react-navigation/core';
+import Video from 'react-native-video';
 import ImageView from 'react-native-image-viewing';
 import {scale, theme} from '../../../utils';
 
@@ -83,9 +84,12 @@ const PostSection = props => {
   const [visible, setIsVisible] = useState(false);
 
   const renderItem = ({item, index}) => {
+    console.log('ite MM ', item);
     return (
       <TouchableOpacity style={styles.img_container}>
-        <Image source={{uri: item.uri}} style={styles.post_imgStyle} />
+        {item?.type !== 'video' && (
+          <Image source={{uri: item.uri}} style={styles.post_imgStyle} />
+        )}
       </TouchableOpacity>
     );
   };
@@ -93,24 +97,21 @@ const PostSection = props => {
   return (
     <View style={styles.container}>
       <PostHeader proicePic={proicePic} name={name} description={description} />
+      {/* {postImages.length <= 4 ? ( */}
+      <FlatList
+        data={postImages}
+        renderItem={renderItem}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+      />
 
-      {postImages.length <= 4 ? (
-        <FlatList
-          data={postImages}
-          renderItem={renderItem}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        />
-      ) : (
-        <ImageSection
-          postImages={postImages}
-          navigation={navigation}
-          setIsVisible={setIsVisible}
-        />
-      )}
-
+      {/* <ImageSection
+        postImages={postImages}
+        navigation={navigation}
+        setIsVisible={setIsVisible}
+      /> */}
+      {/* )} */}
       <PostBottom like_count={like_count} view_count={view_count} />
-
       {/* <ImageView
         images={postImages}
         imageIndex={0}
