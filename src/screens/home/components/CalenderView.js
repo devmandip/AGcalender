@@ -5,16 +5,38 @@ import moment from 'moment';
 import Icon from 'react-native-vector-icons/Feather';
 import {scale, theme} from '../../../utils';
 import {Label} from '../../../components';
+import ProgressCircle from 'react-native-progress-circle';
 
 const CalenderHeader = props => {
   const {scrollPosition} = props;
   const [dateViewShow, setDateViewShow] = useState(false);
   const today = moment().format('YYYY-MM-DD');
+
+  const date = new Date(today);
+  const options = {day: 'numeric', month: 'long', year: 'numeric'};
+  const formattedDate = date.toLocaleDateString('en-US', options);
+
   useEffect(() => {
     if (scrollPosition > 80) {
       setDateViewShow(false);
     }
   }, [scrollPosition]);
+
+  const dayComponent = ({date}) => {
+    return (
+      <View>
+        <ProgressCircle
+          percent={60}
+          radius={20}
+          borderWidth={2}
+          color="#FFD580"
+          shadowColor="#f2f2f2"
+          bgColor="white">
+          <Text style={{fontSize: 18, textAlign: 'center'}}>{date.day}</Text>
+        </ProgressCircle>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.header_container}>
@@ -35,7 +57,7 @@ const CalenderHeader = props => {
         />
       </View>
       <View style={styles.dateView}>
-        <Label title="January 2023" style={styles.dateTxt} />
+        <Label title={formattedDate} style={styles.dateTxt} />
         <TouchableOpacity
           onPress={() => {
             setDateViewShow(!dateViewShow);
@@ -63,6 +85,7 @@ const CalenderHeader = props => {
             selectedDayBackgroundColor: theme.colors.primary,
             selectedDayTextColor: 'white',
           }}
+          dayComponent={dayComponent}
         />
       )}
     </View>
