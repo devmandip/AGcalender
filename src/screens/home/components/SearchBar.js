@@ -27,10 +27,13 @@ const styles = StyleSheet.create({
     width: theme.SCREENWIDTH * 0.68,
   },
   TextInput_style: {
-    fontSize: scale(13),
+    fontSize: scale(16),
     paddingHorizontal: 15,
     paddingVertical: 5,
-    width: '95%',
-    textAlign: 'center',
+    // width: '95%',
+    // textAlign: '',
+    fontFamily: theme.fonts.poetic,
+    // fontWeight: '',
+    fontVariant: 'italic',
   },
 });

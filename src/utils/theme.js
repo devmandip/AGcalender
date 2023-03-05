@@ -11,9 +11,10 @@ const theme = {
     InterMedium: 'Inter-Medium',
     InterRegular: 'Inter-Regular',
     InterThin: 'Inter-Thin',
+    poetic: 'Isiniscript-lOJy',
   },
   colors: {
-    primary: '#56AB2F',
+    primary: '#007a3c', // '#56AB2F',
     green: '#007a3c',
     white: '#FFFFFF',
     black: '#000000',

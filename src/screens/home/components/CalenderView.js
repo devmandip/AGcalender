@@ -174,11 +174,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontWeight: '700',
+    fontFamily: theme.fonts.InterBold,
   },
   title2: {
     color: 'white',
     fontSize: 12,
     fontWeight: '400',
+    fontFamily: theme.fonts.InterMedium,
   },
   dateTxt: {
     color: theme.colors.primary,

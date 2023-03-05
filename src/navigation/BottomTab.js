@@ -44,7 +44,7 @@ const BottomTab = () => {
         tabBarInactiveTintColor: '#555',
         // tabBarActiveBackgroundColor: theme.colors.green,
         tabBarStyle: {
-          height: scale(55),
+          height: Platform.OS === 'ios' ? scale(85) : scale(50),
           position: 'absolute',
           backgroundColor: theme.colors.primary,
           paddingVertical: Platform.OS === 'ios' ? scale(5) : scale(5),

@@ -13,6 +13,7 @@ import {useNavigation} from '@react-navigation/core';
 import Video from 'react-native-video';
 import ImageView from 'react-native-image-viewing';
 import {scale, theme} from '../../../utils';
+import {VideoShow} from '../../../components';
 
 const imgArr = [];
 
@@ -84,11 +85,12 @@ const PostSection = props => {
   const [visible, setIsVisible] = useState(false);
 
   const renderItem = ({item, index}) => {
-    console.log('ite MM ', item);
     return (
-      <TouchableOpacity style={styles.img_container}>
-        {item?.type !== 'video' && (
+      <TouchableOpacity style={styles.img_container} key={index}>
+        {item?.type === 'image' ? (
           <Image source={{uri: item.uri}} style={styles.post_imgStyle} />
+        ) : (
+          <VideoShow url={item?.uri} style={styles.video_View} />
         )}
       </TouchableOpacity>
     );
@@ -101,6 +103,7 @@ const PostSection = props => {
       <FlatList
         data={postImages}
         renderItem={renderItem}
+        keyExtractor={(item, index) => index}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       />
@@ -141,11 +144,16 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
   },
   post_imgStyle: {
-    height: 200,
-    width: 171,
+    height: scale(200),
+    width: scale(170),
   },
   img_container: {
     marginRight: 2,
+  },
+  video_View: {
+    height: scale(200),
+    width: scale(170),
+    // borderRadius: 15,
   },
 
   // image section

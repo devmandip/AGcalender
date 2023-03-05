@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   cameraView: {
-    height: theme.SCREENHEIGHT * 0.7,
+    height: theme.SCREENHEIGHT * 0.68,
     marginTop: 8,
   },
   txt: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(10),
     alignItems: 'center',
     height: scale(80),
-    paddingBottom: scale(10),
+    paddingBottom: scale(20),
   },
   icon_view: {
     borderColor: theme.colors.black,
