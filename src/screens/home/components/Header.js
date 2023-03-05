@@ -1,6 +1,6 @@
 import {Image, StyleSheet, View, TouchableOpacity} from 'react-native';
 import React from 'react';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchBar from './SearchBar';
 
 const Header = () => {
@@ -11,7 +11,7 @@ const Header = () => {
       <Image source={require(logoImg)} style={styles.logoImg_style} />
       <SearchBar />
       <TouchableOpacity onPress={() => {}}>
-        <FontAwesome5 name="shopping-basket" size={25} color="black" />
+        <Ionicons name="options-outline" size={30} color="black" />
       </TouchableOpacity>
     </View>
   );

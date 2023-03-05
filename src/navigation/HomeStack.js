@@ -16,7 +16,7 @@ const HomeStack = () => {
       <Stack.Screen
         name="ImageView"
         component={ImageView}
-        options={{headerShown: false}}
+        // options={{headerShown: false}}
       />
     </Stack.Navigator>
   );

@@ -10,7 +10,7 @@ const AddCrop = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="Add Corp" />
+      <Header title="Add New Corp" />
 
       <ScrollView style={styles.View1} showsVerticalScrollIndicator={false}>
         <View style={styles.input_view}>
