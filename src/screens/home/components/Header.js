@@ -6,12 +6,15 @@ import SearchBar from './SearchBar';
 import {scale, theme} from '../../../utils';
 
 const Header = props => {
-  const {basket} = props;
+  const {basket, onPressMenu} = props;
   const logoImg = '../../../assets/Images/logo.png';
 
   return (
     <View style={styles.conatainer}>
-      <Image source={require(logoImg)} style={styles.logoImg_style} />
+      <TouchableOpacity onPress={onPressMenu}>
+        <Image source={require(logoImg)} style={styles.logoImg_style} />
+      </TouchableOpacity>
+
       <SearchBar />
       <TouchableOpacity onPress={() => {}}>
         {basket && (

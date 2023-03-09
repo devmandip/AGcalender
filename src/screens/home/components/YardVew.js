@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, FlatList, SafeAreaView} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  SafeAreaView,
+  Platform,
+} from 'react-native';
 import React from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {YardData} from '../../../utils/MockData';
@@ -110,7 +117,13 @@ const YardVew = () => {
     <SafeAreaView>
       <Header />
       <Story />
-      <View style={{height: theme.SCREENHEIGHT * 0.58}}>
+      <View
+        style={{
+          height:
+            Platform.OS === 'ios'
+              ? theme.SCREENHEIGHT * 0.53
+              : theme.SCREENHEIGHT * 0.57,
+        }}>
         <View style={styles.container}>
           <Yard_header />
           <FlatList

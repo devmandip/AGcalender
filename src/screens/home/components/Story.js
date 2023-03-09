@@ -6,23 +6,31 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Veg from '../../../dummyData/Veg';
-
-const renderItem = ({item}) => {
-  console.log('this is item :', item);
-
-  return (
-    <View style={styles.renderItem_container}>
-      <TouchableOpacity onPress={() => {}}>
-        <Image source={item.img} style={styles.renderItem_img} />
-      </TouchableOpacity>
-      <Text style={styles.renderItem_txt}>{item.name}</Text>
-    </View>
-  );
-};
+import {scale, theme} from '../../../utils';
 
 const Story = () => {
+  const [selectCat, setCategory] = useState(null);
+  const renderItem = ({item, index}) => {
+    return (
+      <View style={styles.renderItem_container} key={index}>
+        <TouchableOpacity
+          onPress={() => {
+            setCategory(index);
+          }}
+          style={{
+            borderWidth: selectCat === index ? scale(1.3) : 0,
+            borderColor: theme.colors.green,
+            padding: scale(3),
+            borderRadius: scale(35),
+          }}>
+          <Image source={item.img} style={styles.renderItem_img} />
+        </TouchableOpacity>
+        <Text style={styles.renderItem_txt}>{item.name}</Text>
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       <FlatList
@@ -46,9 +54,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   renderItem_img: {
-    height: 70,
-    width: 70,
-    borderWidth: 1,
+    height: scale(60),
+    width: scale(60),
+    // borderWidth: 1,
     borderRadius: 50,
     // borderColor: "#56AB2F"
   },
