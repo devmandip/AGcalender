@@ -69,6 +69,7 @@ const CalenderHeader = props => {
           />
         </TouchableOpacity>
       </View>
+
       {dateViewShow && (
         <Calendar
           hideArrows={false}
