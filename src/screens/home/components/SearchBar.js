@@ -3,13 +3,16 @@ import React from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {scale, theme} from '../../../utils';
 
-const SearchBar = () => {
+const SearchBar = props => {
+  const {style, placeholder, inputStyle, value, onChangeText} = props;
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <AntDesign name="search1" size={15} />
       <TextInput
-        style={styles.TextInput_style}
-        placeholder="Mere Desh Ki Dharti"
+        value={value}
+        onChangeText={onChangeText}
+        style={[styles.TextInput_style, inputStyle]}
+        placeholder={placeholder ? placeholder : 'Mere Desh Ki Dharti'}
       />
     </View>
   );

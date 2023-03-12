@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/core';
 import {scale, theme} from '../../utils';
 import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {SelectCropModel} from '../../components';
 
 const data = [
   {label: 'Item 1', value: '1'},
@@ -37,9 +38,15 @@ const AddCrop = () => {
 
           <View style={styles.input_view}>
             <TxtInput width={theme.SCREENWIDTH * 0.43} title="Farm Location" />
-            {/* <TxtInput width={theme.SCREENWIDTH * 0.43} title="Crop Name" /> */}
+            <TxtInput
+              onTouchStart={() => {
+                setIsFocus(true);
+              }}
+              width={theme.SCREENWIDTH * 0.43}
+              title="Crop Name"
+            />
 
-            <Dropdown
+            {/* <Dropdown
               style={[
                 styles.dropdown,
                 isFocus && {borderColor: theme.colors.primary},
@@ -76,7 +83,7 @@ const AddCrop = () => {
               //     size={20}
               //   />
               // )}
-            />
+            /> */}
           </View>
 
           <View style={styles.input_view}>
@@ -102,6 +109,7 @@ const AddCrop = () => {
           />
         </ScrollView>
       </View>
+      <SelectCropModel isVisible={isFocus} close={() => setIsFocus(false)} />
     </SafeAreaView>
   );
 };

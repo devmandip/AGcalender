@@ -22,6 +22,7 @@ const theme = {
     gray1: '#EEEEEE',
     add: '#41416E',
     gray2: '#808080',
+    yellow: '#ff9900',
   },
   SCREENWIDTH: width,
   SCREENHEIGHT: height,

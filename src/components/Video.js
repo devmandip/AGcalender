@@ -23,7 +23,7 @@ const VideoShow = props => {
     setPlay(!isPlay);
     setVal(flatListScroll);
   };
-  console.log('url', url);
+  // console.log('url', url);
   return (
     <View style={[styles.container, style]}>
       <Video

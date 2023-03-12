@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
-import Veg from '../../../dummyData/Veg';
+import {Veg} from '../../../dummyData/Veg';
 import {scale, theme} from '../../../utils';
+import { Label } from '../../../components';
 
 const Story = () => {
   const [selectCat, setCategory] = useState(null);
@@ -27,7 +28,7 @@ const Story = () => {
           }}>
           <Image source={item.img} style={styles.renderItem_img} />
         </TouchableOpacity>
-        <Text style={styles.renderItem_txt}>{item.name}</Text>
+        <Label title={item.name} />
       </View>
     );
   };
