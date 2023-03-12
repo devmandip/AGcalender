@@ -51,10 +51,18 @@ const CalenderHeader = props => {
             Samay ki pallaki - buvaee se bikri Tak...
           </Text>
         </View>
-        <Image
+        {/* <Image
           source={require('../../../assets/Images/calenderImages/calender.png')}
           style={styles.header_img}
-        />
+        /> */}
+        <View style={styles.calCon}>
+          <View style={styles.monthcon}>
+            <Label title={'March'} style={styles.month} />
+          </View>
+
+          <Label title="11" style={styles.date} />
+          <Label title="Saturday" style={styles.daytxt} />
+        </View>
       </View>
       <View style={styles.dateView}>
         <Label title={formattedDate} style={styles.dateTxt} />
@@ -135,6 +143,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: scale(5),
+    paddingHorizontal: scale(5),
   },
   // calender header style
   header_container: {
@@ -187,4 +196,19 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: scale(16),
   },
+  calCon: {
+    backgroundColor: theme.colors.white,
+    borderRadius: scale(4),
+    width: scale(50),
+    margin: scale(5),
+    overflow: 'hidden',
+  },
+  monthcon: {backgroundColor: theme.colors.yellow, paddingVertical: 1},
+  month: {fontSize: scale(10), textAlign: 'center', color: theme.colors.white},
+  date: {
+    fontSize: scale(11),
+    textAlign: 'center',
+    fontWeight: '700',
+  },
+  daytxt: {fontSize: scale(10), textAlign: 'center'},
 });

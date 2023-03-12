@@ -2,12 +2,15 @@ import {StyleSheet, Text, View, TextInput} from 'react-native';
 import React from 'react';
 
 const TxtInput = props => {
-  const {width,title} = props;
+  const {width, title, onTouchStart} = props;
 
   return (
     <View style={styles.container}>
       <Text style={styles.headerTxt}>{title}</Text>
-      <TextInput style={[styles.txtinput, {width: width}]} />
+      <TextInput
+        onTouchStart={onTouchStart}
+        style={[styles.txtinput, {width: width}]}
+      />
     </View>
   );
 };

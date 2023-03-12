@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Signup, Login} from '../screens';
+import {Signup, Login, WhyHarvestingCalendar, ContactUs} from '../screens';
 import BottomTab from './BottomTab';
 import LoginStack from '../screens/auth/AuthStack';
 
@@ -21,6 +21,8 @@ const MianStack = () => {
           component={BottomTab}
           options={{headerShown: false}}
         />
+        <Stack.Screen name="Static" component={WhyHarvestingCalendar} />
+        <Stack.Screen name="ContactUs" component={ContactUs} />
       </Stack.Navigator>
     </NavigationContainer>
   );

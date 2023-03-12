@@ -6,11 +6,11 @@ export default Posts = [
     description:
       'Srinivas rao from Manvi cultivating Supreme varietyChilli in 4 ac. Expected to harvest 20 Quintalson/after 29-01-23',
     postedImages: [
-      {
-        id: 6,
-        uri: 'https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/V7hI1imKeijyy0rxl/videoblocks-farm-landscape-midwestern-fields-of-wheat-aerial-drone-shot_ssbvaweylr__c6760efb3aee05eec7f3fffb208f35a0__P360.mp4',
-        type: 'video',
-      },
+      // {
+      //   id: 6,
+      //   uri: 'https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/V7hI1imKeijyy0rxl/videoblocks-farm-landscape-midwestern-fields-of-wheat-aerial-drone-shot_ssbvaweylr__c6760efb3aee05eec7f3fffb208f35a0__P360.mp4',
+      //   type: 'video',
+      // },
       {
         id: 5,
         uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',

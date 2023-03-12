@@ -24,7 +24,7 @@ const Yard_header = () => {
       }}>
       <View
         style={[styles.headerView, , {borderLeftWidth: 1, borderTopWidth: 1}]}>
-        <Text style={styles.header_txt}>Market Yard</Text>
+        <Text style={styles.header_txt}>APMC Yard</Text>
       </View>
       <View
         style={[styles.headerView, , {borderLeftWidth: 1, borderTopWidth: 1}]}>
@@ -37,6 +37,9 @@ const Yard_header = () => {
           {borderLeftWidth: 1, borderTopWidth: 1, borderRightWidth: 1},
         ]}>
         <Text style={styles.header_txt}>Modal Price</Text>
+        <Text style={[styles.header_txt, {fontSize: scale(11)}]}>
+          (Min/max)
+        </Text>
       </View>
     </View>
   );
@@ -73,21 +76,21 @@ const Yard_list = props => {
         ]}>
         <Text style={styles.yard_txt}>Rs, {Rs}/Q</Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <AntDesign
+          {/* <AntDesign
             name="arrowdown"
             size={scale(15)}
             style={{right: scale(3)}}
             color="red"
-          />
+          /> */}
           <Text style={styles.yard_txt}>
             {down} - {up}
           </Text>
-          <AntDesign
+          {/* <AntDesign
             name="arrowup"
             size={scale(15)}
             style={{left: scale(3)}}
             color="#56AB2F"
-          />
+          /> */}
         </View>
       </View>
     </View>

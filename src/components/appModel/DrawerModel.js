@@ -11,10 +11,19 @@ import {scale, theme} from '../../utils';
 import Modal from 'react-native-modal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Feather';
+import {useNavigation} from '@react-navigation/core';
+import {
+  AboutAgMart,
+  hiw,
+  MarketIntelligence,
+  PrivacyPolicy,
+  TermsofUse,
+  whyhc,
+} from '../../utils/MockData';
 
 const DrawerModal = props => {
-  const {isVisible, close, handlePayment, handleContact, handleMyOrder} = props;
-
+  const {isVisible, close, } = props;
+  const navigation = useNavigation();
   return (
     <Modal
       backdropOpacity={0.4}
@@ -45,6 +54,7 @@ const DrawerModal = props => {
             style={styles.textButton}
             onPress={() => {
               close();
+              navigation.navigate('Static', {data: whyhc});
             }}>
             <Icon name="calendar" size={25} color={theme.colors.purpal} />
             <Text style={styles.btnText}>Why Harvesting calendar </Text>
@@ -53,6 +63,7 @@ const DrawerModal = props => {
             style={styles.textButton}
             onPress={() => {
               close();
+              navigation.navigate('Static', {data: hiw});
             }}>
             <Icon name="help-circle" size={25} color={theme.colors.purpal} />
             <Text style={styles.btnText}>How it work</Text>
@@ -61,6 +72,7 @@ const DrawerModal = props => {
             style={styles.textButton}
             onPress={() => {
               close();
+              navigation.navigate('Static', {data: MarketIntelligence});
             }}>
             <Icon name="codepen" size={25} color={theme.colors.purpal} />
             <Text style={styles.btnText}>Market intelligence </Text>
@@ -70,6 +82,7 @@ const DrawerModal = props => {
             style={styles.textButton}
             onPress={() => {
               close();
+              navigation.navigate('Static', {data: AboutAgMart});
             }}>
             <Icon name="info" size={25} color={theme.colors.purpal} />
             <Text style={styles.btnText}>About AgMart </Text>
@@ -78,6 +91,7 @@ const DrawerModal = props => {
             style={styles.textButton}
             onPress={() => {
               close();
+              navigation.navigate('Static', {data: TermsofUse});
             }}>
             <Icon name="book-open" size={25} color={theme.colors.purpal} />
             <Text style={styles.btnText}>Terms of use</Text>
@@ -86,6 +100,7 @@ const DrawerModal = props => {
             style={styles.textButton}
             onPress={() => {
               close();
+              navigation.navigate('Static', {data: PrivacyPolicy});
             }}>
             <Icon name="check" size={25} color={theme.colors.purpal} />
             <Text style={styles.btnText}>Privacy policy </Text>
@@ -94,6 +109,7 @@ const DrawerModal = props => {
             style={styles.textButton}
             onPress={() => {
               close();
+              navigation.navigate('ContactUs');
             }}>
             <Icon name="phone" size={25} color={theme.colors.purpal} />
             <Text style={styles.btnText}>Contact</Text>
