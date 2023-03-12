@@ -1,4 +1,13 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Button,
+  ToastAndroid,
+  Alert,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
 import moment from 'moment';
@@ -6,10 +15,12 @@ import Icon from 'react-native-vector-icons/Feather';
 import {scale, theme} from '../../../utils';
 import {Label} from '../../../components';
 import ProgressCircle from 'react-native-progress-circle';
+import Toast from '../../../components/Toast';
 
 const CalenderHeader = props => {
   const {scrollPosition} = props;
   const [dateViewShow, setDateViewShow] = useState(false);
+
   const today = moment().format('YYYY-MM-DD');
 
   const date = new Date(today);
@@ -23,18 +34,27 @@ const CalenderHeader = props => {
   }, [scrollPosition]);
 
   const dayComponent = ({date}) => {
+    const [showPopup, setShowPopup] = useState(false);
+
+    const handlePress = () => {
+      setShowPopup(!showPopup);
+    };
+
     return (
-      <View>
-        <ProgressCircle
-          percent={60}
-          radius={20}
-          borderWidth={2}
-          color="#FFD580"
-          shadowColor="#f2f2f2"
-          bgColor="white">
-          <Text style={{fontSize: 18, textAlign: 'center'}}>{date.day}</Text>
-        </ProgressCircle>
-      </View>
+      <>
+        <TouchableOpacity onPress={handlePress}>
+          <ProgressCircle
+            percent={10}
+            radius={20}
+            borderWidth={2}
+            color="#FFD580"
+            shadowColor="#f2f2f2"
+            bgColor="white">
+            <Text style={{fontSize: 18, textAlign: 'center'}}>{date.day}</Text>
+          </ProgressCircle>
+        </TouchableOpacity>
+        {showPopup && <Toast />}
+      </>
     );
   };
 
@@ -87,9 +107,6 @@ const CalenderHeader = props => {
           }}
           hideExtraDays={true}
           renderHeader={date => {}}
-          onDayPress={day => {
-            console.log('selected day', day);
-          }}
           theme={{
             selectedDayBackgroundColor: theme.colors.primary,
             selectedDayTextColor: 'white',
@@ -195,6 +212,16 @@ const styles = StyleSheet.create({
   dateTxt: {
     color: theme.colors.primary,
     fontSize: scale(16),
+
+
+  popup_style: {
+    position: 'absolute',
+    width: scale(80),
+    height: scale(35),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: scale(10),
+    backgroundColor: theme.colors.gray1,
   },
   calCon: {
     backgroundColor: theme.colors.white,

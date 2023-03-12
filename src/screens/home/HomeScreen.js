@@ -5,12 +5,14 @@ import {
   FlatList,
   Text,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
 import {CalenderView, Header, PostSection, Story, YardVew} from './components';
 import Posts from '../../dummyData/Posts';
 import {DrawerModal} from '../../components';
 import {theme} from '../../utils';
+import Toast from '../../components/Toast';
 
 const renderItem = ({item}) => {
   return (
@@ -48,6 +50,7 @@ const HomeScreen = () => {
           />
           <Story />
           <CalenderView hideCal scrollPosition={scrollPosition} />
+
           <FlatList
             nestedScrollEnabled={true}
             data={Posts}
@@ -62,6 +65,12 @@ const HomeScreen = () => {
           }}
         />
       </ScrollView>
+      <TouchableOpacity
+        onPress={() => {
+          Toast.show('this is long text', Toast.LONG);
+        }}>
+        <Text>press me</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
