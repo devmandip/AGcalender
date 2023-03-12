@@ -77,11 +77,11 @@ const CalenderHeader = props => {
         /> */}
         <View style={styles.calCon}>
           <View style={styles.monthcon}>
-            <Label title={'March'} style={styles.month} />
+            <Label title={moment(today).format('MMMM')} style={styles.month} />
           </View>
 
-          <Label title="11" style={styles.date} />
-          <Label title="Saturday" style={styles.daytxt} />
+          <Label title={moment(today).format('DD')} style={styles.date} />
+          <Label title={moment(today).format('dddd')} style={styles.daytxt} />
         </View>
       </View>
       <View style={styles.dateView}>
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   dateTxt: {
     color: theme.colors.primary,
     fontSize: scale(16),
-
+  },
 
   popup_style: {
     position: 'absolute',
