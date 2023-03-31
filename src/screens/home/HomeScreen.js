@@ -13,6 +13,7 @@ import Posts from '../../dummyData/Posts';
 import {DrawerModal} from '../../components';
 import {theme} from '../../utils';
 import Toast from '../../components/Toast';
+import MapModal from '../../components/appModel/MapModel';
 
 const renderItem = ({item}) => {
   return (
@@ -71,6 +72,7 @@ const HomeScreen = () => {
         }}>
         <Text>press me</Text>
       </TouchableOpacity>
+      <MapModal />
     </SafeAreaView>
   );
 };
