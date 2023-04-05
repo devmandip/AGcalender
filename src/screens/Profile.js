@@ -15,9 +15,11 @@ import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 import {images, moderatedScale, scale, theme} from '../utils';
 import {Label, Title} from '../components';
 import {chatData, cropData, optionsData} from '../utils/MockData';
+import {useNavigation} from '@react-navigation/core';
 
 const Profile = () => {
   const [selTab, setTab] = useState(0);
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.profileHeader} />
@@ -35,7 +37,7 @@ const Profile = () => {
         size={scale(20)}
         style={styles.menu}
         onPress={() => {
-          alert('call');
+          navigation.navigate('SignUp');
         }}
       />
 

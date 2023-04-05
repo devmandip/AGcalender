@@ -12,11 +12,34 @@ import OTPTextView from 'react-native-otp-textinput';
 import {images, scale, theme} from '../../utils';
 import {Button, InputBox, Label} from '../../components';
 import {useNavigation} from '@react-navigation/core';
+import ApiService, {API} from '../../utils/ApiService';
+import {useDispatch} from 'react-redux';
+import {isLogin, userData} from '../../redux/Actions/UserActions';
 
 const Login = () => {
   const navigation = useNavigation();
   const [otp, setotp] = useState('');
+  const [userName, setUserName] = useState('');
+  const [password, setPassword] = useState('');
   const [otpSend, setOtpSend] = useState(false);
+  const dispatch = useDispatch();
+  const handleLogin = () => {
+    const frmData = {
+      username: userName,
+      password: password,
+    };
+    const options = {payloads: frmData};
+    ApiService.post(API.Login, options)
+      .then(res => {
+        dispatch(isLogin(true));
+        dispatch(userData(res));
+        navigation.navigate('Tab');
+        console.log('Res >', res);
+      })
+      .catch(e => {
+        console.log('error', e);
+      });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -30,9 +53,22 @@ const Login = () => {
             <Label title="Harvesting calendar" style={styles.txt} />
           </View>
           <View style={styles.contactForm}>
-            <Label title="Mobile Number" style={styles.title} />
-            <InputBox />
-            {otpSend && (
+            <Label title="User Name" style={styles.title} />
+            <InputBox
+              value={userName}
+              onChangeText={txt => {
+                setUserName(txt);
+              }}
+            />
+            <Label title="Password" style={styles.title} />
+            <InputBox
+              value={password}
+              onChangeText={txt => {
+                setPassword(txt);
+              }}
+              secureTextEntry={true}
+            />
+            {/* {otpSend && (
               <>
                 <Label title="OTP" style={styles.title} />
                 <OTPTextView
@@ -46,13 +82,14 @@ const Login = () => {
                   tintColor={theme.colors.primary}
                 />
               </>
-            )}
+            )} */}
             <View>
               <Button
                 onPress={() => {
-                  otpSend ? navigation.navigate('Tab') : setOtpSend(!otpSend);
+                  handleLogin();
+                  // otpSend ? navigation.navigate('Tab') : setOtpSend(!otpSend);
                 }}
-                title={otpSend ? 'Login' : 'Get OTP'}
+                title={'Login'}
                 style={styles.btn}
                 titleStyle={styles.btnTxt}
               />
