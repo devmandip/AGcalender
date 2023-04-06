@@ -22,6 +22,7 @@ const Login = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [otpSend, setOtpSend] = useState(false);
+  const [load, setLoad] = useState(false);
   const dispatch = useDispatch();
   const handleLogin = () => {
     const frmData = {
@@ -29,16 +30,22 @@ const Login = () => {
       password: password,
     };
     const options = {payloads: frmData};
-    ApiService.post(API.Login, options)
-      .then(res => {
-        dispatch(isLogin(true));
-        dispatch(userData(res));
-        navigation.navigate('Tab');
-        console.log('Res >', res);
-      })
-      .catch(e => {
-        console.log('error', e);
-      });
+    try {
+      setLoad(true);
+      ApiService.post(API.Login, options)
+        .then(res => {
+          dispatch(isLogin(true));
+          dispatch(userData(res));
+          navigation.navigate('Tab');
+          setLoad(false);
+          console.log('Res >', res);
+        })
+        .catch(e => {
+          console.log('error', e);
+        });
+    } catch (error) {
+      setLoad(false);
+    }
   };
   return (
     <SafeAreaView style={styles.container}>

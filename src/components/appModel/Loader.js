@@ -8,7 +8,7 @@ const Loader = props => {
   const {loading, background} = props;
   return (
     <Modal
-      transparent={loading}
+      transparent={true}
       animationType={'none'}
       visible={loading}
       backdropOpacity={0.8}
@@ -19,7 +19,7 @@ const Loader = props => {
             source={loader}
             autoPlay
             loop
-            style={{height: scale(250)}}
+            style={{height: scale(200)}}
           />
         </View>
       </View>
@@ -34,14 +34,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-around',
     paddingVertical: scale(20),
-    backgroundColor: '#00000020',
+    backgroundColor: '#00000040',
     zIndex: 111,
   },
   label: {textAlign: 'center', color: theme.colors.black},
   activityIndicatorWrapper: {
-    // backgroundColor: theme.colors.white,
-    height: scale(100),
-    width: scale(100),
+    backgroundColor: theme.colors.white,
     borderRadius: scale(10),
     display: 'flex',
     alignItems: 'center',
