@@ -1,8 +1,8 @@
 import axios from 'axios';
 // import { BASE_URL } from '../constants';
 
-const APP_API_URL = 'https://4ee6-43-228-229-22.in.ngrok.io/api/';
-export const APP_BASE_URL = 'https://4ee6-43-228-229-22.in.ngrok.io/';
+const APP_API_URL ='https://246b-2603-8081-1800-f423-d131-6594-b2b7-e578.ngrok.io/api/';
+
 axios.interceptors.request.use(config => config);
 
 const execute = async (
@@ -56,20 +56,8 @@ const execute = async (
 };
 
 export const API = {
-  login: 'Users/SignIn',
-  signUp: 'Users/SignUp',
-  getAllCategory: 'Restaurant/GetAllCategory',
-  getAllAddress: 'Users/GetUserAddress?UserId=',
-  getAllRestaurant: 'Restaurant/GetAllRestaurant',
-  GetAllExternalRestaurant: 'Restaurant/GetAllExternalRestaurant',
-  GetAllExclusivesRestaurant: 'Restaurant/GetAllExclusivesRestaurant',
-  getRestoranti: 'Ristoranti/FilterRestaurants',
-  deleteAddress: 'Users/DeleteUserAddressById?addressId=',
-  getPerticularRestaurant: 'Restaurant/GetRestaurantDetailsById',
-  updatePassword:'Users/ChangeUserPassword',
-  recoveryPassword:'Users/RecoveryPassword?email=',
-  varifyUser:'Users/VerifyUser',
-  coupenCode:'Order/ApplyCoupenCode'
+  Login:'auth/signin',
+  SignUp:'auth/signup'
 };
 
 export default {

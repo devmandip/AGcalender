@@ -10,7 +10,7 @@ import {
 import React, {useState} from 'react';
 import {CalenderView, Header, PostSection, Story, YardVew} from './components';
 import Posts from '../../dummyData/Posts';
-import {DrawerModal} from '../../components';
+import {DrawerModal, Loader} from '../../components';
 import {theme} from '../../utils';
 import Toast from '../../components/Toast';
 import MapModal from '../../components/appModel/MapModel';
@@ -72,7 +72,8 @@ const HomeScreen = () => {
         }}>
         <Text>press me</Text>
       </TouchableOpacity>
-      <MapModal />
+      {/* <MapModal /> */}
+      <Loader />
     </SafeAreaView>
   );
 };

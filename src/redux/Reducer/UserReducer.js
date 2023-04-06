@@ -2,10 +2,7 @@ import * as types from '../Actions/ActionsTypes';
 
 const initialState = {
   login: false,
-  onBoarding: false,
   userDetails: '',
-  address: [],
-  selAddress: null,
 };
 
 export default (state = initialState, action) => {
@@ -21,18 +18,7 @@ export default (state = initialState, action) => {
         userDetails: action.payload,
       };
     }
-    case types.SELECTEDADDRESS:
-      console.log('first >>> ', action.payload);
-      return {
-        ...state,
-        selAddress: action.payload,
-      };
-    case types.GETALLADDRESS: {
-      return {
-        ...state,
-        address: action.payload,
-      };
-    }
+
     case types.LOGOUT:
       return {
         initialState,

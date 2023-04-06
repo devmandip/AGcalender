@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
@@ -56,22 +57,26 @@ const Signup = () => {
           <InputBox />
           <Label title="Profession" style={styles.title} />
           <InputBox />
-          {/* <View style={styles.row}>
-            <Text style={styles.signupTxt}>
-              Don’t have account?{'  '}
-              <Text style={styles.signupTxt1}>Sign Up</Text>
-            </Text>
 
-            <Label title="Forgot Password?" style={styles.forgottxt} />
-          </View> */}
           <Button
             title="Sign Up"
             style={styles.btn}
             titleStyle={styles.btnTxt}
             onPress={() => {
-              navigation.navigate('Tab');
+              navigation.navigate('SignUp');
             }}
           />
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Login');
+            }}
+            style={styles.row}>
+            <Text style={styles.signupTxt}>
+              Already have account?{'  '}
+              <Text style={styles.signupTxt1}>Login</Text>
+            </Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </SafeAreaView>
