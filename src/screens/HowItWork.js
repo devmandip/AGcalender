@@ -7,13 +7,16 @@ import {whyhc} from '../utils/MockData';
 import {useNavigation} from '@react-navigation/core';
 
 const HowItWork = () => {
+
   const navigation = useNavigation();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => <Label title="Why Harvesting Calendar" />,
       headerShadowVisible: false,
     });
   }, [navigation]);
+  
   return (
     <SafeAreaView style={styles.container}>
       {/* <Header /> */}

@@ -18,9 +18,11 @@ import {chatData, cropData, optionsData} from '../utils/MockData';
 
 const Profile = () => {
   const [selTab, setTab] = useState(0);
+
   return (
     <View style={styles.container}>
       <View style={styles.profileHeader} />
+
       <View style={styles.imageContainer}>
         <Image
           style={styles.userImage}
@@ -29,6 +31,7 @@ const Profile = () => {
           }}
         />
       </View>
+
       <Icon
         name="more-vertical"
         color={theme.colors.black}
@@ -45,12 +48,15 @@ const Profile = () => {
             <Title title="Lokesh Kakarla, " style={styles.title} />
             <Label title="Farmer" />
           </View>
+
           <View style={styles.row}>
             <Title title="Kanpur" style={styles.title} />
             <Image source={images.pin} style={styles.pin} />
           </View>
         </View>
+
         <View style={styles.divider} />
+
         <ScrollView
           showsHorizontalScrollIndicator={false}
           horizontal
@@ -81,7 +87,9 @@ const Profile = () => {
             );
           })}
         </ScrollView>
+
         {/* farmer crops */}
+
         {selTab === 0 && (
           <FlatList
             data={cropData}
@@ -198,6 +206,7 @@ const Profile = () => {
             }}
           />
         )}
+
         {/* Chat tabBar */}
         {selTab === 1 && (
           <FlatList
@@ -220,7 +229,9 @@ const Profile = () => {
             }}
           />
         )}
+
         {/* Your Activity  */}
+        
         {selTab === 2 && (
           <FlatList
             data={chatData}
