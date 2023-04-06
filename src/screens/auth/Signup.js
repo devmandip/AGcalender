@@ -8,14 +8,54 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {images, scale, theme} from '../../utils';
 import {Button, InputBox, Label} from '../../components';
 import {useNavigation} from '@react-navigation/core';
+import ApiService, {API} from '../../utils/ApiService';
+import axios from 'axios';
 
 const Signup = () => {
   const navigation = useNavigation();
+
+  const [name, setName] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [profession, setProfession] = useState([]);
+
+  const OnSignup_press = () => {
+    const frmData = {
+      username: name,
+      mobileNumber: mobile,
+      password: 'dev@1234',
+      email: 'panchalsagardsf45303@gmail.com',
+      role: ['mod', 'user'],
+      profession: 'Farmer',
+      latitude: 16.216,
+      longitude: 77.3566,
+      marketName: '',
+      districtName: '',
+      stateName: '',
+      preferredCrops: '',
+    };
+
+    const options = {payloads: frmData};
+
+    try {
+      ApiService.post(API.SignUp, options)
+        .then(res => {
+          navigation.navigate('SignUp');
+
+          console.log('Responce : ', JSON.stringify(res, null, 4));
+        })
+        .catch(e => {
+          console.log('error', e);
+        });
+    } catch (error) {}
+  };
+
+  console.log(name, mobile, profession);
+
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -50,21 +90,22 @@ const Signup = () => {
 
         <View style={styles.contactForm}>
           <Label title="Name" style={styles.title} />
-          <InputBox />
+          <InputBox value={name} onChangeText={value => setName(value)} />
+
           <Label title="Location" style={styles.title} />
           <InputBox />
-          <Label title="Mobile" style={styles.title} />
-          <InputBox />
-          <Label title="Profession" style={styles.title} />
-          <InputBox />
+
+          <Label title="Mobile" value={mobile} style={styles.title} />
+          <InputBox onChangeText={value => setMobile(value)} />
+
+          <Label title="Profession" value={profession} style={styles.title} />
+          <InputBox onChangeText={value => setProfession(value)} />
 
           <Button
             title="Sign Up"
             style={styles.btn}
             titleStyle={styles.btnTxt}
-            onPress={() => {
-              navigation.navigate('SignUp');
-            }}
+            onPress={OnSignup_press}
           />
 
           <TouchableOpacity
