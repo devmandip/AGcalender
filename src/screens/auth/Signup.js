@@ -11,7 +11,7 @@ import {
 import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {images, scale, theme} from '../../utils';
-import {Button, InputBox, Label} from '../../components';
+import {Button, InputBox, Label, Loader} from '../../components';
 import {useNavigation} from '@react-navigation/core';
 import ApiService, {API} from '../../utils/ApiService';
 import axios from 'axios';
@@ -26,6 +26,8 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
+
+  const [loader, setLoader] = useState(false);
 
   const data = {
     username: name,
@@ -43,6 +45,8 @@ const Signup = () => {
   };
 
   const OnSignup_press = () => {
+    setLoader(true);
+
     const headers = {
       'Content-Type': 'application/json',
     };
@@ -59,7 +63,9 @@ const Signup = () => {
         if (response.status === 200) {
           console.log(JSON.stringify(response.data, null, 4));
 
-          navigation.navigate('');
+          navigation.navigate('Login');
+
+          setLoader(false);
         }
       })
       .catch(error => {
@@ -138,6 +144,8 @@ const Signup = () => {
           </TouchableOpacity>
         </View>
       </ImageBackground>
+
+      {loader && <Loader />}
     </SafeAreaView>
   );
 };

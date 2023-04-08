@@ -73,7 +73,7 @@ const HomeScreen = () => {
         <Text>press me</Text>
       </TouchableOpacity>
       {/* <MapModal /> */}
-      <Loader />
+      {/* <Loader /> */}
     </SafeAreaView>
   );
 };
