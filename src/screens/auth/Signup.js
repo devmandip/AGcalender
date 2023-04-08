@@ -15,46 +15,64 @@ import {Button, InputBox, Label} from '../../components';
 import {useNavigation} from '@react-navigation/core';
 import ApiService, {API} from '../../utils/ApiService';
 import axios from 'axios';
+import {useToast} from 'react-native-toast-notifications';
 
 const Signup = () => {
   const navigation = useNavigation();
 
+  const toast = useToast();
+
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
-  const [profession, setProfession] = useState([]);
+  const [password, setPassword] = useState('');
 
-  const OnSignup_press = () => {
-    const frmData = {
-      username: name,
-      mobileNumber: mobile,
-      password: 'dev@1234',
-      email: 'panchalsagardsf45303@gmail.com',
-      role: ['mod', 'user'],
-      profession: 'Farmer',
-      latitude: 16.216,
-      longitude: 77.3566,
-      marketName: '',
-      districtName: '',
-      stateName: '',
-      preferredCrops: '',
-    };
-
-    const options = {payloads: frmData};
-
-    try {
-      ApiService.post(API.SignUp, options)
-        .then(res => {
-          navigation.navigate('SignUp');
-
-          console.log('Responce : ', JSON.stringify(res, null, 4));
-        })
-        .catch(e => {
-          console.log('error', e);
-        });
-    } catch (error) {}
+  const data = {
+    username: name,
+    mobileNumber: mobile,
+    password: password,
+    email: email,
+    role: ['mod', 'user'],
+    profession: 'Farmer',
+    latitude: 16.216,
+    longitude: 77.3566,
+    marketName: '',
+    districtName: '',
+    stateName: '',
+    preferredCrops: '',
   };
 
-  console.log(name, mobile, profession);
+  const OnSignup_press = () => {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    axios
+      .post(
+        'https://246b-2603-8081-1800-f423-d131-6594-b2b7-e578.ngrok.io/api/auth/signup',
+        data,
+        {
+          headers,
+        },
+      )
+      .then(response => {
+        if (response.status === 200) {
+          console.log(JSON.stringify(response.data, null, 4));
+
+          navigation.navigate('');
+        }
+      })
+      .catch(error => {
+        console.log(error.response.data.message);
+
+        toast.show(error.response.data.message, {
+          type: 'danger',
+          placement: 'bottom',
+          duration: 2000,
+          animationType: 'zoom-in',
+        });
+      });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -92,14 +110,14 @@ const Signup = () => {
           <Label title="Name" style={styles.title} />
           <InputBox value={name} onChangeText={value => setName(value)} />
 
-          <Label title="Location" style={styles.title} />
-          <InputBox />
+          <Label title="Email" style={styles.title} />
+          <InputBox value={email} onChangeText={value => setEmail(value)} />
 
           <Label title="Mobile" value={mobile} style={styles.title} />
           <InputBox onChangeText={value => setMobile(value)} />
 
-          <Label title="Profession" value={profession} style={styles.title} />
-          <InputBox onChangeText={value => setProfession(value)} />
+          <Label title="password" value={password} style={styles.title} />
+          <InputBox onChangeText={value => setPassword(value)} />
 
           <Button
             title="Sign Up"
