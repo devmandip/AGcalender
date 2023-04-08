@@ -66,6 +66,13 @@ const Signup = () => {
           navigation.navigate('Login');
 
           setLoader(false);
+
+          toast.show('Successfully registred', {
+            type: 'success',
+            placement: 'bottom',
+            duration: 2000,
+            animationType: 'zoom-in',
+          });
         }
       })
       .catch(error => {
