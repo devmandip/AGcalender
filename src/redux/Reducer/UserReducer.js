@@ -3,6 +3,7 @@ import * as types from '../Actions/ActionsTypes';
 const initialState = {
   login: false,
   userDetails: '',
+  userWiseDetails: '',
 };
 
 export default (state = initialState, action) => {
@@ -18,7 +19,12 @@ export default (state = initialState, action) => {
         userDetails: action.payload,
       };
     }
-
+    case types.USER_WISE_DETAILS: {
+      return {
+        ...state,
+        userDetails: action.payload,
+      };
+    }
     case types.LOGOUT:
       return {
         initialState,

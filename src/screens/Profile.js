@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/Fontisto';
@@ -16,10 +16,19 @@ import {images, moderatedScale, scale, theme} from '../utils';
 import {Label, Title} from '../components';
 import {chatData, cropData, optionsData} from '../utils/MockData';
 import {useNavigation} from '@react-navigation/core';
+import {useDispatch, useSelector} from 'react-redux';
+import {userWiseDetails} from '../redux/Actions/UserActions';
 
 const Profile = () => {
   const [selTab, setTab] = useState(0);
   const navigation = useNavigation();
+  const [userDetails, setUserDetails] = useState(null);
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.UserReducer);
+  console.log('user >> ', user);
+  useEffect(() => {
+    dispatch(userWiseDetails());
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.profileHeader} />

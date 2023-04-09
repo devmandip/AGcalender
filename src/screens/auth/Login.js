@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   ImageBackground,
   SafeAreaView,
@@ -34,11 +35,11 @@ const Login = () => {
       setLoad(true);
       ApiService.post(API.Login, options)
         .then(res => {
+          console.log('res >>> ', res);
           dispatch(isLogin(true));
           dispatch(userData(res));
           navigation.navigate('Tab');
           setLoad(false);
-          console.log('Res >', res);
         })
         .catch(e => {
           console.log('error', e);
@@ -91,15 +92,22 @@ const Login = () => {
               </>
             )} */}
             <View>
-              <Button
-                onPress={() => {
-                  handleLogin();
-                  // otpSend ? navigation.navigate('Tab') : setOtpSend(!otpSend);
-                }}
-                title={'Login'}
-                style={styles.btn}
-                titleStyle={styles.btnTxt}
-              />
+              {load ? (
+                <ActivityIndicator
+                  size={'large'}
+                  color={theme.colors.primary}
+                />
+              ) : (
+                <Button
+                  onPress={() => {
+                    handleLogin();
+                    // otpSend ? navigation.navigate('Tab') : setOtpSend(!otpSend);
+                  }}
+                  title={'Login'}
+                  style={styles.btn}
+                  titleStyle={styles.btnTxt}
+                />
+              )}
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('SignUp');

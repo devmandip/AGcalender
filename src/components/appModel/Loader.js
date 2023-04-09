@@ -19,7 +19,7 @@ const Loader = props => {
             source={loader}
             autoPlay
             loop
-            style={{height: scale(200)}}
+            style={{height: scale(70)}}
           />
         </View>
       </View>

@@ -13,3 +13,9 @@ export const userData = payload => {
     payload,
   };
 };
+
+export const userWiseDetails = payload => {
+  return {
+    type: types.USER_WISE_DETAILS,
+  };
+};

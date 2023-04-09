@@ -54,7 +54,8 @@ const execute = async (
 
 export const API = {
   Login:'auth/signin',
-  SignUp:'auth/signup'
+  SignUp:'auth/signup',
+  user:'user'
 };
 
 export default {
