@@ -47,11 +47,8 @@ const execute = async (
     console.info('res ===> ', res);
     return res.data;
   } catch (err: any) {
-    if (err.response.status === 401) {
-      //   storage.remove();
-      //   navigation.replace('Landing');
-    }
-    throw err;
+    
+    
   }
 };
 

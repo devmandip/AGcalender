@@ -3,6 +3,7 @@ import AppNavigation from './src/navigation/AppNavigation';
 import {Provider} from 'react-redux';
 import {store, persistor} from './src/redux/Store';
 import {PersistGate} from 'redux-persist/integration/react';
+import {ToastProvider} from 'react-native-toast-notifications';
 
 const App = () => {
   useEffect(() => {
@@ -12,7 +13,9 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <AppNavigation />
+        <ToastProvider>
+          <AppNavigation />
+        </ToastProvider>
       </PersistGate>
     </Provider>
   );
