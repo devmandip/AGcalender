@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/core';
 import {scale, theme} from '../../utils';
 import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {SelectCropModel} from '../../components';
+import {Range_Calender, SelectCropModel} from '../../components';
 
 const data = [
   {label: 'Item 1', value: '1'},
@@ -93,7 +93,9 @@ const AddCrop = () => {
           </View>
 
           <Text style={styles.calender_title}>Harvesting Date</Text>
-          <CalenderView showheader={false} />
+          {/* <CalenderView showheader={false} /> */}
+
+          <Range_Calender />
 
           <View style={[styles.input_view, {marginTop: scale(10)}]}>
             <TxtInput

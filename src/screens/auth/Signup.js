@@ -13,7 +13,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {images, scale, theme} from '../../utils';
 import {Button, InputBox, Label, Loader} from '../../components';
 import {useNavigation} from '@react-navigation/core';
-import ApiService, {API} from '../../utils/ApiService';
 import axios from 'axios';
 import {useToast} from 'react-native-toast-notifications';
 
@@ -21,6 +20,15 @@ const Signup = () => {
   const navigation = useNavigation();
 
   const toast = useToast();
+
+  const ToastMessage = (message, type) => {
+    toast.show(message, {
+      type: type === undefined ? 'normal' : type,
+      placement: 'bottom',
+      duration: 1000,
+      animationType: 'zoom-in',
+    });
+  };
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -45,46 +53,53 @@ const Signup = () => {
   };
 
   const OnSignup_press = () => {
-    setLoader(true);
+    if (name === '') {
+      ToastMessage('Username is required', 'danger');
+    } else if (email === '') {
+      ToastMessage('Email is required', 'danger');
+    } else if (mobile === '') {
+      ToastMessage('Mobile number is required', 'danger');
+    } else if (password === '') {
+      ToastMessage('Password is required', 'danger');
+    } else {
+      setLoader(true);
 
-    const headers = {
-      'Content-Type': 'application/json',
-    };
+      const headers = {
+        'Content-Type': 'application/json',
+      };
 
-    axios
-      .post(
-        'https://246b-2603-8081-1800-f423-d131-6594-b2b7-e578.ngrok.io/api/auth/signup',
-        data,
-        {
-          headers,
-        },
-      )
-      .then(response => {
-        if (response.status === 200) {
-          console.log(JSON.stringify(response.data, null, 4));
+      axios
+        .post(
+          'https://246b-2603-8081-1800-f423-d131-6594-b2b7-e578.ngrok.io/api/auth/signup',
+          data,
+          {
+            headers,
+          },
+        )
+        .then(response => {
+          if (response.status === 200) {
+            console.log(JSON.stringify(response.data, null, 4));
 
-          navigation.navigate('Login');
+            navigation.navigate('Login');
 
+            setLoader(false);
+
+            ToastMessage('successfully registred', 'success');
+          }
+        })
+        .catch(error => {
           setLoader(false);
 
-          toast.show('Successfully registred', {
-            type: 'success',
-            placement: 'bottom',
-            duration: 2000,
-            animationType: 'zoom-in',
-          });
-        }
-      })
-      .catch(error => {
-        console.log(error.response.data.message);
+          console.log(error.response.data.message);
 
-        toast.show(error.response.data.message, {
-          type: 'danger',
-          placement: 'bottom',
-          duration: 2000,
-          animationType: 'zoom-in',
+          ToastMessage(
+            error.response.data.message === undefined
+              ? 'something went wrong !'
+              : error.response.data.message,
+            'danger',
+          );
         });
-      });
+    }
   };
 
   return (

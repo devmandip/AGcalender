@@ -41,7 +41,7 @@ const Login = () => {
           console.log('Res >', res);
         })
         .catch(e => {
-          console.log('error', e);
+          console.log('error', e.response.data.message);
         });
     } catch (error) {
       setLoad(false);
