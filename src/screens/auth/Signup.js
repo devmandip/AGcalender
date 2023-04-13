@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Image,
   ImageBackground,
@@ -13,14 +14,24 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {images, scale, theme} from '../../utils';
 import {Button, InputBox, Label, Loader} from '../../components';
 import {useNavigation} from '@react-navigation/core';
-import ApiService, {API} from '../../utils/ApiService';
 import axios from 'axios';
 import {useToast} from 'react-native-toast-notifications';
+import ApiService from '../../utils/ApiService';
+import {API} from '../../utils/ApiService';
 
 const Signup = () => {
   const navigation = useNavigation();
 
   const toast = useToast();
+
+  const ToastMessage = (message, type) => {
+    toast.show(message, {
+      type: type === undefined ? 'normal' : type,
+      placement: 'bottom',
+      duration: 1000,
+      animationType: 'zoom-in',
+    });
+  };
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -44,47 +55,43 @@ const Signup = () => {
     preferredCrops: '',
   };
 
-  const OnSignup_press = () => {
-    setLoader(true);
+  const OnSignup_press = async () => {
+    if (name === '') {
+      ToastMessage('Username is required', 'danger');
+    } else if (email === '') {
+      ToastMessage('Email is required', 'danger');
+    } else if (mobile === '') {
+      ToastMessage('Mobile number is required', 'danger');
+    } else if (password === '') {
+      ToastMessage('Password is required', 'danger');
+    } else {
+      setLoader(true);
+      try {
+        const options = {payloads: data};
+        const response = await ApiService.post(API.SignUp, options);
 
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-
-    axios
-      .post(
-        'https://246b-2603-8081-1800-f423-d131-6594-b2b7-e578.ngrok.io/api/auth/signup',
-        data,
-        {
-          headers,
-        },
-      )
-      .then(response => {
-        if (response.status === 200) {
+        if (response) {
           console.log(JSON.stringify(response.data, null, 4));
 
           navigation.navigate('Login');
 
           setLoader(false);
 
-          toast.show('Successfully registred', {
-            type: 'success',
-            placement: 'bottom',
-            duration: 2000,
-            animationType: 'zoom-in',
-          });
+          ToastMessage('successfully registred', 'success');
+        } else {
+          setLoader(false);
         }
-      })
-      .catch(error => {
-        console.log(error.response.data.message);
-
-        toast.show(error.response.data.message, {
-          type: 'danger',
-          placement: 'bottom',
-          duration: 2000,
-          animationType: 'zoom-in',
-        });
-      });
+      } catch (error) {
+        console.log(error.response);
+        setLoader(false);
+        ToastMessage(
+          error.response.data.message === undefined
+            ? 'something went wrong !'
+            : error.response.data.message,
+          'danger',
+        );
+      }
+    }
   };
 
   return (
@@ -122,18 +129,26 @@ const Signup = () => {
           <Label title="Email" style={styles.title} />
           <InputBox value={email} onChangeText={value => setEmail(value)} />
 
-          <Label title="Mobile" value={mobile} style={styles.title} />
-          <InputBox onChangeText={value => setMobile(value)} />
+          <Label title="Mobile" style={styles.title} />
+          <InputBox value={mobile} onChangeText={value => setMobile(value)} />
 
-          <Label title="password" value={password} style={styles.title} />
-          <InputBox onChangeText={value => setPassword(value)} />
-
-          <Button
-            title="Sign Up"
-            style={styles.btn}
-            titleStyle={styles.btnTxt}
-            onPress={OnSignup_press}
+          <Label title="Password" value={password} style={styles.title} />
+          <InputBox
+            secureTextEntry
+            value={password}
+            onChangeText={value => setPassword(value)}
           />
+
+          {loader ? (
+            <ActivityIndicator size="large" color={theme.colors.white} />
+          ) : (
+            <Button
+              title="Sign Up"
+              style={styles.btn}
+              titleStyle={styles.btnTxt}
+              onPress={OnSignup_press}
+            />
+          )}
 
           <TouchableOpacity
             onPress={() => {
@@ -148,7 +163,7 @@ const Signup = () => {
         </View>
       </ImageBackground>
 
-      {loader && <Loader />}
+      {/* {loader && <Loader />} */}
     </SafeAreaView>
   );
 };
