@@ -5,6 +5,7 @@ const images = {
   google: require('./google.png'),
   fb: require('./facebook.png'),
   linkedin: require('./linkedin.png'),
+  background: require('./background.png'),
 };
 
 export default images;

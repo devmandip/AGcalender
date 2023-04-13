@@ -96,11 +96,35 @@ const AddCrop = () => {
           <CalenderView showheader={false} />
 
           <View style={[styles.input_view, {marginTop: scale(10)}]}>
-            <TxtInput
-              width={theme.SCREENWIDTH * 0.43}
-              title="Approximate Volume"
-            />
-            <TxtInput width={theme.SCREENWIDTH * 0.43} title="Units" />
+            <TxtInput width={theme.SCREENWIDTH * 0.3} title="Eild Volume" />
+            <View
+              style={[
+                styles.input_view,
+                {marginHorizontal: scale(1), alignItems: 'center'},
+              ]}>
+              <TxtInput width={theme.SCREENWIDTH * 0.2} title="Units" />
+              <Dropdown
+                style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={data}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select unit' : '...'}
+                searchPlaceholder="Search..."
+                value={value}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={item => {
+                  setValue(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
           </View>
 
           <SubmitBtn
@@ -158,8 +182,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
-    width: theme.SCREENWIDTH * 0.43,
-    marginTop: scale(15),
+    width: theme.SCREENWIDTH * 0.3,
+    marginTop: scale(20),
+    marginHorizontal: scale(8),
   },
   icon: {
     marginRight: 5,

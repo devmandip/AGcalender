@@ -16,6 +16,7 @@ import {useNavigation} from '@react-navigation/core';
 import ApiService, {API} from '../../utils/ApiService';
 import {useDispatch} from 'react-redux';
 import {isLogin, userData} from '../../redux/Actions/UserActions';
+import {useToast} from 'react-native-toast-notifications';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -24,8 +25,9 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [otpSend, setOtpSend] = useState(false);
   const [load, setLoad] = useState(false);
+  const toast = useToast();
   const dispatch = useDispatch();
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const frmData = {
       username: userName,
       password: password,
@@ -33,28 +35,30 @@ const Login = () => {
     const options = {payloads: frmData};
     try {
       setLoad(true);
-      ApiService.post(API.Login, options)
-        .then(res => {
-          console.log('res >>> ', res);
-          dispatch(isLogin(true));
-          dispatch(userData(res));
-          navigation.navigate('Tab');
-          setLoad(false);
-        })
-        .catch(e => {
-          console.log('error', e);
+      const response = await ApiService.post(API.Login, options);
+
+      if (response?.username) {
+        console.log('response>>> ', response);
+        dispatch(isLogin(true));
+        dispatch(userData(response));
+        navigation.navigate('Tab');
+        setLoad(false);
+      } else {
+        setLoad(false);
+        toast.show('wrong details.', {
+          type: 'error',
+          placement: 'bottom',
+          duration: 1000,
+          animationType: 'zoom-in',
         });
+      }
     } catch (error) {
       setLoad(false);
     }
   };
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={{
-          uri: 'https://png.pngtree.com/thumb_back/fh260/background/20190223/ourmid/pngtree-full-matte-grain-texture-flare-black-background-granulefrosted-textureblackblack-goldfrosted-image_71659.jpg',
-        }}
-        style={styles.container}>
+      <ImageBackground source={images.background} style={styles.container}>
         <View style={{justifyContent: 'space-between', flex: 1}}>
           <View style={styles.logoContainer}>
             <Image source={images.FLogo} style={styles.logoStyle} />
@@ -133,6 +137,7 @@ export default Login;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#000',
   },
   logoStyle: {
     width: scale(100),

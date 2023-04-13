@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 
 const MianStack = () => {
   const isLogin = useSelector(state => state.UserReducer.login);
-  console.log('>>>>> ', isLogin);
+
   return (
     <NavigationContainer>
       <Stack.Navigator

@@ -22,7 +22,7 @@ export default (state = initialState, action) => {
     case types.USER_WISE_DETAILS: {
       return {
         ...state,
-        userDetails: action.payload,
+        userWiseDetails: action.payload,
       };
     }
     case types.LOGOUT:

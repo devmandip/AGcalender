@@ -89,11 +89,7 @@ const Signup = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={{
-          uri: 'https://png.pngtree.com/thumb_back/fh260/background/20190223/ourmid/pngtree-full-matte-grain-texture-flare-black-background-granulefrosted-textureblackblack-goldfrosted-image_71659.jpg',
-        }}
-        style={styles.container}>
+      <ImageBackground source={images.background} style={styles.container}>
         <View style={styles.logoContainer}>
           <Image source={images.Logo} style={styles.logoStyle} />
           <Label title="  Harvesting calendar" style={styles.txt} />
@@ -162,6 +158,7 @@ export default Signup;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#000',
   },
   logoStyle: {
     width: scale(30),

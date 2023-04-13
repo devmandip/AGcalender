@@ -17,18 +17,19 @@ import {Label, Title} from '../components';
 import {chatData, cropData, optionsData} from '../utils/MockData';
 import {useNavigation} from '@react-navigation/core';
 import {useDispatch, useSelector} from 'react-redux';
-import {userWiseDetails} from '../redux/Actions/UserActions';
+import {isLogin, userData, userWiseDetails} from '../redux/Actions/UserActions';
 
 const Profile = () => {
   const [selTab, setTab] = useState(0);
   const navigation = useNavigation();
   const [userDetails, setUserDetails] = useState(null);
   const dispatch = useDispatch();
-  const user = useSelector(state => state.UserReducer);
-  console.log('user >> ', user);
+  const loginUserData = useSelector(state => state.UserReducer);
+  console.log('user >> ', loginUserData?.userWiseDetails);
   useEffect(() => {
-    dispatch(userWiseDetails());
-  }, []);
+    dispatch(userWiseDetails(loginUserData?.userDetails?.id));
+  }, [loginUserData]);
+
   return (
     <View style={styles.container}>
       <View style={styles.profileHeader} />
@@ -48,14 +49,19 @@ const Profile = () => {
         size={scale(20)}
         style={styles.menu}
         onPress={() => {
-          navigation.navigate('SignUp');
+          navigation.navigate('authStack');
+          dispatch(isLogin(false));
+          dispatch(userData(null));
         }}
       />
 
       <View style={styles.bodyContainer}>
         <View style={styles.nameContainer}>
           <View style={styles.row}>
-            <Title title="Lokesh Kakarla, " style={styles.title} />
+            <Title
+              title={`${loginUserData?.userDetails?.username}, `}
+              style={styles.title}
+            />
             <Label title="Farmer" />
           </View>
 

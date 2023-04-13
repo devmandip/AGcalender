@@ -1,7 +1,7 @@
 import axios from 'axios';
 // import { BASE_URL } from '../constants';
 
-const APP_API_URL ='https://246b-2603-8081-1800-f423-d131-6594-b2b7-e578.ngrok.io/api/';
+const APP_API_URL ='https://96e2-2603-8081-1800-f423-688a-2642-1061-aa7d.ngrok-free.app/api/';
 
 axios.interceptors.request.use(config => config);
 
@@ -18,7 +18,7 @@ const execute = async (
 ) => {
   const base = APP_API_URL.replace(/~\/$/, '');
   const url = !fileUpload ? base + path : path;
-  console.log('url for api call ', url) ;
+  console.log('url for api call ', url);
   //   if (token && !fileUpload) {
   //     headers.Authorization = `Bearer ${token}`;
   //   }
@@ -55,7 +55,7 @@ const execute = async (
 export const API = {
   Login:'auth/signin',
   SignUp:'auth/signup',
-  user:'user'
+  user:'user/'
 };
 
 export default {
