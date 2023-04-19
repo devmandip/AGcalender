@@ -1,7 +1,7 @@
 import axios from 'axios';
 // import { BASE_URL } from '../constants';
 
-const APP_API_URL ='https://96e2-2603-8081-1800-f423-688a-2642-1061-aa7d.ngrok-free.app/api/';
+const APP_API_URL ='https://agmart.ngrok.app/api/';
 
 axios.interceptors.request.use(config => config);
 

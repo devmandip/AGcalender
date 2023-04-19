@@ -10,6 +10,8 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
+import {Menu, MenuItem, MenuDivider} from 'react-native-material-menu';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {images, scale, theme} from '../../utils';
 import {Button, InputBox, Label, Loader} from '../../components';
@@ -18,10 +20,15 @@ import axios from 'axios';
 import {useToast} from 'react-native-toast-notifications';
 import ApiService from '../../utils/ApiService';
 import {API} from '../../utils/ApiService';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const Signup = () => {
   const navigation = useNavigation();
+  const [visible, setVisible] = useState(false);
 
+  const hideMenu = () => setVisible(false);
+
+  const showMenu = () => setVisible(true);
   const toast = useToast();
 
   const ToastMessage = (message, type) => {
@@ -121,46 +128,52 @@ const Signup = () => {
             Alert.alert('call');
           }}
         />
+        <KeyboardAwareScrollView>
+          <View style={styles.contactForm}>
+            <Label title="Name" style={styles.title} />
+            <InputBox value={name} onChangeText={value => setName(value)} />
 
-        <View style={styles.contactForm}>
-          <Label title="Name" style={styles.title} />
-          <InputBox value={name} onChangeText={value => setName(value)} />
+            <Label title="Email" style={styles.title} />
+            <InputBox value={email} onChangeText={value => setEmail(value)} />
 
-          <Label title="Email" style={styles.title} />
-          <InputBox value={email} onChangeText={value => setEmail(value)} />
-
-          <Label title="Mobile" style={styles.title} />
-          <InputBox value={mobile} onChangeText={value => setMobile(value)} />
-
-          <Label title="Password" value={password} style={styles.title} />
-          <InputBox
-            secureTextEntry
-            value={password}
-            onChangeText={value => setPassword(value)}
-          />
-
-          {loader ? (
-            <ActivityIndicator size="large" color={theme.colors.white} />
-          ) : (
-            <Button
-              title="Sign Up"
-              style={styles.btn}
-              titleStyle={styles.btnTxt}
-              onPress={OnSignup_press}
+            <Label title="Mobile" style={styles.title} />
+            <InputBox
+              keyboardType="numeric"
+              maxLength={10}
+              value={mobile}
+              onChangeText={value => setMobile(value)}
             />
-          )}
 
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Login');
-            }}
-            style={styles.row}>
-            <Text style={styles.signupTxt}>
-              Already have account?{'  '}
-              <Text style={styles.signupTxt1}>Login</Text>
-            </Text>
-          </TouchableOpacity>
-        </View>
+            <Label title="Password" value={password} style={styles.title} />
+            <InputBox
+              secureTextEntry
+              value={password}
+              onChangeText={value => setPassword(value)}
+            />
+
+            {loader ? (
+              <ActivityIndicator size="large" color={theme.colors.white} />
+            ) : (
+              <Button
+                title="Sign Up"
+                style={styles.btn}
+                titleStyle={styles.btnTxt}
+                onPress={OnSignup_press}
+              />
+            )}
+
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Login');
+              }}
+              style={styles.row}>
+              <Text style={styles.signupTxt}>
+                Already have account?{'  '}
+                <Text style={styles.signupTxt1}>Login</Text>
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAwareScrollView>
       </ImageBackground>
 
       {/* {loader && <Loader />} */}

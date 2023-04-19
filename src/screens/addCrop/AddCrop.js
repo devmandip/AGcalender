@@ -7,6 +7,7 @@ import {scale, theme} from '../../utils';
 import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Range_Calender, SelectCropModel} from '../../components';
+import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
 
 const data = [
   {label: 'Item 1', value: '1'},
@@ -20,8 +21,13 @@ const data = [
 ];
 const AddCrop = () => {
   const navigation = useNavigation();
+  const [visible, setVisible] = useState(false);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const hideMenu = () => setVisible(false);
+
+  const showMenu = () => setVisible(true);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
@@ -105,27 +111,23 @@ const AddCrop = () => {
                 {marginHorizontal: scale(1), alignItems: 'center'},
               ]}>
               <TxtInput width={theme.SCREENWIDTH * 0.2} title="Units" />
-              <Dropdown
-                style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={data}
-                search
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus ? 'Select unit' : '...'}
-                searchPlaceholder="Search..."
-                value={value}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                onChange={item => {
-                  setValue(item.value);
-                  setIsFocus(false);
-                }}
-              />
+              <Menu
+                visible={visible}
+                anchor={
+                  <Text
+                    style={{
+                      marginHorizontal: scale(5),
+                      paddingVertical: scale(5),
+                    }}
+                    onPress={showMenu}>
+                    Select
+                  </Text>
+                }
+                onRequestClose={hideMenu}>
+                <MenuItem onPress={hideMenu}>Grm</MenuItem>
+                <MenuItem onPress={hideMenu}>Kg</MenuItem>
+                <MenuItem onPress={hideMenu}>Qtl</MenuItem>
+              </Menu>
             </View>
           </View>
 
