@@ -30,3 +30,35 @@ export const userWiseDetails = id => {
     }
   };
 };
+
+export const getCategoriesData = () => {
+  return async dispatch => {
+    try {
+      const response = await ApiService.get(API.categories);
+
+      if (response) {
+        dispatch({type: types.CATEGORIES_LIST, payload: response});
+      } else {
+        console.log('response > ', response);
+      }
+    } catch (error) {
+      console.log('error in CATEGORI LIST ', error);
+    }
+  };
+};
+
+export const getCropData = () => {
+  return async dispatch => {
+    try {
+      const response = await ApiService.get(API.crops);
+
+      if (response) {
+        dispatch({type: types.CROPS_LIST, payload: response});
+      } else {
+        console.log('response > ', response);
+      }
+    } catch (error) {
+      console.log('error in CATEGORI LIST ', error);
+    }
+  };
+};

@@ -6,12 +6,14 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React from 'react';
+import React,{useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {YardData} from '../../../utils/MockData';
 import {scale, theme} from '../../../utils';
 import Header from './Header';
 import Story from './Story';
+import {useDispatch, useSelector} from 'react-redux';
+import ApiService, { API } from '../../../utils/ApiService';
 
 const Yard_header = () => {
   return (
@@ -116,10 +118,34 @@ const renderItem = ({item}) => {
 };
 
 const YardVew = () => {
+const [yardData, setYardData] = useState([])
+
+  const dispatch = useDispatch();
+  const userReducer = useSelector(state => state.UserReducer);
+
+   const getYardDetailsByID =async id => {
+      try {
+        const response = await ApiService.get(`${API.mRates}cropId=${id}&latitude=${"17.3850"}&longitude=${"78.4867"}&radius=${"1000000"}`);
+        if (response) {
+          setYardData(response)
+        } else {
+          console.log('response > ', response);
+        }
+      } catch (error) {
+        console.log('error in USERDETAILS', error);
+      }
+    };
+console.log(yardData)
+
   return (
     <SafeAreaView>
       <Header />
-      <Story />
+      <Story
+        selectPress={item => {
+          getYardDetailsByID(item?.id)
+        }}
+        listData={userReducer?.categoryList}
+      />
       <View
         style={{
           height:

@@ -4,6 +4,8 @@ const initialState = {
   login: false,
   userDetails: '',
   userWiseDetails: '',
+  categoryList: [],
+  cropsList: [],
 };
 
 export default (state = initialState, action) => {
@@ -23,6 +25,18 @@ export default (state = initialState, action) => {
       return {
         ...state,
         userWiseDetails: action.payload,
+      };
+    }
+    case types.CATEGORIES_LIST: {
+      return {
+        ...state,
+        categoryList: action.payload,
+      };
+    }
+    case types.CROPS_LIST: {
+      return {
+        ...state,
+        cropsList: action.payload,
       };
     }
     case types.LOGOUT:

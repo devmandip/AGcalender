@@ -8,6 +8,7 @@ const TxtInput = props => {
     <View style={styles.container}>
       <Text style={styles.headerTxt}>{title}</Text>
       <TextInput
+        {...props}
         onTouchStart={onTouchStart}
         style={[styles.txtinput, {width: width}]}
       />
@@ -28,8 +29,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 0,
     height: 50,
+    color: 'black',
     backgroundColor: '#EDEDED',
     borderRadius: 10,
-    marginTop:5
+    marginTop: 5,
   },
 });

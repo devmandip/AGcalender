@@ -11,7 +11,7 @@ import {Veg} from '../../../dummyData/Veg';
 import {scale, theme} from '../../../utils';
 import { Label } from '../../../components';
 
-const Story = () => {
+const Story = (props) => {
   const [selectCat, setCategory] = useState(null);
   const renderItem = ({item, index}) => {
     return (
@@ -19,6 +19,7 @@ const Story = () => {
         <TouchableOpacity
           onPress={() => {
             setCategory(index);
+            props.selectPress(item);
           }}
           style={{
             borderWidth: selectCat === index ? scale(1.3) : 0,
@@ -26,7 +27,7 @@ const Story = () => {
             padding: scale(3),
             borderRadius: scale(35),
           }}>
-          <Image source={item.img} style={styles.renderItem_img} />
+          <Image source={item?.imageUrl  ??require('../../../assets/Images/veges/coriander.png')} style={styles.renderItem_img} />
         </TouchableOpacity>
         <Label title={item.name} />
       </View>
@@ -35,7 +36,7 @@ const Story = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={Veg}
+        data={props.listData}
         renderItem={renderItem}
         horizontal={true}
         showsHorizontalScrollIndicator={false}

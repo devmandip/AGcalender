@@ -55,7 +55,10 @@ const execute = async (
 export const API = {
   Login:'auth/signin',
   SignUp:'auth/signup',
-  user:'user/'
+  user:'user/',
+  categories:'categories',
+  crops:'crops',
+  mRates:'market/rates?',
 };
 
 export default {

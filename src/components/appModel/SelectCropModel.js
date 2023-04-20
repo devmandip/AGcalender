@@ -15,7 +15,6 @@ import {useNavigation} from '@react-navigation/core';
 
 import {SearchBar} from '../../screens/home/components';
 import {Label, Title} from '../Label';
-import {cropList} from '../../dummyData/Veg';
 
 const DrawerModal = props => {
   const {isVisible, close} = props;
@@ -23,7 +22,7 @@ const DrawerModal = props => {
   const [searchtxt, setSearch] = useState('');
 
   useEffect(() => {
-    setCropList(cropList);
+    setCropList(props.listData);
   }, []);
 
   const navigation = useNavigation();
@@ -32,10 +31,17 @@ const DrawerModal = props => {
       <View style={styles.renderItem_container} key={index}>
         <TouchableOpacity
           onPress={() => {
+            close();
+            props.selectedItem(item)
             //  setCategory(index);
           }}
           style={styles.cropcard}>
-          <Image source={{uri: item.image_url}} style={styles.renderItem_img} />
+          <Image
+            source={{
+              uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Triticum_aestivum_-_Kia_Gardens.jpg/220px-Triticum_aestivum_-_Kia_Gardens.jpg',
+            }}
+            style={styles.renderItem_img}
+          />
           <Label title={item.name} />
         </TouchableOpacity>
       </View>
@@ -43,7 +49,7 @@ const DrawerModal = props => {
   };
   const handleSearch = text => {
     if (text) {
-      const newData = cropList.filter(function (item) {
+      const newData = props.listData.filter(function (item) {
         const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
@@ -51,7 +57,7 @@ const DrawerModal = props => {
       setCropList(newData);
       setSearch(text);
     } else {
-      setCropList(cropList);
+      setCropList(props.listData);
       setSearch(text);
     }
   };

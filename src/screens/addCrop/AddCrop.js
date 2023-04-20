@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, ScrollView, SafeAreaView} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {Header, SubmitBtn, TxtInput} from './addCrop_components';
 import {CalenderView} from '../home/components';
 import {useNavigation} from '@react-navigation/core';
@@ -8,6 +8,8 @@ import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Range_Calender, SelectCropModel} from '../../components';
 import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
+import {useDispatch, useSelector} from 'react-redux';
+import {getCropData} from '../../redux/Actions/UserActions';
 
 const data = [
   {label: 'Item 1', value: '1'},
@@ -22,9 +24,16 @@ const data = [
 const AddCrop = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
-  const [value, setValue] = useState(null);
+  const [selectedCrop, setSelectedCrop] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const hideMenu = () => setVisible(false);
+
+  const dispatch = useDispatch();
+  const userReducer = useSelector(state => state.UserReducer);
+  console.log('>>>>>>>>', userReducer);
+  useEffect(() => {
+    dispatch(getCropData());
+  }, []);
 
   const showMenu = () => setVisible(true);
 
@@ -45,6 +54,7 @@ const AddCrop = () => {
           <View style={styles.input_view}>
             <TxtInput width={theme.SCREENWIDTH * 0.43} title="Farm Location" />
             <TxtInput
+            value={selectedCrop}
               onTouchStart={() => {
                 setIsFocus(true);
               }}
@@ -137,7 +147,7 @@ const AddCrop = () => {
           />
         </ScrollView>
       </View>
-      <SelectCropModel isVisible={isFocus} close={() => setIsFocus(false)} />
+      <SelectCropModel selectedItem={(item)=>{setSelectedCrop(item?.name)}} listData={userReducer?.cropsList} isVisible={isFocus} close={() => setIsFocus(false)} />
     </SafeAreaView>
   );
 };
