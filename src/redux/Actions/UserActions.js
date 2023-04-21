@@ -34,13 +34,16 @@ export const userWiseDetails = id => {
 export const getCategoriesData = () => {
   return async dispatch => {
     try {
-      const response = await ApiService.get(API.categories);
-
-      if (response) {
-        dispatch({type: types.CATEGORIES_LIST, payload: response});
-      } else {
-        console.log('response > ', response);
-      }
+      ApiService.get(API.categories)
+        .then(response => {
+          console.log('response ???', response);
+          if (response) {
+            dispatch({type: types.CATEGORIES_LIST, payload: response});
+          }
+        })
+        .catch(e => {
+          console.log('error > ', e);
+        });
     } catch (error) {
       console.log('error in CATEGORI LIST ', error);
     }

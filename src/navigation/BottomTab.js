@@ -14,6 +14,8 @@ import {ContactUs, Profile, TermsAndConditions} from '../screens';
 import {Title} from '../components';
 import AddCropStack from './AddCropStack';
 import {YardVew} from '../screens/home/components';
+import {useSelector} from 'react-redux';
+import axios from 'axios';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,6 +35,9 @@ const Comman = () => {
 };
 
 const BottomTab = () => {
+  const userDetails = useSelector(state => state.UserReducer?.userDetails);
+  console.log('first', userDetails);
+  axios.defaults.headers.common.Authorization = `Bearer ${userDetails?.accessToken}`;
   return (
     <Tab.Navigator
       // initialRouteName="User"

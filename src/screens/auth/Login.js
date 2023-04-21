@@ -17,6 +17,7 @@ import ApiService, {API} from '../../utils/ApiService';
 import {useDispatch} from 'react-redux';
 import {isLogin, userData} from '../../redux/Actions/UserActions';
 import {useToast} from 'react-native-toast-notifications';
+import axios from 'axios';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -39,6 +40,7 @@ const Login = () => {
 
       if (response?.username) {
         console.log('response>>> ', response);
+        axios.defaults.headers.common.Authorization = `Bearer ${response?.accessToken}`;
         dispatch(isLogin(true));
         dispatch(userData(response));
         navigation.navigate('Tab');

@@ -16,6 +16,7 @@ import Toast from '../../components/Toast';
 import MapModal from '../../components/appModel/MapModel';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCategoriesData} from '../../redux/Actions/UserActions';
+import {useIsFocused} from '@react-navigation/core';
 
 const renderItem = ({item}) => {
   return (
@@ -36,10 +37,10 @@ const HomeScreen = () => {
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
-
+  const isFocuse = useIsFocused();
   useEffect(() => {
     dispatch(getCategoriesData());
-  }, []);
+  }, [isFocuse]);
 
   const handleScroll = event => {
     // alert('call');

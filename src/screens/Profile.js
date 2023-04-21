@@ -15,7 +15,7 @@ import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 import {images, moderatedScale, scale, theme} from '../utils';
 import {Label, Title} from '../components';
 import {chatData, cropData, optionsData} from '../utils/MockData';
-import {useNavigation} from '@react-navigation/core';
+import {useIsFocused, useNavigation} from '@react-navigation/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {isLogin, userData, userWiseDetails} from '../redux/Actions/UserActions';
 
@@ -25,10 +25,10 @@ const Profile = () => {
   const [userDetails, setUserDetails] = useState(null);
   const dispatch = useDispatch();
   const loginUserData = useSelector(state => state.UserReducer);
-  console.log('user >> ', loginUserData?.userWiseDetails);
+  const isDocus = useIsFocused();
   useEffect(() => {
     dispatch(userWiseDetails(loginUserData?.userDetails?.id));
-  }, [loginUserData]);
+  }, []);
 
   return (
     <View style={styles.container}>

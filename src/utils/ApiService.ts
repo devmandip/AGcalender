@@ -47,8 +47,7 @@ const execute = async (
     console.info('res ===> ', res);
     return res.data;
   } catch (err: any) {
-    
-    
+     console.log('eror of api call ',err.response)
   }
 };
 
