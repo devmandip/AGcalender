@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {Calendar} from 'react-native-calendars';
 import moment from 'moment';
 
-const Range_Calender = () => {
+const Range_Calender = props => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [startDay, setStartDay] = useState('');
   const [endDay, setEndDay] = useState('');
@@ -36,8 +36,10 @@ const Range_Calender = () => {
 
           setSelectedDate(date);
           setEndDay(day.dateString);
+          props.endDay(day.dateString);
         } else {
           setStartDay(day.dateString);
+          props.startDay(day.dateString);
           setEndDay(null);
           setSelectedDate({
             [day.dateString]: {

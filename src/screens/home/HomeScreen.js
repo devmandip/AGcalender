@@ -5,6 +5,7 @@ import {
   FlatList,
   Text,
   SafeAreaView,
+  PermissionsAndroid,
   TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -42,6 +43,33 @@ const HomeScreen = () => {
     dispatch(getCategoriesData());
   }, [isFocuse]);
 
+  useEffect(() => {
+    (async () => {
+      await requestLocationPermission();
+    })();
+  }, []);
+
+  const requestLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Example App',
+          message: 'Example App access to your location ',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the location');
+        // alert('You can use the location');
+      } else {
+        console.log('location permission denied');
+        alert('Location permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
   const handleScroll = event => {
     // alert('call');
     let yOffset = event.nativeEvent.contentOffset.y / 1;
@@ -49,6 +77,7 @@ const HomeScreen = () => {
   };
   return (
     <SafeAreaView style={{backgroundColor: theme.colors.white}}>
+      {/* <MapModal isVisible={false} /> */}
       <ScrollView
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
@@ -87,7 +116,6 @@ const HomeScreen = () => {
         }}>
         <Text>press me</Text>
       </TouchableOpacity>
-      {/* <MapModal /> */}
       {/* <Loader /> */}
     </SafeAreaView>
   );

@@ -2,6 +2,7 @@ import {
   FlatList,
   Image,
   Linking,
+  PermissionsAndroid,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,7 +13,8 @@ import {scale, theme} from '../../utils';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/core';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+import Geolocation from '@react-native-community/geolocation';
 
 import {SearchBar} from '../../screens/home/components';
 import {Label, Title} from '../Label';
@@ -22,41 +24,101 @@ const MapModal = props => {
   const {isVisible, close} = props;
   const [cropsList, setCropList] = useState([]);
   const [searchtxt, setSearch] = useState('');
+  const [position, setPosition] = useState('');
 
   useEffect(() => {
     setCropList(cropList);
+    (async () => {
+      await requestLocationPermission();
+    })();
   }, []);
+
+  const requestLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Example App',
+          message: 'Example App access to your location ',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the location');
+        GetLocation();
+        // alert('You can use the location');
+      } else {
+        console.log('location permission denied');
+        alert('Location permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const GetLocation = () => {
+    Geolocation.getCurrentPosition(pos => {
+      const crd = pos.coords;
+      console.log(crd);
+      setPosition({
+        latitude: crd.latitude,
+        longitude: crd.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    }).catch(err => {
+      console.log(err);
+    });
+  };
 
   return (
     <Modal
       backdropOpacity={0.4}
       visible={isVisible}
       onRequestClose={() => {
-        close();
+        close(position);
       }}
       animationIn="slideOutLeft"
       animationOut="slideInLeft"
       animationInTiming={0.5}
       style={{width: '100%', margin: 0}}>
       <View style={styles.modalBackground}>
-        <View style={styles.header}>
-          <Title title="Crop nam select." />
-          <Icon
-            name="x"
-            size={scale(22)}
-            color={theme.colors.black}
-            onPress={() => close()}
-            // style={styles.closeIcon}
-          />
+        <View style={{flex: 1}}>
+          <View
+            style={{
+              zIndex: 1,
+              right: 20,
+              top: 20,
+              position: 'absolute',
+            }}>
+            <Icon
+              name="x"
+              size={scale(30)}
+              color={theme.colors.black}
+              onPress={() => close(position)}
+              // style={styles.closeIcon}
+            />
+          </View>
           <MapView
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={styles.map}
-            region={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.0121,
-            }}></MapView>
+            onPress={e => {
+              setPosition({
+                latitude: e.nativeEvent.coordinate.latitude,
+                longitude: e.nativeEvent.coordinate.longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              });
+              setTimeout(() => {
+                close(position);
+              }, 2000);
+            }}
+            region={position}>
+            <Marker
+              coordinate={{
+                latitude: Number(position?.latitude),
+                longitude: Number(position?.longitude),
+              }}></Marker>
+          </MapView>
         </View>
       </View>
     </Modal>
@@ -68,12 +130,9 @@ export default MapModal;
 const styles = StyleSheet.create({
   modalBackground: {
     flex: 1,
-    alignItems: 'center',
     // flexDirection: 'column',
     // justifyContent: 'space-around',
-    paddingVertical: scale(20),
     backgroundColor: theme.colors.white,
-    zIndex: 111,
   },
   label: {color: theme.colors.black, fontSize: scale(14), fontWeight: '500'},
   activityIndicatorWrapper: {

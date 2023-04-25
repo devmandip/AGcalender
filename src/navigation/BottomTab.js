@@ -106,6 +106,7 @@ const BottomTab = () => {
         name="Add"
         component={AddCropStack}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({focused}) => {
             return (
               <Icon

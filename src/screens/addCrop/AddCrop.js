@@ -1,5 +1,12 @@
-import {StyleSheet, Text, View, ScrollView, SafeAreaView} from 'react-native';
-import React, {useState,useEffect} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  SafeAreaView,
+  ActivityIndicator,
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {Header, SubmitBtn, TxtInput} from './addCrop_components';
 import {CalenderView} from '../home/components';
 import {useNavigation} from '@react-navigation/core';
@@ -10,6 +17,10 @@ import {Range_Calender, SelectCropModel} from '../../components';
 import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCropData} from '../../redux/Actions/UserActions';
+import MapModal from '../../components/appModel/MapModel';
+import {useToast} from 'react-native-toast-notifications';
+import ApiService, {API} from '../../utils/ApiService';
+import moment from 'moment';
 
 const data = [
   {label: 'Item 1', value: '1'},
@@ -26,10 +37,26 @@ const AddCrop = () => {
   const [visible, setVisible] = useState(false);
   const [selectedCrop, setSelectedCrop] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-  const hideMenu = () => setVisible(false);
+  const hideMenu = (text = '') => {
+    setUnits(text);
+    setVisible(false);
+  };
+  const [loader, setLoader] = useState(false);
+  const toast = useToast();
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
+  const [fName, setFName] = useState(userReducer?.userDetails?.username);
+  const [mNo, setMNo] = useState('');
+  const [variety, setVariety] = useState('');
+  const [Volume, setVolume] = useState('');
+  const [area, setArea] = useState('');
+  const [showMap, setShowMap] = useState(false);
+  const [farmLocation, setFarmLocation] = useState(false);
+  const [units, setUnits] = useState('');
+  const [endDay, setEndDay] = useState('');
+  const [startDay, setStartDay] = useState('');
+
   console.log('>>>>>>>>', userReducer);
   useEffect(() => {
     dispatch(getCropData());
@@ -37,9 +64,91 @@ const AddCrop = () => {
 
   const showMenu = () => setVisible(true);
 
+  const ToastMessage = (message, type) => {
+    toast.show(message, {
+      type: type === undefined ? 'normal' : type,
+      placement: 'bottom',
+      duration: 1000,
+      animationType: 'zoom-in',
+    });
+  };
+
+  const checkValidation = async () => {
+    if (fName === '') {
+      ToastMessage('Farm name is required', 'danger');
+    } else if (mNo === '') {
+      ToastMessage('Mobile number is required', 'danger');
+    } else if (farmLocation === '') {
+      ToastMessage('Farm location is required', 'danger');
+    } else if (selectedCrop === '') {
+      ToastMessage('Crop name is required', 'danger');
+    } else if (variety === '') {
+      ToastMessage('Variety name is required', 'danger');
+    } else if (area === '') {
+      ToastMessage('Area name is required', 'danger');
+    } else if (startDay === '') {
+      ToastMessage('Harvesting date is required', 'danger');
+    } else if (Volume === '') {
+      ToastMessage('Eild Volume is required', 'danger');
+    } else if (units === '') {
+      ToastMessage('Units is required', 'danger');
+    } else {
+      setLoader(true);
+      try {
+        const options = {
+          payloads: {
+            userId: userReducer?.userDetails?.id,
+            cropName: selectedCrop,
+            latitude: farmLocation?.latitude,
+            longitude: farmLocation?.longitude,
+            variety: variety,
+            area: area,
+            volume: Volume,
+            unit: units,
+            sowingDate: '',
+            harvestStartDate: moment(startDay).format('DD/MM/YYYY') ?? '', //"22/03/2023"
+            harvestEndDate: moment(endDay).format('DD/MM/YYYY') ?? '', //"22/03/2023"
+            media: '',
+          },
+        };
+        const response = await ApiService.post(API.listing, options);
+
+        if (response) {
+          console.log(
+            '>>>>>>>>>>>>> RESPONSE ',
+            JSON.stringify(response, null, 4),
+          );
+          navigation.navigate('User');
+          setLoader(false);
+          ToastMessage('successfully submit', 'success');
+        } else {
+          setLoader(false);
+        }
+      } catch (error) {
+        console.log(error.response);
+        setLoader(false);
+        ToastMessage(
+          error.response.data.message === undefined
+            ? 'something went wrong !'
+            : error.response.data.message,
+          'danger',
+        );
+      }
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
+        <MapModal
+          close={data => {
+            if (data != null) {
+              setFarmLocation(data);
+            }
+            setShowMap(false);
+          }}
+          isVisible={showMap}
+        />
         <Header title="Add New Corp" />
 
         <ScrollView
@@ -47,14 +156,31 @@ const AddCrop = () => {
           style={styles.View1}
           showsVerticalScrollIndicator={false}>
           <View style={styles.input_view}>
-            <TxtInput width={theme.SCREENWIDTH * 0.43} title="Farmer’s Name" />
-            <TxtInput width={theme.SCREENWIDTH * 0.43} title="Mobile Number" />
+            <TxtInput
+              value={fName}
+              onChangeText={text => setFName(text)}
+              width={theme.SCREENWIDTH * 0.43}
+              title="Farmer’s Name"
+            />
+            <TxtInput
+              value={mNo}
+              keyboardType={'number-pad'}
+              onChangeText={text => setMNo(text)}
+              width={theme.SCREENWIDTH * 0.43}
+              title="Mobile Number"
+            />
           </View>
 
           <View style={styles.input_view}>
-            <TxtInput width={theme.SCREENWIDTH * 0.43} title="Farm Location" />
             <TxtInput
-            value={selectedCrop}
+              onTouchStart={() => {
+                setShowMap(true);
+              }}
+              width={theme.SCREENWIDTH * 0.43}
+              title="Farm Location"
+            />
+            <TxtInput
+              value={selectedCrop}
               onTouchStart={() => {
                 setIsFocus(true);
               }}
@@ -103,24 +229,52 @@ const AddCrop = () => {
           </View>
 
           <View style={styles.input_view}>
-            <TxtInput width={theme.SCREENWIDTH * 0.42} title="Variety" />
-            <TxtInput width={theme.SCREENWIDTH * 0.32} title="Area" />
+            <TxtInput
+              value={variety}
+              onChangeText={text => setVariety(text)}
+              width={theme.SCREENWIDTH * 0.42}
+              title="Variety"
+            />
+            <TxtInput
+              keyboardType={'numeric'}
+              value={area}
+              onChangeText={text => setArea(text)}
+              width={theme.SCREENWIDTH * 0.32}
+              title="Area"
+            />
             <Text style={styles.secondary_txt}>Ac.</Text>
           </View>
 
           <Text style={styles.calender_title}>Harvesting Date</Text>
           {/* <CalenderView showheader={false} /> */}
 
-          <Range_Calender />
+          <Range_Calender
+            endDay={day => {
+              setEndDay(day);
+            }}
+            startDay={day => {
+              setStartDay(day);
+            }}
+          />
 
           <View style={[styles.input_view, {marginTop: scale(10)}]}>
-            <TxtInput width={theme.SCREENWIDTH * 0.3} title="Eild Volume" />
+            <TxtInput
+              value={Volume}
+              onChangeText={text => setVolume(text)}
+              width={theme.SCREENWIDTH * 0.3}
+              title="Eild Volume"
+            />
             <View
               style={[
                 styles.input_view,
                 {marginHorizontal: scale(1), alignItems: 'center'},
               ]}>
-              <TxtInput width={theme.SCREENWIDTH * 0.2} title="Units" />
+              <TxtInput
+                value={units}
+                onChangeText={text => setUnits(text)}
+                width={theme.SCREENWIDTH * 0.2}
+                title="Units"
+              />
               <Menu
                 visible={visible}
                 anchor={
@@ -134,20 +288,43 @@ const AddCrop = () => {
                   </Text>
                 }
                 onRequestClose={hideMenu}>
-                <MenuItem onPress={hideMenu}>Grm</MenuItem>
-                <MenuItem onPress={hideMenu}>Kg</MenuItem>
-                <MenuItem onPress={hideMenu}>Qtl</MenuItem>
+                <MenuItem onPress={() => hideMenu('Grm')}>Grm</MenuItem>
+                <MenuItem onPress={() => hideMenu('Kg')}>Kg</MenuItem>
+                <MenuItem onPress={() => hideMenu('Qtl')}>Qtl</MenuItem>
               </Menu>
             </View>
           </View>
 
-          <SubmitBtn
-            onPress={() => navigation.navigate('Camera')}
-            style={styles.btnStyle}
-          />
+          {loader ? (
+            <View
+              style={[
+                {
+                  height: 50,
+                  borderRadius: 12,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#56AB2F',
+                },
+                styles.btnStyle,
+              ]}>
+              <ActivityIndicator size="large" color={theme.colors.white} />
+            </View>
+          ) : (
+            <SubmitBtn
+              onPress={() => checkValidation()}
+              style={styles.btnStyle}
+            />
+          )}
         </ScrollView>
       </View>
-      <SelectCropModel selectedItem={(item)=>{setSelectedCrop(item?.name)}} listData={userReducer?.cropsList} isVisible={isFocus} close={() => setIsFocus(false)} />
+      <SelectCropModel
+        selectedItem={item => {
+          setSelectedCrop(item?.name);
+        }}
+        listData={userReducer?.cropsList}
+        isVisible={isFocus}
+        close={() => setIsFocus(false)}
+      />
     </SafeAreaView>
   );
 };

@@ -58,6 +58,7 @@ export const API = {
   categories:'categories',
   crops:'crops',
   mRates:'market/rates?',
+  listing:'listing',
 };
 
 export default {
