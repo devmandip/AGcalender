@@ -59,6 +59,7 @@ export const API = {
   crops:'crops',
   mRates:'market/rates?',
   listing:'listing',
+  listingC:'listing/calendar',
 };
 
 export default {

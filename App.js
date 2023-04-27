@@ -5,6 +5,8 @@ import {store, persistor} from './src/redux/Store';
 import {PersistGate} from 'redux-persist/integration/react';
 import {ToastProvider} from 'react-native-toast-notifications';
 
+global.currentLocation;
+
 const App = () => {
   useEffect(() => {
     // LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message

@@ -6,14 +6,14 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {YardData} from '../../../utils/MockData';
 import {scale, theme} from '../../../utils';
 import Header from './Header';
 import Story from './Story';
 import {useDispatch, useSelector} from 'react-redux';
-import ApiService, { API } from '../../../utils/ApiService';
+import ApiService, {API} from '../../../utils/ApiService';
+import moment from 'moment';
 
 const Yard_header = () => {
   return (
@@ -60,7 +60,7 @@ const Yard_list = props => {
           styles.headerView,
           {alignItems: 'flex-start', borderLeftWidth: 1, borderBottomWidth: 1},
         ]}>
-        <Text style={styles.yard_txt}>{date}</Text>
+        <Text style={styles.yard_txt}>{moment(date).format('DD-MM-YYYY')}</Text>
         <Text style={[styles.header_txt, {color: '#56AB2F'}]}>{landMark}</Text>
         <Text style={styles.yard_txt}>
           {km} Km, {state}
@@ -103,46 +103,54 @@ const renderItem = ({item}) => {
   return (
     <View>
       <Yard_list
-        date={item.date}
-        landMark={item.location.landMark}
-        km={item.location.km}
-        state={item.location.product}
-        product={item.product}
-        weight={item.weight}
-        Rs={item.price.RS}
-        up={item.price.up}
-        down={item.price.Down}
+        date={item.arrivalDate}
+        landMark={item?.districtName}
+        state={item?.state}
+        km={item.distance}
+        product={item.variety}
+        weight={item?.arrivals + ' ' + item?.arrivals_unit}
+        Rs={item?.price_unit}
+        up={item.min_price}
+        down={item.max_price}
       />
     </View>
   );
 };
 
 const YardVew = () => {
-const [yardData, setYardData] = useState([])
+  const [yardData, setYardData] = useState([]);
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
 
-   const getYardDetailsByID =async id => {
-      try {
-        const response = await ApiService.get(`${API.mRates}cropId=${id}&latitude=${"17.3850"}&longitude=${"78.4867"}&radius=${"1000000"}`);
-        if (response) {
-          setYardData(response)
-        } else {
-          console.log('response > ', response);
-        }
-      } catch (error) {
-        console.log('error in USERDETAILS', error);
+  const getYardDetailsByID = async id => {
+    try {
+      const options = {
+        queries: {
+          cropId: id,
+          latitude: global.currentLocation?.latitude,
+          longitude: global.currentLocation?.longitude,
+          radius: 1000000,
+        },
+      };
+
+      const response = await ApiService.get(API.mRates, options);
+      if (response) {
+        setYardData(response);
+      } else {
       }
-    };
-console.log(yardData)
+    } catch (error) {
+      console.log('error in USERDETAILS', error);
+    }
+  };
 
   return (
     <SafeAreaView>
       <Header />
       <Story
         selectPress={item => {
-          getYardDetailsByID(item?.id)
+          setYardData([]);
+          getYardDetailsByID(item?.id);
         }}
         listData={userReducer?.categoryList}
       />
@@ -153,12 +161,14 @@ console.log(yardData)
               ? theme.SCREENHEIGHT * 0.53
               : theme.SCREENHEIGHT * 0.57,
         }}>
-        <View style={styles.container}>
+        <View
+          display={yardData && yardData.length != 0 ? 'flex' : 'none'}
+          style={styles.container}>
           <Yard_header />
           <FlatList
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{paddingVertical: scale(10)}}
-            data={YardData}
+            data={yardData}
             renderItem={renderItem}
           />
         </View>

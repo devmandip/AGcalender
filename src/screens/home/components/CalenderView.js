@@ -5,7 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Button,
-  ToastAndroid,
+  Pressable,
   Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -16,10 +16,14 @@ import {scale, theme} from '../../../utils';
 import {Label} from '../../../components';
 import ProgressCircle from 'react-native-progress-circle';
 import Toast from '../../../components/Toast';
+import MapModal from '../../../components/appModel/MapModel';
+import ApiService, {API} from '../../../utils/ApiService';
 
 const CalenderHeader = props => {
-  const {scrollPosition} = props;
+  const {scrollPosition, cropName} = props;
   const [dateViewShow, setDateViewShow] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const [farmLocation, setFarmLocation] = useState('');
 
   const today = moment().format('YYYY-MM-DD');
 
@@ -27,44 +31,87 @@ const CalenderHeader = props => {
   const options = {day: 'numeric', month: 'long', year: 'numeric'};
   const formattedDate = date.toLocaleDateString('en-US', options);
 
+  console.log(
+    '>>>>>>>>>>>>>> GLOBAL CURRENT ',
+    global.currentLocation + ' ' + JSON.stringify(farmLocation),
+  );
+
   useEffect(() => {
     if (scrollPosition > 80) {
       setDateViewShow(false);
     }
   }, [scrollPosition]);
 
-  const dayComponent = ({date}) => {
-    const [showPopup, setShowPopup] = useState(false);
+  useEffect(() => {
+    setFarmLocation(global.currentLocation);
+  }, []);
 
-    const handlePress = () => {
-      setShowPopup(!showPopup);
+  const [showPopup, setShowPopup] = useState(false);
+  const [showTag, setShowTag] = useState('');
+  const [dateSelected, setDateSelected] = useState(
+    moment().format('YYYY-MM-DD'),
+  );
+
+  const handlePress = () => {};
+
+  const callListApi = async date => {
+    setDateSelected(date?.dateString);
+    setShowPopup(false);
+    const options = {
+      queries: {
+        cropName: cropName, // selectedCrop,
+        latitude: farmLocation?.latitude,
+        longitude: farmLocation?.longitude,
+        radius: 1000,
+        month: moment(dateSelected).format('M'),
+        year: moment(dateSelected).format('YYYY'),
+      },
     };
 
-    return (
-      <>
-        <TouchableOpacity onPress={handlePress}>
-          <ProgressCircle
-            percent={10}
-            radius={20}
-            borderWidth={2}
-            color="#FFD580"
-            shadowColor="#f2f2f2"
-            bgColor="white">
-            <Text style={{fontSize: 18, textAlign: 'center'}}>{date.day}</Text>
-          </ProgressCircle>
-        </TouchableOpacity>
-        {showPopup && <Toast />}
-      </>
-    );
+    try {
+      const response = await ApiService.get(API.listingC, options);
+
+      if (response) {
+        setShowPopup(true);
+        setShowTag(response[0]?.count + ' ' + response[0]?.cropName);
+        props.callBack(farmLocation);
+        // setListData(response);
+        // navigation.navigate('User');
+        // setLoader(false);
+        // ToastMessage('successfully submit', 'success');
+      } else {
+        // setLoader(false);
+      }
+    } catch (error) {
+      console.log(error.response);
+      // ToastMessage(
+      //   error.response.data.message === undefined
+      //     ? 'something went wrong !'
+      //     : error.response.data.message,
+      //   'danger',
+      // );
+    }
   };
 
   return (
     <View style={styles.header_container}>
+      <MapModal
+        close={data => {
+          if (data != null) {
+            setFarmLocation(data);
+          }
+          setShowMap(false);
+        }}
+        isVisible={showMap}
+      />
+
       <View style={styles.headerView}>
-        <Image
-          source={require('../../../assets/Images/calenderImages/map.png')}
-          style={styles.header_img}
-        />
+        <Pressable onPress={() => setShowMap(true)}>
+          <Image
+            source={require('../../../assets/Images/calenderImages/map.png')}
+            style={styles.header_img}
+          />
+        </Pressable>
         <View style={styles.header_txtView}>
           <Text style={styles.title1}>Harvesting calendar</Text>
           <Text style={styles.title2}>
@@ -77,15 +124,27 @@ const CalenderHeader = props => {
         /> */}
         <View style={styles.calCon}>
           <View style={styles.monthcon}>
-            <Label title={moment(today).format('MMMM')} style={styles.month} />
+            <Label
+              title={moment(dateSelected).format('MMMM')}
+              style={styles.month}
+            />
           </View>
 
-          <Label title={moment(today).format('DD')} style={styles.date} />
-          <Label title={moment(today).format('dddd')} style={styles.daytxt} />
+          <Label
+            title={moment(dateSelected).format('DD')}
+            style={styles.date}
+          />
+          <Label
+            title={moment(dateSelected).format('dddd')}
+            style={styles.daytxt}
+          />
         </View>
       </View>
       <View style={styles.dateView}>
-        <Label title={formattedDate} style={styles.dateTxt} />
+        <Label
+          title={moment(dateSelected).format('MMM DD, YYYY')}
+          style={styles.dateTxt}
+        />
         <TouchableOpacity
           onPress={() => {
             setDateViewShow(!dateViewShow);
@@ -101,6 +160,7 @@ const CalenderHeader = props => {
       {dateViewShow && (
         <Calendar
           hideArrows={false}
+          onDayPress={day => {}}
           enableSwipeMonths={true}
           markedDates={{
             [today]: {selected: true, selectedColor: theme.colors.primary},
@@ -111,22 +171,45 @@ const CalenderHeader = props => {
             selectedDayBackgroundColor: theme.colors.primary,
             selectedDayTextColor: 'white',
           }}
-          dayComponent={dayComponent}
+          dayComponent={({date}) => (
+            <>
+              <TouchableOpacity onPress={() => callListApi(date)}>
+                <ProgressCircle
+                  percent={10}
+                  radius={20}
+                  borderWidth={2}
+                  color="#FFD580"
+                  shadowColor="#f2f2f2"
+                  bgColor="white">
+                  <Text style={{fontSize: 18, textAlign: 'center'}}>
+                    {date.day}
+                  </Text>
+                </ProgressCircle>
+              </TouchableOpacity>
+              {showPopup && dateSelected == date?.dateString && (
+                <Toast tagName={showTag} />
+              )}
+            </>
+          )}
         />
       )}
     </View>
   );
 };
 
-const CalenderView = prpos => {
+const CalenderView = props => {
   const today = moment().format('YYYY-MM-DD');
 
-  const {showheader, hideCal, scrollPosition} = prpos;
+  const {showheader, hideCal, scrollPosition} = props;
 
   return (
     <View style={styles.container}>
       {showheader === false ? null : (
-        <CalenderHeader scrollPosition={scrollPosition} />
+        <CalenderHeader
+          callBack={props.callListAPi}
+          cropName={props.cropName}
+          scrollPosition={scrollPosition}
+        />
       )}
 
       {hideCal ? null : (
@@ -137,9 +220,6 @@ const CalenderView = prpos => {
             [today]: {selected: true, selectedColor: '#56AB2F'},
           }}
           renderHeader={date => {}}
-          onDayPress={day => {
-            console.log('selected day', day);
-          }}
           theme={{
             selectedDayBackgroundColor: '#56AB2F',
             selectedDayTextColor: 'white',

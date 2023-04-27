@@ -52,13 +52,13 @@ const AddCrop = () => {
   const [Volume, setVolume] = useState('');
   const [area, setArea] = useState('');
   const [showMap, setShowMap] = useState(false);
-  const [farmLocation, setFarmLocation] = useState(false);
+  const [farmLocation, setFarmLocation] = useState('');
   const [units, setUnits] = useState('');
   const [endDay, setEndDay] = useState('');
   const [startDay, setStartDay] = useState('');
 
-  console.log('>>>>>>>>', userReducer);
   useEffect(() => {
+    setFarmLocation(global.currentLocation);
     dispatch(getCropData());
   }, []);
 
@@ -114,11 +114,7 @@ const AddCrop = () => {
         const response = await ApiService.post(API.listing, options);
 
         if (response) {
-          console.log(
-            '>>>>>>>>>>>>> RESPONSE ',
-            JSON.stringify(response, null, 4),
-          );
-          navigation.navigate('User');
+          navigation.navigate('Home');
           setLoader(false);
           ToastMessage('successfully submit', 'success');
         } else {
@@ -143,6 +139,33 @@ const AddCrop = () => {
         <MapModal
           close={data => {
             if (data != null) {
+              // const url = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?apiKey=${'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc'}&mode=retrieveAddresses&prox=${
+              //   data?.latitude
+              // },${data?.longitude}`;
+              // fetch(url)
+              //   .then(res => res.json())
+              //   .then(resJson => {
+              //     console.log(">>>>>>>>  resJson ",resJson)
+              //     // the response had a deeply nested structure :/
+              //     // if (
+              //     //   resJson &&
+              //     //   resJson.Response &&
+              //     //   resJson.Response.View &&
+              //     //   resJson.Response.View[0] &&
+              //     //   resJson.Response.View[0].Result &&
+              //     //   resJson.Response.View[0].Result[0]
+              //     // ) {
+              //     //   resolve(
+              //     //     resJson.Response.View[0].Result[0].Location.Address.Label,
+              //     //   );
+              //     // } else {
+              //     //   resolve();
+              //     // }
+              //   })
+              //   .catch(e => {
+              //     console.log('Error in getAddressFromCoordinates', e);
+              //     // resolve();
+              //   });
               setFarmLocation(data);
             }
             setShowMap(false);
