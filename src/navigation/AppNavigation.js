@@ -11,9 +11,11 @@ const Stack = createNativeStackNavigator();
 
 const MianStack = () => {
   const isLogin = useSelector(state => state.UserReducer.login);
-  const userDetails = useSelector(state => state.UserReducer?.userDetails);
-  console.log('first', userDetails);
-  axios.defaults.headers.common.Authorization = `Bearer ${userDetails?.accessToken}`;
+  // const userDetails = useSelector(state => state.UserReducer);
+  // console.log('first', userDetails);
+  // axios.defaults.headers.Authorization = `Bearer ${
+  //   JSON.parse(userDetails?.userDetails)?.accessToken
+  // }`;
   return (
     <NavigationContainer>
       <Stack.Navigator

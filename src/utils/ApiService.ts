@@ -37,7 +37,7 @@ const execute = async (
     options.data = payloads;
   }
 
-  if (queries) {
+  if (queries != null) {
     options.params = queries;
   }
   console.info('req ===> ', url, options);
@@ -52,12 +52,13 @@ const execute = async (
 };
 
 export const API = {
-  Login:'auth/signin',
+  sendOtp:'auth/auth',
+  verifyOtp:'auth/authenticate',
   SignUp:'auth/signup',
   user:'user/',
   categories:'categories',
   crops:'crops',
-  mRates:'market/rates?',
+  mRates:'market/rates',
   listing:'listing',
   listingC:'listing/calendar',
 };

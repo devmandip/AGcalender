@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  ScrollView,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -42,25 +43,46 @@ const Signup = () => {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [selectedProff, setSelectedProff] = useState('');
+  const [showProff, setShowProff] = useState(false);
+  const [proffList, setProffList] = useState([
+    {
+      id: '1',
+      tag: 'Farmer (Cultivator)',
+    },
+    {
+      id: '2',
+      tag: 'FPO - Farmer Producer Organisations',
+    },
+    {
+      id: '3',
+      tag: 'APMC Traders & Comission Agents',
+    },
+    {
+      id: '4',
+      tag: 'Distributor/Exporter/Retailer',
+    },
+    {
+      id: '5',
+      tag: 'Agro/Food Processing Industries',
+    },
+    {
+      id: '6',
+      tag: 'Transport/ Logistics Services',
+    },
+    {
+      id: '7',
+      tag: 'Warehouse/ Cold-Storage Services',
+    },
+    {
+      id: '8',
+      tag: 'Others (Specify your profession)',
+    },
+  ]);
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
 
   const [loader, setLoader] = useState(false);
-
-  const data = {
-    username: name,
-    mobileNumber: mobile,
-    password: password,
-    email: email,
-    role: ['mod', 'user'],
-    profession: 'Farmer',
-    latitude: 16.216,
-    longitude: 77.3566,
-    marketName: '',
-    districtName: '',
-    stateName: '',
-    preferredCrops: '',
-  };
 
   const OnSignup_press = async () => {
     if (name === '') {
@@ -74,20 +96,42 @@ const Signup = () => {
     } else {
       setLoader(true);
       try {
-        const options = {payloads: data};
-        const response = await ApiService.post(API.SignUp, options);
+        var myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
 
-        if (response) {
-          console.log(JSON.stringify(response.data, null, 4));
+        var raw = JSON.stringify({
+          username: name,
+          mobileNumber: mobile,
+          password: password,
+          email: email,
+          role: ['mod', 'user'],
+          profession: selectedProff,
+          latitude: '',
+          longitude: '',
+          marketName: '',
+          districtName: '',
+          stateName: '',
+          preferredCrops: '',
+        });
 
-          navigation.navigate('Login');
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow',
+        };
 
-          setLoader(false);
-
-          ToastMessage('successfully registred', 'success');
-        } else {
-          setLoader(false);
-        }
+        fetch('https://agmart.ngrok.app/api/auth/signup', requestOptions)
+          .then(response => response.json())
+          .then(result => {
+            ToastMessage('successfully registred', 'success');
+            navigation.navigate('Login');
+            setLoader(false);
+          })
+          .catch(error => {
+            console.log(error);
+            setLoader(false);
+          });
       } catch (error) {
         console.log(error.response);
         setLoader(false);
@@ -143,7 +187,48 @@ const Signup = () => {
               value={mobile}
               onChangeText={value => setMobile(value)}
             />
-
+            <Label title="profession" style={styles.title} />
+            <TouchableOpacity
+              onPress={() => {
+                setShowProff(!showProff);
+              }}>
+              <InputBox
+                editable={false}
+                keyboardType="numeric"
+                maxLength={10}
+                value={selectedProff}
+                onChangeText={value => setMobile(value)}
+              />
+            </TouchableOpacity>
+            <ScrollView
+              display={showProff ? 'flex' : 'none'}
+              nestedScrollEnabled
+              style={{
+                top: -10,
+                marginHorizontal: scale(5),
+                height: 200,
+              }}
+              contentContainerStyle={{
+                overflow: 'hidden',
+                borderBottomLeftRadius: scale(9),
+                borderBottomRightRadius: scale(9),
+              }}>
+              {proffList?.map(item => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowProff(false);
+                      setSelectedProff(item?.tag);
+                    }}
+                    style={{
+                      padding: 10,
+                      backgroundColor: theme.colors.white,
+                    }}>
+                    <Text>{item.tag}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
             <Label title="Password" value={password} style={styles.title} />
             <InputBox
               secureTextEntry

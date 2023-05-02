@@ -125,25 +125,33 @@ const YardVew = () => {
 
   const getYardDetailsByID = async id => {
     try {
-      const options = {
-        queries: {
-          cropId: id,
-          latitude: global.currentLocation?.latitude,
-          longitude: global.currentLocation?.longitude,
-          radius: 1000000,
-        },
-      };
+      var myHeaders = new Headers();
+      myHeaders.append(
+        'Authorization',
+        'Bearer ' + userReducer?.userDetails?.accessToken,
+      );
 
-      const response = await ApiService.get(API.mRates, options);
-      if (response) {
-        setYardData(response);
-      } else {
-      }
+      var raw = '';
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+      fetch(
+        `https://agmart.ngrok.app/api/market/rates?cropId=${id}&latitude=${global.currentLocation?.latitude}&longitude=${global.currentLocation?.longitude}&radius=1000000`,
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(response => {
+          setYardData(response);
+        })
+        .catch(error => console.log('error', error));
     } catch (error) {
-      console.log('error in USERDETAILS', error);
+      console.log(error);
     }
   };
-
   return (
     <SafeAreaView>
       <Header />

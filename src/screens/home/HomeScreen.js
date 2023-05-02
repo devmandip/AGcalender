@@ -8,7 +8,7 @@ import {
   PermissionsAndroid,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 import {CalenderView, Header, PostSection, Story, YardVew} from './components';
 import Posts from '../../dummyData/Posts';
 import {DrawerModal, Loader} from '../../components';
@@ -16,20 +16,33 @@ import {theme} from '../../utils';
 import Toast from '../../components/Toast';
 import MapModal from '../../components/appModel/MapModel';
 import {useDispatch, useSelector} from 'react-redux';
-import {getCategoriesData} from '../../redux/Actions/UserActions';
-import {useIsFocused} from '@react-navigation/core';
+import {getCategoriesData, getCropData} from '../../redux/Actions/UserActions';
+import {useFocusEffect, useIsFocused} from '@react-navigation/core';
 import ApiService, {API} from '../../utils/ApiService';
 import Geolocation from '@react-native-community/geolocation';
 
 const renderItem = ({item}) => {
   return (
     <PostSection
-      postImages={item.postedImages}
-      proicePic={item.profileImg}
-      name={item.cropName}
-      description={item.description}
-      view_count={item.ViewCount}
-      like_count={item.likeCount}
+      postImages={[
+        {
+          id: 5,
+          uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+          type: 'image',
+        },
+        {
+          id: 8,
+          uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+          type: 'image',
+        },
+      ]}
+      proicePic={require('../../assets/Images/postImages/profileImage.png')}
+      name={item.username}
+      description={
+        'Srinivas rao from Manvi cultivating Supreme varietyChilli in 4 ac. Expected to harvest 20 Quintalson/after 29-01-23'
+      }
+      view_count={'221'}
+      like_count={'167'}
     />
   );
 };
@@ -45,14 +58,17 @@ const HomeScreen = () => {
   const userReducer = useSelector(state => state.UserReducer);
   const isFocuse = useIsFocused();
   useEffect(() => {
-    dispatch(getCategoriesData());
+    dispatch(getCropData(userReducer));
+    dispatch(getCategoriesData(userReducer));
   }, [isFocuse]);
 
-  useEffect(() => {
-    (async () => {
-      await requestLocationPermission();
-    })();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        await requestLocationPermission();
+      })();
+    }, []),
+  );
 
   const requestLocationPermission = async () => {
     try {
@@ -84,29 +100,35 @@ const HomeScreen = () => {
     });
   };
 
-
-  const callListApi = async farmLocation => {
-    const options = {
-      queries: {
-        cropName: selectedCrop,
-        latitude: farmLocation?.latitude,
-        longitude: farmLocation?.longitude,
-        radius: 1000,
-      },
-    };
-
+  const callListApi = async (farmLocation, date) => {
     try {
-      const response = await ApiService.get(API.listing, options);
+      var myHeaders = new Headers();
+      myHeaders.append(
+        'Authorization',
+        'Bearer ' + userReducer?.userDetails?.accessToken,
+      );
 
-      if (response) {
-        setListData(response);
-        // setListData(response);
-        // navigation.navigate('User');
-        // setLoader(false);
-        // ToastMessage('successfully submit', 'success');
-      } else {
-        // setLoader(false);
-      }
+      var raw = '';
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      const lat = farmLocation.latitude;
+      const long = farmLocation.longitude;
+
+      fetch(
+        `https://agmart.ngrok.app/api/listing?cropName=${selectedCrop}&latitude=${lat}&longitude=${long}&radius=1000&harvestingDate=17/05/2023`,
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(response => {
+          setListData(response?.data);
+        })
+        .catch(error => console.log('error', error));
     } catch (error) {
       console.log(error.response);
       // ToastMessage(
@@ -140,11 +162,11 @@ const HomeScreen = () => {
             selectPress={item => {
               setSelectedCrop(item?.name);
             }}
-            listData={userReducer?.categoryList}
+            listData={userReducer?.cropsList}
           />
           <CalenderView
-            callListAPi={location => {
-              callListApi(location);
+            callListAPi={(location, date) => {
+              callListApi(location, date);
             }}
             cropName={selectedCrop}
             hideCal

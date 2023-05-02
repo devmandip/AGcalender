@@ -9,6 +9,8 @@ export const isLogin = payload => {
 };
 
 export const userData = payload => {
+  console.log('>>>>>>>>>>>>>>>> PAYLOAD ', payload);
+
   return {
     type: types.USER_DETAILS,
     payload,
@@ -31,37 +33,62 @@ export const userWiseDetails = id => {
   };
 };
 
-export const getCategoriesData = () => {
+export const getCategoriesData = userReducer => {
   return async dispatch => {
     try {
-      ApiService.get(API.categories)
+      var myHeaders = new Headers();
+      myHeaders.append(
+        'Authorization',
+        'Bearer ' + userReducer?.userDetails?.accessToken,
+      );
+      var raw = '';
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+      fetch('https://agmart.ngrok.app/api/categories', requestOptions)
+        .then(response => response.json())
         .then(response => {
-          console.log('response ???', response);
-          if (response) {
-            dispatch({type: types.CATEGORIES_LIST, payload: response});
-          }
+          console.log(response?.data);
+          dispatch({type: types.CATEGORIES_LIST, payload: response?.data});
         })
-        .catch(e => {
-          console.log('error > ', e);
+        .catch(err => {
+          console.log(err);
         });
     } catch (error) {
-      console.log('error in CATEGORI LIST ', error);
+      console.log(error);
     }
   };
 };
 
-export const getCropData = () => {
+export const getCropData = userReducer => {
   return async dispatch => {
     try {
-      const response = await ApiService.get(API.crops);
-
-      if (response) {
-        dispatch({type: types.CROPS_LIST, payload: response});
-      } else {
-        console.log('response > ', response);
-      }
+      var myHeaders = new Headers();
+      myHeaders.append(
+        'Authorization',
+        'Bearer ' + userReducer?.userDetails?.accessToken,
+      );
+      var raw = '';
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+      fetch('https://agmart.ngrok.app/api/crops', requestOptions)
+        .then(response => response.json())
+        .then(response => {
+          console.log(response?.data);
+          dispatch({type: types.CROPS_LIST, payload: response?.data});
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } catch (error) {
-      console.log('error in CATEGORI LIST ', error);
+      console.log(error);
     }
   };
 };

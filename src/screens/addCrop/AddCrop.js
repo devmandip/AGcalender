@@ -46,8 +46,8 @@ const AddCrop = () => {
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
-  const [fName, setFName] = useState(userReducer?.userDetails?.username);
-  const [mNo, setMNo] = useState('');
+  const [fName, setFName] = useState(userReducer?.userDetails?.user?.username);
+  const [mNo, setMNo] = useState(userReducer?.userDetails?.user?.mobileNumber);
   const [variety, setVariety] = useState('');
   const [Volume, setVolume] = useState('');
   const [area, setArea] = useState('');
@@ -59,7 +59,7 @@ const AddCrop = () => {
 
   useEffect(() => {
     setFarmLocation(global.currentLocation);
-    dispatch(getCropData());
+    dispatch(getCropData(userReducer));
   }, []);
 
   const showMenu = () => setVisible(true);
@@ -95,40 +95,56 @@ const AddCrop = () => {
     } else {
       setLoader(true);
       try {
-        const options = {
-          payloads: {
-            userId: userReducer?.userDetails?.id,
-            cropName: selectedCrop,
-            latitude: farmLocation?.latitude,
-            longitude: farmLocation?.longitude,
-            variety: variety,
-            area: area,
-            volume: Volume,
-            unit: units,
-            sowingDate: '',
-            harvestStartDate: moment(startDay).format('DD/MM/YYYY') ?? '', //"22/03/2023"
-            harvestEndDate: moment(endDay).format('DD/MM/YYYY') ?? '', //"22/03/2023"
-            media: '',
-          },
-        };
-        const response = await ApiService.post(API.listing, options);
-
-        if (response) {
-          navigation.navigate('Home');
-          setLoader(false);
-          ToastMessage('successfully submit', 'success');
-        } else {
-          setLoader(false);
-        }
-      } catch (error) {
-        console.log(error.response);
-        setLoader(false);
-        ToastMessage(
-          error.response.data.message === undefined
-            ? 'something went wrong !'
-            : error.response.data.message,
-          'danger',
+        var myHeaders = new Headers();
+        myHeaders.append(
+          'Authorization',
+          'Bearer ' + userReducer?.userDetails?.accessToken,
         );
+        myHeaders.append('Content-Type', 'application/json');
+
+        var raw = JSON.stringify({
+          userId: userReducer?.userDetails?.id,
+          cropName: selectedCrop,
+          latitude: farmLocation?.latitude,
+          longitude: farmLocation?.longitude,
+          variety: variety,
+          area: area,
+          volume: Volume,
+          unit: units,
+          sowingDate: '',
+          harvestStartDate: moment(startDay).format('DD/MM/YYYY') ?? '', //"22/03/2023"
+          harvestEndDate: moment(endDay).format('DD/MM/YYYY') ?? '', //"22/03/2023"
+          media: '',
+        });
+
+        console.log(raw);
+
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow',
+        };
+
+        fetch('https://agmart.ngrok.app/api/listing', requestOptions)
+          .then(response => response.json())
+          .then(result => {
+            navigation.navigate('Home');
+            setLoader(false);
+            ToastMessage('successfully submit', 'success');
+          })
+          .catch(error => {
+            console.log(error);
+            setLoader(false);
+            ToastMessage(
+              error.message === undefined
+                ? 'something went wrong !'
+                : error.message,
+              'danger',
+            );
+          });
+      } catch (error) {
+        console.log(error);
       }
     }
   };

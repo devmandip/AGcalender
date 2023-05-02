@@ -22,41 +22,95 @@ import axios from 'axios';
 const Login = () => {
   const navigation = useNavigation();
   const [otp, setotp] = useState('');
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+  const [pNumber, setPNumber] = useState('');
   const [otpSend, setOtpSend] = useState(false);
   const [load, setLoad] = useState(false);
   const toast = useToast();
-  const dispatch = useDispatch();
-  const handleLogin = async () => {
-    const frmData = {
-      username: userName,
-      password: password,
-    };
-    const options = {payloads: frmData};
-    try {
-      setLoad(true);
-      const response = await ApiService.post(API.Login, options);
 
-      if (response?.username) {
+  const dispatch = useDispatch();
+
+  const handleLogin = async () => {
+    setLoad(true);
+    // var myHeaders = new Headers();
+    // myHeaders.append('Content-Type', 'application/json');
+
+    // var raw = JSON.stringify({
+    //   mobile: pNumber,
+    // });
+
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    var raw = JSON.stringify({
+      mobile: pNumber,
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch('https://agmart.ngrok.app/api/auth/auth', requestOptions)
+      .then(response => response.text())
+      .then(response => {
         console.log('response>>> ', response);
-        axios.defaults.headers.common.Authorization = `Bearer ${response?.accessToken}`;
-        dispatch(isLogin(true));
-        dispatch(userData(response));
-        navigation.navigate('Tab');
-        setLoad(false);
-      } else {
-        setLoad(false);
-        toast.show('wrong details.', {
-          type: 'error',
+        toast.show(response, {
+          type: 'success',
           placement: 'bottom',
           duration: 1000,
           animationType: 'zoom-in',
         });
-      }
-    } catch (error) {
-      setLoad(false);
-    }
+        setOtpSend(true);
+        setLoad(false);
+      })
+      .catch(error => {
+        setLoad(false);
+        console.log('error', error);
+      });
+  };
+  const verifyOTP = async () => {
+    setLoad(true);
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    var raw = JSON.stringify({
+      phoneNumber: pNumber,
+      otp: otp,
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch('http://agmart.ngrok.app/api/auth/authenticate', requestOptions)
+      .then(response => response.json())
+      .then(response => {
+        console.log('response>>> ', response);
+        if (response?.user) {
+          dispatch(isLogin(true));
+          dispatch(userData(response));
+          navigation.navigate('Tab');
+          setLoad(false);
+        } else {
+          console.log(response);
+          setLoad(false);
+          toast.show('wrong details.', {
+            type: 'error',
+            placement: 'bottom',
+            duration: 1000,
+            animationType: 'zoom-in',
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        setLoad(false);
+      });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -67,22 +121,14 @@ const Login = () => {
             <Label title="Harvesting calendar" style={styles.txt} />
           </View>
           <View style={styles.contactForm}>
-            <Label title="User Name" style={styles.title} />
+            <Label title="Phone Number" style={styles.title} />
             <InputBox
-              value={userName}
+              value={pNumber}
               onChangeText={txt => {
-                setUserName(txt);
+                setPNumber(txt);
               }}
             />
-            <Label title="Password" style={styles.title} />
-            <InputBox
-              value={password}
-              onChangeText={txt => {
-                setPassword(txt);
-              }}
-              secureTextEntry={true}
-            />
-            {/* {otpSend && (
+            {otpSend && (
               <>
                 <Label title="OTP" style={styles.title} />
                 <OTPTextView
@@ -96,7 +142,7 @@ const Login = () => {
                   tintColor={theme.colors.primary}
                 />
               </>
-            )} */}
+            )}
             <View>
               {load ? (
                 <ActivityIndicator
@@ -106,10 +152,10 @@ const Login = () => {
               ) : (
                 <Button
                   onPress={() => {
-                    handleLogin();
+                    otpSend ? verifyOTP() : handleLogin();
                     // otpSend ? navigation.navigate('Tab') : setOtpSend(!otpSend);
                   }}
-                  title={'Login'}
+                  title={otpSend ? 'Verify OTP' : 'Send OTP'}
                   style={styles.btn}
                   titleStyle={styles.btnTxt}
                 />

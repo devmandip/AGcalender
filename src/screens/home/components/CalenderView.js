@@ -18,6 +18,7 @@ import ProgressCircle from 'react-native-progress-circle';
 import Toast from '../../../components/Toast';
 import MapModal from '../../../components/appModel/MapModel';
 import ApiService, {API} from '../../../utils/ApiService';
+import {useSelector} from 'react-redux';
 
 const CalenderHeader = props => {
   const {scrollPosition, cropName} = props;
@@ -33,7 +34,7 @@ const CalenderHeader = props => {
 
   console.log(
     '>>>>>>>>>>>>>> GLOBAL CURRENT ',
-    global.currentLocation + ' ' + JSON.stringify(farmLocation),
+    JSON.stringify(global.currentLocation) + ' ' + JSON.stringify(farmLocation),
   );
 
   useEffect(() => {
@@ -52,38 +53,52 @@ const CalenderHeader = props => {
     moment().format('YYYY-MM-DD'),
   );
 
+  const userReducer = useSelector(state => state.UserReducer);
+
   const handlePress = () => {};
 
   const callListApi = async date => {
     setDateSelected(date?.dateString);
-    setShowPopup(false);
-    const options = {
-      queries: {
-        cropName: cropName, // selectedCrop,
-        latitude: farmLocation?.latitude,
-        longitude: farmLocation?.longitude,
-        radius: 1000,
-        month: moment(dateSelected).format('M'),
-        year: moment(dateSelected).format('YYYY'),
-      },
-    };
+    // setShowTag(response[0]?.count + ' ' + response[0]?.cropName);
+    // setShowPopup(!showPopup);
+    props.callBack(farmLocation, date?.dateString);
+  };
 
+  useEffect(() => {
+    apiCall();
+  }, [dateSelected]);
+
+  const apiCall = async () => {
     try {
-      const response = await ApiService.get(API.listingC, options);
+      var myHeaders = new Headers();
+      myHeaders.append(
+        'Authorization',
+        'Bearer ' + userReducer?.userDetails?.accessToken,
+      );
 
-      if (response) {
-        setShowPopup(true);
-        setShowTag(response[0]?.count + ' ' + response[0]?.cropName);
-        props.callBack(farmLocation);
-        // setListData(response);
-        // navigation.navigate('User');
-        // setLoader(false);
-        // ToastMessage('successfully submit', 'success');
-      } else {
-        // setLoader(false);
-      }
+      var raw = '';
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      const month = moment(dateSelected).format('M');
+      const year = moment(dateSelected).format('YYYY');
+
+      fetch(
+        `https://agmart.ngrok.app/api/listing/calendar?cropName=${cropName}&latitude=${farmLocation?.latitude}&longitude=${farmLocation?.longitude}&radius=1000&month=${month}&year=${year}`,
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(response => {
+          setDateViewShow(true);
+        })
+        .catch(error => console.log('error', error));
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
       // ToastMessage(
       //   error.response.data.message === undefined
       //     ? 'something went wrong !'
@@ -92,7 +107,6 @@ const CalenderHeader = props => {
       // );
     }
   };
-
   return (
     <View style={styles.header_container}>
       <MapModal
@@ -161,6 +175,10 @@ const CalenderHeader = props => {
         <Calendar
           hideArrows={false}
           onDayPress={day => {}}
+          onPressArrowLeft={(method, month) => {
+            month();
+            setDateSelected(moment(month).format('YYYY-MM-DD'));
+          }}
           enableSwipeMonths={true}
           markedDates={{
             [today]: {selected: true, selectedColor: theme.colors.primary},
