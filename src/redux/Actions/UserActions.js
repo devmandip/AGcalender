@@ -17,18 +17,37 @@ export const userData = payload => {
   };
 };
 
-export const userWiseDetails = id => {
+export const userWiseDetails = userReducer => {
   return async dispatch => {
     try {
-      const response = await ApiService.get(API.user + id);
+      var myHeaders = new Headers();
+      myHeaders.append(
+        'Authorization',
+        'Bearer ' + userReducer?.userDetails?.accessToken,
+      );
 
-      if (response) {
-        dispatch({type: types.USER_WISE_DETAILS, payload: response});
-      } else {
-        console.log('response > ', response);
-      }
+      var raw = '';
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://agmart.ngrok.app/api/user/' +
+          userReducer?.userDetails?.user?.userId,
+        requestOptions,
+      )
+        .then(response => response.json())
+        .then(response => {
+          dispatch({type: types.USER_WISE_DETAILS, payload: response});
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } catch (error) {
-      console.log('error in USERDETAILS', error);
+      console.log(error);
     }
   };
 };

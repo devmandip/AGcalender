@@ -173,6 +173,16 @@ const HomeScreen = () => {
             scrollPosition={scrollPosition}
           />
           <FlatList
+            ListEmptyComponent={
+              <View
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: 100,
+                }}>
+                <Text>{'No data found'}</Text>
+              </View>
+            }
             nestedScrollEnabled={true}
             data={listData}
             renderItem={renderItem}

@@ -106,8 +106,8 @@ const Signup = () => {
           email: email,
           role: ['mod', 'user'],
           profession: selectedProff,
-          latitude: '',
-          longitude: '',
+          latitude: global.currentLocation?.latitude ?? '',
+          longitude: global.currentLocation?.longitude ?? '',
           marketName: '',
           districtName: '',
           stateName: '',
@@ -122,7 +122,7 @@ const Signup = () => {
         };
 
         fetch('https://agmart.ngrok.app/api/auth/signup', requestOptions)
-          .then(response => response.json())
+          .then(response => response.text())
           .then(result => {
             ToastMessage('successfully registred', 'success');
             navigation.navigate('Login');
@@ -133,7 +133,7 @@ const Signup = () => {
             setLoader(false);
           });
       } catch (error) {
-        console.log(error.response);
+        console.log(error);
         setLoader(false);
         ToastMessage(
           error.response.data.message === undefined

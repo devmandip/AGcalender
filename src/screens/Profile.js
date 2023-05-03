@@ -27,7 +27,7 @@ const Profile = () => {
   const loginUserData = useSelector(state => state.UserReducer);
   const isDocus = useIsFocused();
   useEffect(() => {
-    dispatch(userWiseDetails(loginUserData?.userDetails?.id));
+    dispatch(userWiseDetails(loginUserData));
   }, []);
 
   return (
@@ -38,7 +38,9 @@ const Profile = () => {
         <Image
           style={styles.userImage}
           source={{
-            uri: 'https://media.istockphoto.com/id/1319254635/photo/latin-american-farmer-working-in-agriculture-at-a-farm.jpg?s=612x612&w=0&k=20&c=uSUaq4iNJB1TYt4RCCtf9sp6FdPyJyHbXqmKa9AqFHY=',
+            uri:
+              loginUserData?.userWiseDetails?.imageURI ??
+              'https://media.istockphoto.com/id/1319254635/photo/latin-american-farmer-working-in-agriculture-at-a-farm.jpg?s=612x612&w=0&k=20&c=uSUaq4iNJB1TYt4RCCtf9sp6FdPyJyHbXqmKa9AqFHY=',
           }}
         />
       </View>
@@ -59,10 +61,10 @@ const Profile = () => {
         <View style={styles.nameContainer}>
           <View style={styles.row}>
             <Title
-              title={`${loginUserData?.userDetails?.username}, `}
+              title={`${loginUserData?.userWiseDetails?.username}, `}
               style={styles.title}
             />
-            <Label title="Farmer" />
+            <Label title={loginUserData?.userWiseDetails?.profession} />
           </View>
 
           <View style={styles.row}>
@@ -108,16 +110,27 @@ const Profile = () => {
 
         {selTab === 0 && (
           <FlatList
-            data={cropData}
+            ItemSeparatorComponent={<View style={{marginVertical: scale(5)}} />}
+            ListEmptyComponent={
+              <View
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: 100,
+                }}>
+                <Text>{'No data found'}</Text>
+              </View>
+            }
+            data={loginUserData?.userWiseDetails?.cropListingResponses}
             renderItem={({item, index}) => {
               return (
                 <View style={styles.cropCard} key={index.toString()}>
                   <View style={[styles.row, {justifyContent: 'space-between'}]}>
                     <Label
-                      title={'Listing ID : ' + item?.lid}
+                      title={'Listing ID : ' + item?.cropListingId}
                       style={styles.startDate}
                     />
-                    <Label title={item?.date} style={styles.startDate} />
+                    <Label title={item?.cropName} style={styles.startDate} />
                   </View>
                   <View
                     style={[
@@ -129,12 +142,12 @@ const Profile = () => {
                     ]}>
                     <Text style={styles.name}>
                       Corp Name
-                      <Text style={styles.cName}>{` ${item?.cropName}`}</Text>
+                      <Text style={styles.cName}>{item?.cropName}</Text>
                     </Text>
                     <Label title={'Area : ' + item?.area} />
                   </View>
                   <Label
-                    title="Harvesting Start From : 10/12/2022"
+                    title={'Harvesting Start From : ' + item?.harvestStartDate}
                     style={styles.date}
                   />
                   <View style={styles.row}>
@@ -166,7 +179,10 @@ const Profile = () => {
                   <View
                     style={[
                       styles.row,
-                      {justifyContent: 'space-between', paddingTop: scale(10)},
+                      {
+                        justifyContent: 'space-between',
+                        paddingTop: scale(10),
+                      },
                     ]}>
                     <View style={styles.view}>
                       <Icon2

@@ -23,6 +23,7 @@ import {useSelector} from 'react-redux';
 const CalenderHeader = props => {
   const {scrollPosition, cropName} = props;
   const [dateViewShow, setDateViewShow] = useState(false);
+  const [dateData, setDateData] = useState([]);
   const [showMap, setShowMap] = useState(false);
   const [farmLocation, setFarmLocation] = useState('');
 
@@ -58,9 +59,15 @@ const CalenderHeader = props => {
   const handlePress = () => {};
 
   const callListApi = async date => {
+    setShowPopup(false);
     setDateSelected(date?.dateString);
-    // setShowTag(response[0]?.count + ' ' + response[0]?.cropName);
-    // setShowPopup(!showPopup);
+    const tempData = [...dateData];
+    tempData.map(obj => {
+      if (obj.harvestStartDate == date?.dateString) {
+        setShowTag(obj?.volume + ' ' + cropName);
+        setShowPopup(true);
+      }
+    });
     props.callBack(farmLocation, date?.dateString);
   };
 
@@ -94,6 +101,7 @@ const CalenderHeader = props => {
       )
         .then(response => response.json())
         .then(response => {
+          setDateData(response?.data[0]?.cropListingsByDate);
           setDateViewShow(true);
         })
         .catch(error => console.log('error', error));
@@ -175,10 +183,11 @@ const CalenderHeader = props => {
         <Calendar
           hideArrows={false}
           onDayPress={day => {}}
-          onPressArrowLeft={(method, month) => {
-            month();
-            setDateSelected(moment(month).format('YYYY-MM-DD'));
+          onMonthChange={month => {
+            setShowPopup(false);
+            setDateSelected(month?.dateString);
           }}
+          current={dateSelected}
           enableSwipeMonths={true}
           markedDates={{
             [today]: {selected: true, selectedColor: theme.colors.primary},
@@ -189,26 +198,28 @@ const CalenderHeader = props => {
             selectedDayBackgroundColor: theme.colors.primary,
             selectedDayTextColor: 'white',
           }}
-          dayComponent={({date}) => (
-            <>
-              <TouchableOpacity onPress={() => callListApi(date)}>
-                <ProgressCircle
-                  percent={10}
-                  radius={20}
-                  borderWidth={2}
-                  color="#FFD580"
-                  shadowColor="#f2f2f2"
-                  bgColor="white">
-                  <Text style={{fontSize: 18, textAlign: 'center'}}>
-                    {date.day}
-                  </Text>
-                </ProgressCircle>
-              </TouchableOpacity>
-              {showPopup && dateSelected == date?.dateString && (
-                <Toast tagName={showTag} />
-              )}
-            </>
-          )}
+          dayComponent={({date}) => {
+            return (
+              <>
+                <TouchableOpacity onPress={() => callListApi(date)}>
+                  <ProgressCircle
+                    percent={10}
+                    radius={20}
+                    borderWidth={2}
+                    color="#FFD580"
+                    shadowColor="#f2f2f2"
+                    bgColor="white">
+                    <Text style={{fontSize: 18, textAlign: 'center'}}>
+                      {date.day}
+                    </Text>
+                  </ProgressCircle>
+                </TouchableOpacity>
+                {showPopup && dateSelected == date?.dateString && (
+                  <Toast tagName={showTag} />
+                )}
+              </>
+            );
+          }}
         />
       )}
     </View>
@@ -232,7 +243,6 @@ const CalenderView = props => {
 
       {hideCal ? null : (
         <Calendar
-          // hideArrows={false}
           // enableSwipeMonths={true}
           markedDates={{
             [today]: {selected: true, selectedColor: '#56AB2F'},

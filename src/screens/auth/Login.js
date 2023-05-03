@@ -5,19 +5,21 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  PermissionsAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import OTPTextView from 'react-native-otp-textinput';
 import {images, scale, theme} from '../../utils';
 import {Button, InputBox, Label} from '../../components';
-import {useNavigation} from '@react-navigation/core';
+import {useFocusEffect, useNavigation} from '@react-navigation/core';
 import ApiService, {API} from '../../utils/ApiService';
 import {useDispatch} from 'react-redux';
 import {isLogin, userData} from '../../redux/Actions/UserActions';
 import {useToast} from 'react-native-toast-notifications';
 import axios from 'axios';
+import Geolocation from '@react-native-community/geolocation';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -28,6 +30,44 @@ const Login = () => {
   const toast = useToast();
 
   const dispatch = useDispatch();
+
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        await requestLocationPermission();
+      })();
+    }, []),
+  );
+
+  const requestLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Example App',
+          message: 'Example App access to your location ',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        GetLocation();
+        // alert('You can use the location');
+      } else {
+        console.log('location permission denied');
+        alert('Location permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const GetLocation = () => {
+    Geolocation.getCurrentPosition(pos => {
+      const crd = pos.coords;
+      global.currentLocation = crd;
+    }).catch(err => {
+      console.log(err);
+    });
+  };
 
   const handleLogin = async () => {
     setLoad(true);
@@ -56,13 +96,16 @@ const Login = () => {
       .then(response => response.text())
       .then(response => {
         console.log('response>>> ', response);
-        toast.show(response, {
-          type: 'success',
-          placement: 'bottom',
-          duration: 1000,
-          animationType: 'zoom-in',
-        });
-        setOtpSend(true);
+        if (response !== '') {
+          toast.show(response, {
+            type: 'success',
+            placement: 'bottom',
+            duration: 1000,
+            animationType: 'zoom-in',
+          });
+          setOtpSend(true);
+          setLoad(false);
+        }
         setLoad(false);
       })
       .catch(error => {

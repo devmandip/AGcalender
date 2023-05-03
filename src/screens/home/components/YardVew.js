@@ -169,11 +169,19 @@ const YardVew = () => {
               ? theme.SCREENHEIGHT * 0.53
               : theme.SCREENHEIGHT * 0.57,
         }}>
-        <View
-          display={yardData && yardData.length != 0 ? 'flex' : 'none'}
-          style={styles.container}>
+        <View style={styles.container}>
           <Yard_header />
           <FlatList
+            ListEmptyComponent={
+              <View
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: 100,
+                }}>
+                <Text>{'No data found'}</Text>
+              </View>
+            }
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{paddingVertical: scale(10)}}
             data={yardData}
