@@ -14,7 +14,6 @@ import OTPTextView from 'react-native-otp-textinput';
 import {images, scale, theme} from '../../utils';
 import {Button, InputBox, Label} from '../../components';
 import {useFocusEffect, useNavigation} from '@react-navigation/core';
-import ApiService, {API} from '../../utils/ApiService';
 import {useDispatch} from 'react-redux';
 import {isLogin, userData} from '../../redux/Actions/UserActions';
 import {useToast} from 'react-native-toast-notifications';
@@ -70,48 +69,50 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    setLoad(true);
-    // var myHeaders = new Headers();
-    // myHeaders.append('Content-Type', 'application/json');
+    if (pNumber) {
+      setLoad(true);
+      // var myHeaders = new Headers();
+      // myHeaders.append('Content-Type', 'application/json');
 
-    // var raw = JSON.stringify({
-    //   mobile: pNumber,
-    // });
+      // var raw = JSON.stringify({
+      //   mobile: pNumber,
+      // });
 
-    var myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
+      var myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
 
-    var raw = JSON.stringify({
-      mobile: pNumber,
-    });
-
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow',
-    };
-
-    fetch('https://agmart.ngrok.app/api/auth/auth', requestOptions)
-      .then(response => response.text())
-      .then(response => {
-        console.log('response>>> ', response);
-        if (response !== '') {
-          toast.show(response, {
-            type: 'success',
-            placement: 'bottom',
-            duration: 1000,
-            animationType: 'zoom-in',
-          });
-          setOtpSend(true);
-          setLoad(false);
-        }
-        setLoad(false);
-      })
-      .catch(error => {
-        setLoad(false);
-        console.log('error', error);
+      var raw = JSON.stringify({
+        mobile: pNumber,
       });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch('https://agmart.ngrok.app/api/auth/auth', requestOptions)
+        .then(response => response.text())
+        .then(response => {
+          console.log('response>>> ', response);
+          if (response !== '') {
+            toast.show(response, {
+              type: 'success',
+              placement: 'bottom',
+              duration: 1000,
+              animationType: 'zoom-in',
+            });
+            setOtpSend(true);
+            setLoad(false);
+          }
+          setLoad(false);
+        })
+        .catch(error => {
+          setLoad(false);
+          console.log('error', error);
+        });
+    }
   };
   const verifyOTP = async () => {
     setLoad(true);
@@ -130,7 +131,7 @@ const Login = () => {
       redirect: 'follow',
     };
 
-    fetch('http://agmart.ngrok.app/api/auth/authenticate', requestOptions)
+    fetch('https://agmart.ngrok.app/api/auth/authenticate', requestOptions)
       .then(response => response.json())
       .then(response => {
         console.log('response>>> ', response);
@@ -138,6 +139,8 @@ const Login = () => {
           dispatch(isLogin(true));
           dispatch(userData(response));
           navigation.navigate('Tab');
+          setOtpSend(false);
+          setPNumber(null);
           setLoad(false);
         } else {
           console.log(response);
@@ -170,6 +173,8 @@ const Login = () => {
               onChangeText={txt => {
                 setPNumber(txt);
               }}
+              maxLength={10}
+              keyboardType="numeric"
             />
             {otpSend && (
               <>

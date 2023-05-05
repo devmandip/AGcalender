@@ -89,6 +89,7 @@ const Profile = () => {
                     borderBottomWidth: idx === selTab ? 2 : 0,
                     borderColor:
                       idx === selTab ? theme.colors.primary : 'transparent',
+                    height: scale(30),
                   },
                 ]}
                 onPress={() => {
@@ -240,6 +241,7 @@ const Profile = () => {
         )}
 
         {/* Chat tabBar */}
+
         {selTab === 1 && (
           <FlatList
             data={chatData}
@@ -316,6 +318,7 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     padding: moderatedScale(12),
+    height: '75%',
   },
   menu: {
     alignSelf: 'flex-end',
@@ -343,7 +346,8 @@ const styles = StyleSheet.create({
   },
   tabTxt: {
     fontSize: scale(15),
-    marginBottom: scale(2),
+    marginBottom: scale(5),
+    height: scale(20),
   },
   tabContainer: {
     marginVertical: scale(10),

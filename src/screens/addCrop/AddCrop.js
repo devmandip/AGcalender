@@ -101,9 +101,9 @@ const AddCrop = () => {
           'Bearer ' + userReducer?.userDetails?.accessToken,
         );
         myHeaders.append('Content-Type', 'application/json');
-
+        console.log('userReducer?.userDetails?.id >> ', userReducer);
         var raw = JSON.stringify({
-          userId: userReducer?.userDetails?.id,
+          userId: userReducer?.userDetails?.user?.userId,
           cropName: selectedCrop,
           latitude: farmLocation?.latitude,
           longitude: farmLocation?.longitude,
@@ -117,7 +117,7 @@ const AddCrop = () => {
           media: '',
         });
 
-        console.log(raw);
+        console.log('id >>>>', raw);
 
         var requestOptions = {
           method: 'POST',
@@ -129,6 +129,7 @@ const AddCrop = () => {
         fetch('https://agmart.ngrok.app/api/listing', requestOptions)
           .then(response => response.json())
           .then(result => {
+            console.log('respomse ????? ', result);
             navigation.navigate('Home');
             setLoader(false);
             ToastMessage('successfully submit', 'success');
@@ -301,7 +302,7 @@ const AddCrop = () => {
               value={Volume}
               onChangeText={text => setVolume(text)}
               width={theme.SCREENWIDTH * 0.3}
-              title="Eild Volume"
+              title="Yield volume"
             />
             <View
               style={[

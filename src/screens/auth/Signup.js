@@ -113,7 +113,7 @@ const Signup = () => {
           stateName: '',
           preferredCrops: '',
         });
-
+        console.log('clgglg >>> ', raw);
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,
@@ -129,11 +129,11 @@ const Signup = () => {
             setLoader(false);
           })
           .catch(error => {
-            console.log(error);
+            console.log(error.error);
             setLoader(false);
           });
       } catch (error) {
-        console.log(error);
+        console.log(error.response);
         setLoader(false);
         ToastMessage(
           error.response.data.message === undefined
