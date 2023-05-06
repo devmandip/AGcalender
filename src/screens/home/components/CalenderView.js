@@ -4,9 +4,7 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Button,
   Pressable,
-  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
@@ -17,8 +15,9 @@ import {Label} from '../../../components';
 import ProgressCircle from 'react-native-progress-circle';
 import Toast from '../../../components/Toast';
 import MapModal from '../../../components/appModel/MapModel';
-import ApiService, {API} from '../../../utils/ApiService';
 import {useSelector} from 'react-redux';
+import {getServiceCall} from '../../../api/Webservice';
+import {ApiList} from '../../../api/ApiList';
 
 const CalenderHeader = props => {
   const {scrollPosition, cropName} = props;
@@ -31,7 +30,6 @@ const CalenderHeader = props => {
 
   const date = new Date(today);
   const options = {day: 'numeric', month: 'long', year: 'numeric'};
-  const formattedDate = date.toLocaleDateString('en-US', options);
 
   console.log(
     '>>>>>>>>>>>>>> GLOBAL CURRENT ',
@@ -77,42 +75,26 @@ const CalenderHeader = props => {
 
   const apiCall = async () => {
     try {
-      var myHeaders = new Headers();
-      myHeaders.append(
-        'Authorization',
-        'Bearer ' + userReducer?.userDetails?.accessToken,
-      );
-
-      var raw = '';
-
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow',
-      };
-
       const month = moment(dateSelected).format('M');
       const year = moment(dateSelected).format('YYYY');
-
-      fetch(
-        `https://agmart.ngrok.app/api/listing/calendar?cropName=${cropName}&latitude=${farmLocation?.latitude}&longitude=${farmLocation?.longitude}&radius=1000&month=${month}&year=${year}`,
-        requestOptions,
-      )
-        .then(response => response.json())
-        .then(response => {
-          setDateData(response?.data[0]?.cropListingsByDate);
-          setDateViewShow(true);
+      var params = {
+        cropName: cropName,
+        latitude: farmLocation?.latitude,
+        longitude: farmLocation?.longitude,
+        radius: 1000,
+        month: month, //"22/03/2023"
+        year: year, //"22/03/2023"
+      };
+      getServiceCall(ApiList.LISITNG_CALENDER, params)
+        .then(async responseJson => {
+          if (responseJson?.data != '') {
+            setDateData(responseJson?.data?.data[0]?.cropListingsByDate);
+            setDateViewShow(true);
+          }
         })
-        .catch(error => console.log('error', error));
+        .catch(error => {});
     } catch (error) {
       console.log(error);
-      // ToastMessage(
-      //   error.response.data.message === undefined
-      //     ? 'something went wrong !'
-      //     : error.response.data.message,
-      //   'danger',
-      // );
     }
   };
   return (

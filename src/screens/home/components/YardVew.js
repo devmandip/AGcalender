@@ -7,13 +7,13 @@ import {
   Platform,
 } from 'react-native';
 import React, {useState} from 'react';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import {scale, theme} from '../../../utils';
 import Header from './Header';
 import Story from './Story';
 import {useDispatch, useSelector} from 'react-redux';
-import ApiService, {API} from '../../../utils/ApiService';
 import moment from 'moment';
+import {getServiceCall} from '../../../api/Webservice';
+import {ApiList} from '../../../api/ApiList';
 
 const Yard_header = () => {
   return (
@@ -125,29 +125,19 @@ const YardVew = () => {
 
   const getYardDetailsByID = async id => {
     try {
-      var myHeaders = new Headers();
-      myHeaders.append(
-        'Authorization',
-        'Bearer ' + userReducer?.userDetails?.accessToken,
-      );
-
-      var raw = '';
-
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow',
+      var params = {
+        cropId: id,
+        latitude: global.currentLocation?.latitude,
+        longitude: global.currentLocation?.longitude,
+        radius: 1000000,
       };
-      fetch(
-        `https://agmart.ngrok.app/api/market/rates?cropId=${id}&latitude=${global.currentLocation?.latitude}&longitude=${global.currentLocation?.longitude}&radius=1000000`,
-        requestOptions,
-      )
-        .then(response => response.json())
-        .then(response => {
-          setYardData(response);
+      getServiceCall(ApiList.MARKET_RATES, params)
+        .then(async responseJson => {
+          if (responseJson?.data != '') {
+            setYardData(responseJson?.data);
+          }
         })
-        .catch(error => console.log('error', error));
+        .catch(error => {});
     } catch (error) {
       console.log(error);
     }

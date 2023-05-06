@@ -1,4 +1,5 @@
-import ApiService, {API} from '../../utils/ApiService';
+import {ApiList} from '../../api/ApiList';
+import {getServiceCall} from '../../api/Webservice';
 import * as types from './ActionsTypes';
 
 export const isLogin = payload => {
@@ -20,32 +21,19 @@ export const userData = payload => {
 export const userWiseDetails = userReducer => {
   return async dispatch => {
     try {
-      var myHeaders = new Headers();
-      myHeaders.append(
-        'Authorization',
-        'Bearer ' + userReducer?.userDetails?.accessToken,
-      );
-
-      var raw = '';
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow',
-      };
-
-      fetch(
-        'https://agmart.ngrok.app/api/user/' +
-          userReducer?.userDetails?.user?.userId,
-        requestOptions,
+      getServiceCall(
+        ApiList.USER_PROFILE + userReducer?.userDetails?.userId,
+        '',
       )
-        .then(response => response.json())
-        .then(response => {
-          dispatch({type: types.USER_WISE_DETAILS, payload: response});
+        .then(async responseJson => {
+          if (responseJson?.data != '') {
+            dispatch({
+              type: types.USER_WISE_DETAILS,
+              payload: responseJson?.data,
+            });
+          }
         })
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(error => {});
     } catch (error) {
       console.log(error);
     }
@@ -55,27 +43,16 @@ export const userWiseDetails = userReducer => {
 export const getCategoriesData = userReducer => {
   return async dispatch => {
     try {
-      var myHeaders = new Headers();
-      myHeaders.append(
-        'Authorization',
-        'Bearer ' + userReducer?.userDetails?.accessToken,
-      );
-      var raw = '';
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow',
-      };
-      fetch('https://agmart.ngrok.app/api/categories', requestOptions)
-        .then(response => response.json())
-        .then(response => {
-          console.log(response?.data);
-          dispatch({type: types.CATEGORIES_LIST, payload: response?.data});
+      getServiceCall(ApiList.CATEGORIES, '')
+        .then(async responseJson => {
+          if (responseJson?.data != '') {
+            dispatch({
+              type: types.CATEGORIES_LIST,
+              payload: responseJson?.data?.data,
+            });
+          }
         })
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(error => {});
     } catch (error) {
       console.log(error);
     }
@@ -85,27 +62,16 @@ export const getCategoriesData = userReducer => {
 export const getCropData = userReducer => {
   return async dispatch => {
     try {
-      var myHeaders = new Headers();
-      myHeaders.append(
-        'Authorization',
-        'Bearer ' + userReducer?.userDetails?.accessToken,
-      );
-      var raw = '';
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow',
-      };
-      fetch('https://agmart.ngrok.app/api/crops', requestOptions)
-        .then(response => response.json())
-        .then(response => {
-          console.log(response?.data);
-          dispatch({type: types.CROPS_LIST, payload: response?.data});
+      getServiceCall(ApiList.CROPS, '')
+        .then(async responseJson => {
+          if (responseJson?.data != '') {
+            dispatch({
+              type: types.CROPS_LIST,
+              payload: responseJson?.data?.data,
+            });
+          }
         })
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(error => {});
     } catch (error) {
       console.log(error);
     }

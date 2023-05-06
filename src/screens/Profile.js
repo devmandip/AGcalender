@@ -18,6 +18,7 @@ import {chatData, cropData, optionsData} from '../utils/MockData';
 import {useIsFocused, useNavigation} from '@react-navigation/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {isLogin, userData, userWiseDetails} from '../redux/Actions/UserActions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = () => {
   const [selTab, setTab] = useState(0);
@@ -50,8 +51,9 @@ const Profile = () => {
         color={theme.colors.black}
         size={scale(20)}
         style={styles.menu}
-        onPress={() => {
-          navigation.navigate('authStack');
+        onPress={async () => {
+          navigation.replace('authStack');
+          await AsyncStorage.removeItem('token');
           dispatch(isLogin(false));
           dispatch(userData(null));
         }}

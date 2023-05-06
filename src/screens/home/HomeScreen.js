@@ -9,17 +9,17 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useCallback, useState} from 'react';
-import {CalenderView, Header, PostSection, Story, YardVew} from './components';
-import Posts from '../../dummyData/Posts';
-import {DrawerModal, Loader} from '../../components';
+import {CalenderView, Header, PostSection, Story} from './components';
+import {DrawerModal} from '../../components';
 import {theme} from '../../utils';
 import Toast from '../../components/Toast';
-import MapModal from '../../components/appModel/MapModel';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCategoriesData, getCropData} from '../../redux/Actions/UserActions';
 import {useFocusEffect, useIsFocused} from '@react-navigation/core';
-import ApiService, {API} from '../../utils/ApiService';
 import Geolocation from '@react-native-community/geolocation';
+import {getServiceCall} from '../../api/Webservice';
+import {ApiList} from '../../api/ApiList';
+import moment from 'moment';
 
 const renderItem = ({item}) => {
   return (
@@ -102,41 +102,25 @@ const HomeScreen = () => {
 
   const callListApi = async (farmLocation, date) => {
     try {
-      var myHeaders = new Headers();
-      myHeaders.append(
-        'Authorization',
-        'Bearer ' + userReducer?.userDetails?.accessToken,
-      );
-
-      var raw = '';
-
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow',
-      };
-
       const lat = farmLocation.latitude;
       const long = farmLocation.longitude;
 
-      fetch(
-        `https://agmart.ngrok.app/api/listing?cropName=${selectedCrop}&latitude=${lat}&longitude=${long}&radius=1000&harvestingDate=17/05/2023`,
-        requestOptions,
-      )
-        .then(response => response.json())
-        .then(response => {
-          setListData(response?.data);
+      var params = {
+        cropName: selectedCrop,
+        latitude: lat,
+        longitude: long,
+        radius: 1000,
+        harvestingDate: moment(date).format('DD/MM/YYYY') ?? '', //"22/03/2023"
+      };
+      getServiceCall(ApiList.ADD_CROP, params)
+        .then(async responseJson => {
+          if (responseJson?.data != '') {
+            setListData(responseJson?.data?.data);
+          }
         })
-        .catch(error => console.log('error', error));
+        .catch(error => {});
     } catch (error) {
-      console.log(error.response);
-      // ToastMessage(
-      //   error.response.data.message === undefined
-      //     ? 'something went wrong !'
-      //     : error.response.data.message,
-      //   'danger',
-      // );
+      console.log(error);
     }
   };
 

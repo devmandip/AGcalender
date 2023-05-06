@@ -17,8 +17,10 @@ import {useFocusEffect, useNavigation} from '@react-navigation/core';
 import {useDispatch} from 'react-redux';
 import {isLogin, userData} from '../../redux/Actions/UserActions';
 import {useToast} from 'react-native-toast-notifications';
-import axios from 'axios';
 import Geolocation from '@react-native-community/geolocation';
+import {postServiceCall} from '../../api/Webservice';
+import {ApiList} from '../../api/ApiList';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -71,33 +73,13 @@ const Login = () => {
   const handleLogin = async () => {
     if (pNumber) {
       setLoad(true);
-      // var myHeaders = new Headers();
-      // myHeaders.append('Content-Type', 'application/json');
-
-      // var raw = JSON.stringify({
-      //   mobile: pNumber,
-      // });
-
-      var myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'application/json');
-
-      var raw = JSON.stringify({
+      var params = {
         mobile: pNumber,
-      });
-
-      var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow',
       };
-
-      fetch('https://agmart.ngrok.app/api/auth/auth', requestOptions)
-        .then(response => response.text())
-        .then(response => {
-          console.log('response>>> ', response);
-          if (response !== '') {
-            toast.show(response, {
+      postServiceCall(ApiList.SEND_OTP, params, true)
+        .then(async responseJson => {
+          if (responseJson?.data != '') {
+            toast.show(responseJson?.data, {
               type: 'success',
               placement: 'bottom',
               duration: 1000,
@@ -110,51 +92,42 @@ const Login = () => {
         })
         .catch(error => {
           setLoad(false);
-          console.log('error', error);
         });
     }
   };
   const verifyOTP = async () => {
     setLoad(true);
-    var myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
-
-    var raw = JSON.stringify({
+    setLoad(true);
+    var params = {
       phoneNumber: pNumber,
       otp: otp,
-    });
-
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow',
     };
-
-    fetch('https://agmart.ngrok.app/api/auth/authenticate', requestOptions)
-      .then(response => response.json())
-      .then(response => {
-        console.log('response>>> ', response);
-        if (response?.user) {
-          dispatch(isLogin(true));
-          dispatch(userData(response));
-          navigation.navigate('Tab');
-          setOtpSend(false);
-          setPNumber(null);
+    postServiceCall(ApiList.VERIIFY_OTP, params, true)
+      .then(async responseJson => {
+        if (responseJson?.data != '') {
+          if (responseJson?.data) {
+            await AsyncStorage.setItem(
+              'token',
+              responseJson?.data?.accessToken,
+            );
+            dispatch(isLogin(true));
+            dispatch(userData(responseJson?.data?.user));
+            navigation.navigate('Tab');
+            setLoad(false);
+          } else {
+            setLoad(false);
+            toast.show('wrong details.', {
+              type: 'error',
+              placement: 'bottom',
+              duration: 1000,
+              animationType: 'zoom-in',
+            });
+          }
           setLoad(false);
-        } else {
-          console.log(response);
-          setLoad(false);
-          toast.show('wrong details.', {
-            type: 'error',
-            placement: 'bottom',
-            duration: 1000,
-            animationType: 'zoom-in',
-          });
         }
+        setLoad(false);
       })
       .catch(error => {
-        console.log(error);
         setLoad(false);
       });
   };

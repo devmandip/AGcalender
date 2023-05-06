@@ -11,17 +11,15 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {Menu, MenuItem, MenuDivider} from 'react-native-material-menu';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {images, scale, theme} from '../../utils';
-import {Button, InputBox, Label, Loader} from '../../components';
+import {Button, InputBox, Label} from '../../components';
 import {useNavigation} from '@react-navigation/core';
-import axios from 'axios';
 import {useToast} from 'react-native-toast-notifications';
-import ApiService from '../../utils/ApiService';
-import {API} from '../../utils/ApiService';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {ApiList} from '../../api/ApiList';
+import {postServiceCall} from '../../api/Webservice';
 
 const Signup = () => {
   const navigation = useNavigation();
@@ -96,10 +94,7 @@ const Signup = () => {
     } else {
       setLoader(true);
       try {
-        var myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'application/json');
-
-        var raw = JSON.stringify({
+        var params = {
           username: name,
           mobileNumber: mobile,
           password: password,
@@ -112,33 +107,24 @@ const Signup = () => {
           districtName: '',
           stateName: '',
           preferredCrops: '',
-        });
-        console.log('clgglg >>> ', raw);
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow',
         };
-
-        fetch('https://agmart.ngrok.app/api/auth/signup', requestOptions)
-          .then(response => response.text())
-          .then(result => {
-            ToastMessage('successfully registred', 'success');
-            navigation.navigate('Login');
+        postServiceCall(ApiList.SING_UP, params, true)
+          .then(async responseJson => {
+            if (responseJson?.data != '') {
+              ToastMessage('successfully registred', 'success');
+              navigation.navigate('Login');
+              setLoader(false);
+            }
             setLoader(false);
           })
           .catch(error => {
-            console.log(error.error);
             setLoader(false);
           });
       } catch (error) {
-        console.log(error.response);
+        console.log(error);
         setLoader(false);
         ToastMessage(
-          error.response.data.message === undefined
-            ? 'something went wrong !'
-            : error.response.data.message,
+          error === undefined ? 'something went wrong !' : error,
           'danger',
         );
       }

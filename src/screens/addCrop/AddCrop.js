@@ -8,19 +8,17 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {Header, SubmitBtn, TxtInput} from './addCrop_components';
-import {CalenderView} from '../home/components';
 import {useNavigation} from '@react-navigation/core';
 import {scale, theme} from '../../utils';
-import {Dropdown} from 'react-native-element-dropdown';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Range_Calender, SelectCropModel} from '../../components';
-import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
+import {Menu, MenuItem} from 'react-native-material-menu';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCropData} from '../../redux/Actions/UserActions';
 import MapModal from '../../components/appModel/MapModel';
 import {useToast} from 'react-native-toast-notifications';
-import ApiService, {API} from '../../utils/ApiService';
 import moment from 'moment';
+import {ApiList} from '../../api/ApiList';
+import {postServiceCall} from '../../api/Webservice';
 
 const data = [
   {label: 'Item 1', value: '1'},
@@ -46,8 +44,8 @@ const AddCrop = () => {
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
-  const [fName, setFName] = useState(userReducer?.userDetails?.user?.username);
-  const [mNo, setMNo] = useState(userReducer?.userDetails?.user?.mobileNumber);
+  const [fName, setFName] = useState(userReducer?.userDetails?.username);
+  const [mNo, setMNo] = useState(userReducer?.userDetails?.mobileNumber);
   const [variety, setVariety] = useState('');
   const [Volume, setVolume] = useState('');
   const [area, setArea] = useState('');
@@ -95,15 +93,8 @@ const AddCrop = () => {
     } else {
       setLoader(true);
       try {
-        var myHeaders = new Headers();
-        myHeaders.append(
-          'Authorization',
-          'Bearer ' + userReducer?.userDetails?.accessToken,
-        );
-        myHeaders.append('Content-Type', 'application/json');
-        console.log('userReducer?.userDetails?.id >> ', userReducer);
-        var raw = JSON.stringify({
-          userId: userReducer?.userDetails?.user?.userId,
+        var params = {
+          userId: userReducer?.userDetails?.userId,
           cropName: selectedCrop,
           latitude: farmLocation?.latitude,
           longitude: farmLocation?.longitude,
@@ -115,34 +106,18 @@ const AddCrop = () => {
           harvestStartDate: moment(startDay).format('DD/MM/YYYY') ?? '', //"22/03/2023"
           harvestEndDate: moment(endDay).format('DD/MM/YYYY') ?? '', //"22/03/2023"
           media: '',
-        });
-
-        console.log('id >>>>', raw);
-
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow',
         };
-
-        fetch('https://agmart.ngrok.app/api/listing', requestOptions)
-          .then(response => response.json())
-          .then(result => {
-            console.log('respomse ????? ', result);
-            navigation.navigate('Home');
+        postServiceCall(ApiList.ADD_CROP, params)
+          .then(async responseJson => {
+            if (responseJson?.data != '') {
+              navigation.navigate('Home');
+              setLoader(false);
+              ToastMessage(responseJson?.data?.message, 'success');
+            }
             setLoader(false);
-            ToastMessage('successfully submit', 'success');
           })
           .catch(error => {
-            console.log(error);
             setLoader(false);
-            ToastMessage(
-              error.message === undefined
-                ? 'something went wrong !'
-                : error.message,
-              'danger',
-            );
           });
       } catch (error) {
         console.log(error);
@@ -300,6 +275,7 @@ const AddCrop = () => {
           <View style={[styles.input_view, {marginTop: scale(10)}]}>
             <TxtInput
               value={Volume}
+              keyboardType={'number-pad'}
               onChangeText={text => setVolume(text)}
               width={theme.SCREENWIDTH * 0.3}
               title="Yield volume"

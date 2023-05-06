@@ -35,11 +35,6 @@ const Comman = () => {
 };
 
 const BottomTab = () => {
-  // const userDetails = useSelector(state => state.UserReducer);
-  // console.log('first', userDetails);
-  // axios.defaults.headers.Authorization = `Bearer ${
-  //   JSON.parse(userDetails?.userDetails)?.accessToken
-  // }`;
   return (
     <Tab.Navigator
       // initialRouteName="User"
