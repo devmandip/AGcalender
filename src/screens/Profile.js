@@ -1,6 +1,8 @@
 import {
+  Alert,
   FlatList,
   Image,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -19,6 +21,10 @@ import {useIsFocused, useNavigation} from '@react-navigation/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {isLogin, userData, userWiseDetails} from '../redux/Actions/UserActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {ApiList} from '../api/ApiList';
+import {deleteServiceCall} from '../api/Webservice';
+import {useToast} from 'react-native-toast-notifications';
 
 const Profile = () => {
   const [selTab, setTab] = useState(0);
@@ -27,9 +33,29 @@ const Profile = () => {
   const dispatch = useDispatch();
   const loginUserData = useSelector(state => state.UserReducer);
   const isDocus = useIsFocused();
+  const toast = useToast();
+
   useEffect(() => {
     dispatch(userWiseDetails(loginUserData));
   }, []);
+
+  const deleteCropApiCall = id => {
+    deleteServiceCall(ApiList.ADD_CROP + '/' + id, '')
+      .then(async responseJson => {
+        if (responseJson?.data != '') {
+          toast.show(responseJson?.data?.message, {
+            type: 'success',
+            placement: 'bottom',
+            duration: 1000,
+            animationType: 'zoom-in',
+          });
+          dispatch(userWiseDetails(loginUserData));
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -227,14 +253,28 @@ const Profile = () => {
                       />
                       <Label title="Chat" style={styles.lbl} />
                     </View>
-                    <View style={styles.view}>
+                    <Pressable
+                      onPress={() => {
+                        Alert.alert('', 'Are you sure you want to delete?', [
+                          {
+                            text: 'No',
+                          },
+                          {
+                            text: 'Yes',
+                            onPress: () => {
+                              deleteCropApiCall(item?.cropListingId);
+                            },
+                          },
+                        ]);
+                      }}
+                      style={styles.view}>
                       <Icon3
                         size={scale(20)}
                         color={theme.colors.gray2}
                         name="dots-vertical-circle-outline"
                       />
                       <Label title="More" style={styles.lbl} />
-                    </View>
+                    </Pressable>
                   </View>
                 </View>
               );

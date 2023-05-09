@@ -61,3 +61,34 @@ export const postServiceCall = async (endpoint, params, auth = false) => {
       throw error;
     });
 };
+
+export const deleteServiceCall = async (endpoint, params, auth = false) => {
+  let token = await AsyncStorage.getItem('token');
+
+  var headers = {
+    'Content-Type': 'application/json',
+  };
+  if (!auth) {
+    headers = {
+      Authorization: 'Bearer ' + token,
+    };
+  }
+
+  console.log('REQUEST URL:', endpoint);
+  console.log('HEADER:', JSON.stringify(headers));
+  console.log('PARAMS:', JSON.stringify(params));
+
+  return axios
+    .delete(endpoint, {
+      headers: headers,
+      params,
+    })
+    .then(response => {
+      console.log('RESPONSE:', JSON.stringify(response));
+      return response;
+    })
+    .catch(error => {
+      console.log('ERROR:', JSON.stringify(error));
+      throw error;
+    });
+};

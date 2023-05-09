@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useCallback, useState} from 'react';
 import {CalenderView, Header, PostSection, Story} from './components';
-import {DrawerModal} from '../../components';
+import {DrawerModal, SelectCropModel} from '../../components';
 import {theme} from '../../utils';
 import Toast from '../../components/Toast';
 import {useDispatch, useSelector} from 'react-redux';
@@ -53,13 +53,15 @@ const HomeScreen = () => {
 
   const [listData, setListData] = useState([]);
   const [selectedCrop, setSelectedCrop] = useState('');
+  const [selectedCate, setSelectedCate] = useState('');
+  const [isFocus, setIsFocus] = useState(false);
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
   const isFocuse = useIsFocused();
   useEffect(() => {
-    dispatch(getCropData(userReducer));
-    dispatch(getCategoriesData(userReducer));
+    dispatch(getCropData(selectedCate?.id));
+    dispatch(getCategoriesData());
   }, [isFocuse]);
 
   useFocusEffect(
@@ -131,12 +133,24 @@ const HomeScreen = () => {
   };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: theme.colors.white}}>
+      <SelectCropModel
+        selectedItem={item => {
+          setSelectedCate(item);
+          dispatch(getCropData(item?.id));
+        }}
+        listData={userReducer?.categoryList}
+        isVisible={isFocus}
+        close={() => setIsFocus(false)}
+      />
       <ScrollView
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
         onScroll={event => handleScroll(event)}>
         <View style={styles.container}>
           <Header
+            onRightPress={() => {
+              setIsFocus(true);
+            }}
             basket
             onPressMenu={() => {
               setDrawerModel(true);

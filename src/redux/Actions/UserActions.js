@@ -40,7 +40,7 @@ export const userWiseDetails = userReducer => {
   };
 };
 
-export const getCategoriesData = userReducer => {
+export const getCategoriesData = () => {
   return async dispatch => {
     try {
       getServiceCall(ApiList.CATEGORIES, '')
@@ -59,10 +59,10 @@ export const getCategoriesData = userReducer => {
   };
 };
 
-export const getCropData = userReducer => {
+export const getCropData = (id = '') => {
   return async dispatch => {
     try {
-      getServiceCall(ApiList.CROPS, '')
+      getServiceCall(ApiList.CROPS + '?categoryId=' + id, '')
         .then(async responseJson => {
           if (responseJson?.data != '') {
             dispatch({

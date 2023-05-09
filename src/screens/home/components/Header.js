@@ -16,7 +16,7 @@ const Header = props => {
       </TouchableOpacity>
 
       <SearchBar />
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity onPress={props.onRightPress}>
         {basket && (
           <Fontisto
             name="shopping-basket"
