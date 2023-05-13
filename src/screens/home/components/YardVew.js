@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {scale, theme} from '../../../utils';
 import Header from './Header';
 import Story from './Story';
@@ -120,10 +120,14 @@ const renderItem = ({item}) => {
 const YardVew = () => {
   const [yardData, setYardData] = useState([]);
 
+  useEffect(() => {
+    getYardDetailsByID();
+  }, []);
+
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
 
-  const getYardDetailsByID = async id => {
+  const getYardDetailsByID = async (id = '') => {
     try {
       var params = {
         cropId: id,

@@ -84,10 +84,12 @@ const AddCrop = () => {
       ToastMessage('Variety name is required', 'danger');
     } else if (area === '') {
       ToastMessage('Area name is required', 'danger');
-    } else if (startDay === '') {
-      ToastMessage('Harvesting date is required', 'danger');
+    } else if (startDay == '' || startDay == null) {
+      ToastMessage('Harvesting start date is required', 'danger');
+    } else if (endDay == '' || endDay == null) {
+      ToastMessage('Harvesting end date is required', 'danger');
     } else if (Volume === '') {
-      ToastMessage('Eild Volume is required', 'danger');
+      ToastMessage('Yeild Volume is required', 'danger');
     } else if (units === '') {
       ToastMessage('Units is required', 'danger');
     } else {
@@ -260,9 +262,10 @@ const AddCrop = () => {
             <Text style={styles.secondary_txt}>Ac.</Text>
           </View>
 
-          <Text style={styles.calender_title}>Harvesting Date</Text>
+          <Text style={styles.calender_title}>
+            Select Harvesting Start and End Dates
+          </Text>
           {/* <CalenderView showheader={false} /> */}
-
           <Range_Calender
             endDay={day => {
               setEndDay(day);
@@ -278,7 +281,7 @@ const AddCrop = () => {
               keyboardType={'number-pad'}
               onChangeText={text => setVolume(text)}
               width={theme.SCREENWIDTH * 0.3}
-              title="Yield volume"
+              title="Expected Yield"
             />
             <View
               style={[
@@ -286,9 +289,10 @@ const AddCrop = () => {
                 {marginHorizontal: scale(1), alignItems: 'center'},
               ]}>
               <TxtInput
+                editable={false}
                 value={units}
                 onChangeText={text => setUnits(text)}
-                width={theme.SCREENWIDTH * 0.2}
+                width={theme.SCREENWIDTH * 0.3}
                 title="Units"
               />
               <Menu
@@ -304,9 +308,10 @@ const AddCrop = () => {
                   </Text>
                 }
                 onRequestClose={hideMenu}>
-                <MenuItem onPress={() => hideMenu('Grm')}>Grm</MenuItem>
-                <MenuItem onPress={() => hideMenu('Kg')}>Kg</MenuItem>
-                <MenuItem onPress={() => hideMenu('Qtl')}>Qtl</MenuItem>
+                <MenuItem onPress={() => hideMenu('Tons')}>Tons</MenuItem>
+                <MenuItem onPress={() => hideMenu('Quintals')}>
+                  Quintals
+                </MenuItem>
               </Menu>
             </View>
           </View>

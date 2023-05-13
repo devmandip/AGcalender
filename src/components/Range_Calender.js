@@ -41,6 +41,7 @@ const Range_Calender = props => {
           setStartDay(day.dateString);
           props.startDay(day.dateString);
           setEndDay(null);
+          props.endDay(null);
           setSelectedDate({
             [day.dateString]: {
               marked: true,

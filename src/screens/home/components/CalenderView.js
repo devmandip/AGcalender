@@ -89,7 +89,6 @@ const CalenderHeader = props => {
         .then(async responseJson => {
           if (responseJson?.data != '') {
             setDateData(responseJson?.data?.data[0]?.cropListingsByDate);
-            setDateViewShow(true);
           }
         })
         .catch(error => {});
@@ -151,6 +150,7 @@ const CalenderHeader = props => {
         />
         <TouchableOpacity
           onPress={() => {
+            apiCall();
             setDateViewShow(!dateViewShow);
           }}>
           <Icon
@@ -181,20 +181,34 @@ const CalenderHeader = props => {
             selectedDayTextColor: 'white',
           }}
           dayComponent={({date}) => {
+            var showProgreshBar = false;
+            const tempData = [...dateData];
+            tempData.map(obj => {
+              if (obj.harvestStartDate == date?.dateString) {
+                showProgreshBar = true;
+              }
+            });
+
             return (
               <>
                 <TouchableOpacity onPress={() => callListApi(date)}>
-                  <ProgressCircle
-                    percent={10}
-                    radius={20}
-                    borderWidth={2}
-                    color="#FFD580"
-                    shadowColor="#f2f2f2"
-                    bgColor="white">
+                  {showProgreshBar ? (
+                    <ProgressCircle
+                      percent={10}
+                      radius={20}
+                      borderWidth={2}
+                      color="#FFD580"
+                      shadowColor="#f2f2f2"
+                      bgColor="white">
+                      <Text style={{fontSize: 18, textAlign: 'center'}}>
+                        {date.day}
+                      </Text>
+                    </ProgressCircle>
+                  ) : (
                     <Text style={{fontSize: 18, textAlign: 'center'}}>
                       {date.day}
                     </Text>
-                  </ProgressCircle>
+                  )}
                 </TouchableOpacity>
                 {showPopup && dateSelected == date?.dateString && (
                   <Toast tagName={showTag} />

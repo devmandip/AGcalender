@@ -58,19 +58,20 @@ const HomeScreen = () => {
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
-  const isFocuse = useIsFocused();
-  useEffect(() => {
-    dispatch(getCropData(selectedCate?.id));
-    dispatch(getCategoriesData());
-  }, [isFocuse]);
 
   useFocusEffect(
     useCallback(() => {
       (async () => {
+        dispatch(getCropData(selectedCate?.id));
+        dispatch(getCategoriesData());
         await requestLocationPermission();
       })();
     }, []),
   );
+
+  useEffect(() => {
+    callListApi(global.currentLocation, moment().format('DD/MM/YYYY'));
+  }, []);
 
   const requestLocationPermission = async () => {
     try {
@@ -106,7 +107,6 @@ const HomeScreen = () => {
     try {
       const lat = farmLocation.latitude;
       const long = farmLocation.longitude;
-
       var params = {
         cropName: selectedCrop,
         latitude: lat,
@@ -134,6 +134,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: theme.colors.white}}>
       <SelectCropModel
+        category={true}
         selectedItem={item => {
           setSelectedCate(item);
           dispatch(getCropData(item?.id));

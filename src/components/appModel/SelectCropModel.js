@@ -17,7 +17,7 @@ import {SearchBar} from '../../screens/home/components';
 import {Label, Title} from '../Label';
 
 const DrawerModal = props => {
-  const {isVisible, close} = props;
+  const {isVisible, close, category} = props;
   const [cropsList, setCropList] = useState([]);
   const [searchtxt, setSearch] = useState('');
 
@@ -32,7 +32,7 @@ const DrawerModal = props => {
         <TouchableOpacity
           onPress={() => {
             close();
-            props.selectedItem(item)
+            props.selectedItem(item);
             //  setCategory(index);
           }}
           style={styles.cropcard}>
@@ -74,7 +74,9 @@ const DrawerModal = props => {
       style={{width: '100%', margin: 0}}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Title title="Crop nam select." />
+          <Title
+            title={category ? 'Select Category Name' : 'Select Crop Name'}
+          />
           <Icon
             name="x"
             size={scale(22)}
@@ -84,7 +86,7 @@ const DrawerModal = props => {
           />
         </View>
         <SearchBar
-          placeholder="Search Crop"
+          placeholder={category ? 'Search Category' : 'Search Crop'}
           style={{
             width: theme.SCREENWIDTH * 0.9,
             marginTop: scale(10),

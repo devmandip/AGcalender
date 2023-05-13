@@ -155,7 +155,6 @@ const Signup = () => {
           color={theme.colors.white}
           style={{alignSelf: 'center', marginTop: scale(8)}}
           onPress={() => {
-            Alert.alert('call');
           }}
         />
         <KeyboardAwareScrollView>
