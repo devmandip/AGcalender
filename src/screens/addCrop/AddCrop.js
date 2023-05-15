@@ -51,12 +51,12 @@ const AddCrop = () => {
   const [area, setArea] = useState('');
   const [showMap, setShowMap] = useState(false);
   const [farmLocation, setFarmLocation] = useState('');
+  const [placeLocation, setPlaceLocation] = useState('');
   const [units, setUnits] = useState('');
   const [endDay, setEndDay] = useState('');
   const [startDay, setStartDay] = useState('');
 
   useEffect(() => {
-    setFarmLocation(global.currentLocation);
     dispatch(getCropData(userReducer));
   }, []);
 
@@ -133,34 +133,23 @@ const AddCrop = () => {
         <MapModal
           close={data => {
             if (data != null) {
-              // const url = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?apiKey=${'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc'}&mode=retrieveAddresses&prox=${
-              //   data?.latitude
-              // },${data?.longitude}`;
-              // fetch(url)
-              //   .then(res => res.json())
-              //   .then(resJson => {
-              //     console.log(">>>>>>>>  resJson ",resJson)
-              //     // the response had a deeply nested structure :/
-              //     // if (
-              //     //   resJson &&
-              //     //   resJson.Response &&
-              //     //   resJson.Response.View &&
-              //     //   resJson.Response.View[0] &&
-              //     //   resJson.Response.View[0].Result &&
-              //     //   resJson.Response.View[0].Result[0]
-              //     // ) {
-              //     //   resolve(
-              //     //     resJson.Response.View[0].Result[0].Location.Address.Label,
-              //     //   );
-              //     // } else {
-              //     //   resolve();
-              //     // }
-              //   })
-              //   .catch(e => {
-              //     console.log('Error in getAddressFromCoordinates', e);
-              //     // resolve();
-              //   });
-              setFarmLocation(data);
+              fetch(
+                'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+                  data.latitude +
+                  ',' +
+                  data.longitude +
+                  '&key=' +
+                  'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
+              )
+                .then(response => response.json())
+                .then(responseJson => {
+                  const place = JSON.stringify(
+                    responseJson?.results[0]?.formatted_address,
+                  )?.replace(/"/g, '');
+                  setFarmLocation(data);
+                  setPlaceLocation(place);
+                  console.log('name of location ', place);
+                });
             }
             setShowMap(false);
           }}
@@ -191,8 +180,9 @@ const AddCrop = () => {
           <View style={styles.input_view}>
             <TxtInput
               onTouchStart={() => {
-                setShowMap(true);
+                if (placeLocation == '') setShowMap(true);
               }}
+              value={placeLocation}
               width={theme.SCREENWIDTH * 0.43}
               title="Farm Location"
             />

@@ -34,8 +34,28 @@ const Profile = () => {
   const loginUserData = useSelector(state => state.UserReducer);
   const isDocus = useIsFocused();
   const toast = useToast();
+  const [userLocation, setUserLocation] = useState('');
 
   useEffect(() => {
+    fetch(
+      'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+        loginUserData?.userWiseDetails.latitude +
+        ',' +
+        loginUserData?.userWiseDetails.longitude +
+        '&key=' +
+        'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        const place = JSON.stringify(
+          responseJson?.results[0]?.address_components[4]?.long_name,
+        )?.replace(/"/g, '');
+        setUserLocation(place);
+        console.log(
+          'name of location ',
+          responseJson?.results[0]?.address_components[4]?.long_name,
+        );
+      });
     dispatch(userWiseDetails(loginUserData));
   }, [isDocus]);
 
@@ -99,7 +119,7 @@ const Profile = () => {
           </View>
 
           <View style={styles.row}>
-            <Title title="Kanpur" style={styles.title} />
+            <Title title={userLocation} style={styles.title} />
             <Image source={images.pin} style={styles.pin} />
           </View>
         </View>

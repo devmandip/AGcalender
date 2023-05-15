@@ -102,6 +102,21 @@ const CalenderHeader = props => {
         close={data => {
           if (data != null) {
             setFarmLocation(data);
+            fetch(
+              'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+                data.latitude +
+                ',' +
+                data.longitude +
+                '&key=' +
+                'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
+            )
+              .then(response => response.json())
+              .then(responseJson => {
+                const place = JSON.stringify(
+                  responseJson?.results[0]?.formatted_address,
+                )?.replace(/"/g, '');
+                console.log('name of location ', place);
+              });
           }
           setShowMap(false);
         }}

@@ -65,22 +65,6 @@ const MapModal = props => {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       });
-      fetch(
-        'https://maps.googleapis.com/maps/api/geocode/json?address=' +
-          crd.latitude +
-          ',' +
-          crd.longitude +
-          '&key=' +
-          'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
-      )
-        .then(response => response.json())
-        .then(responseJson => {
-          const place = JSON.stringify(
-            responseJson?.results[0]?.formatted_address,
-          )?.replace(/"/g, '');
-          alert(place);
-          console.log('name of location ', place);
-        });
     }).catch(err => {
       console.log(err);
     });
@@ -110,7 +94,7 @@ const MapModal = props => {
       backdropOpacity={0.4}
       visible={isVisible}
       onRequestClose={() => {
-        close(position);
+        close();
       }}
       animationIn="slideOutLeft"
       animationOut="slideInLeft"
@@ -129,10 +113,35 @@ const MapModal = props => {
               name="x"
               size={scale(30)}
               color={theme.colors.black}
-              onPress={() => close(position)}
+              onPress={() => close()}
               // style={styles.closeIcon}
             />
           </View>
+          <TouchableOpacity
+            onPress={() => {
+              close(position);
+            }}
+            style={{
+              zIndex: 1,
+              bottom: 20,
+              backgroundColor: theme.colors.primary,
+              position: 'absolute',
+              padding: scale(10),
+              paddingHorizontal: scale(20),
+              alignSelf: 'center',
+              borderRadius: 10,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: scale(15),
+                color: theme.colors.white,
+              }}>
+              {'Save Location'}
+            </Text>
+          </TouchableOpacity>
           <MapView
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             style={styles.map}
@@ -143,9 +152,6 @@ const MapModal = props => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               });
-              setTimeout(() => {
-                close(position);
-              }, 2000);
             }}
             region={position}>
             <Marker
