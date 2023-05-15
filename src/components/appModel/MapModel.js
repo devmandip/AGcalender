@@ -65,10 +65,45 @@ const MapModal = props => {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       });
+      fetch(
+        'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+          crd.latitude +
+          ',' +
+          crd.longitude +
+          '&key=' +
+          'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
+      )
+        .then(response => response.json())
+        .then(responseJson => {
+          const place = JSON.stringify(
+            responseJson?.results[0]?.formatted_address,
+          )?.replace(/"/g, '');
+          alert(place);
+          console.log('name of location ', place);
+        });
     }).catch(err => {
       console.log(err);
     });
   };
+
+  // const useGoogleGetAddress = () => {
+  //   fetch(
+  //     'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+  //       crd.latitude +
+  //       ',' +
+  //       crd.longitude +
+  //       '&key=' +
+  //       'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
+  //   )
+  //     .then(response => response.json())
+  //     .then(responseJson => {
+  //       const place = JSON.stringify(
+  //         responseJson?.results[0]?.formatted_address,
+  //       )?.replace(/"/g, '');
+
+  //       console.log(place);
+  //     });
+  // };
 
   return (
     <Modal

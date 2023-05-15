@@ -37,7 +37,7 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(userWiseDetails(loginUserData));
-  }, []);
+  }, [isDocus]);
 
   const deleteCropApiCall = id => {
     deleteServiceCall(ApiList.ADD_CROP + '/' + id, '')
@@ -92,7 +92,10 @@ const Profile = () => {
               title={`${loginUserData?.userWiseDetails?.username}, `}
               style={styles.title}
             />
-            <Label title={loginUserData?.userWiseDetails?.profession} />
+            <Label
+              title={loginUserData?.userWiseDetails?.profession}
+              style={styles.profession}
+            />
           </View>
 
           <View style={styles.row}>
@@ -171,7 +174,7 @@ const Profile = () => {
                     ]}>
                     <Text style={styles.name}>
                       Corp Name
-                      <Text style={styles.cName}>{item?.cropName}</Text>
+                      <Text style={styles.cName}>{` ${item?.cropName}`}</Text>
                     </Text>
                     <Label title={'Area : ' + item?.area} />
                   </View>
@@ -470,5 +473,11 @@ const styles = StyleSheet.create({
   view: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  profession: {
+    width: '60%',
+    margin: 0,
+    fontSize: scale(10),
+    left: scale(5),
   },
 });

@@ -138,8 +138,8 @@ const Signup = () => {
           <Image source={images.Logo} style={styles.logoStyle} />
           <Label title="  Harvesting calendar" style={styles.txt} />
         </View>
-        <Label title="Login With" style={styles.loginwith} />
-        <View style={styles.loginView}>
+        <Label title="Signup " style={styles.loginwith} />
+        {/* <View style={styles.loginView}>
           <Image source={images.google} style={styles.loginLogo} />
           <Image source={images.fb} style={styles.loginLogo} />
           <Image source={images.linkedin} style={styles.loginLogo} />
@@ -148,14 +148,13 @@ const Signup = () => {
           <View style={styles.line} />
           <Label title="Or" style={styles.or} />
           <View style={styles.line} />
-        </View>
+        </View> */}
         <Icon
           name="user-circle-o"
           size={scale(60)}
           color={theme.colors.white}
           style={{alignSelf: 'center', marginTop: scale(8)}}
-          onPress={() => {
-          }}
+          onPress={() => {}}
         />
         <KeyboardAwareScrollView>
           <View style={styles.contactForm}>
@@ -172,7 +171,7 @@ const Signup = () => {
               value={mobile}
               onChangeText={value => setMobile(value)}
             />
-            <Label title="profession" style={styles.title} />
+            <Label title="Profession" style={styles.title} />
             <TouchableOpacity
               onPress={() => {
                 setShowProff(!showProff);

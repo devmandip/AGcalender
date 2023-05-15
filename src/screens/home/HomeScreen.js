@@ -78,7 +78,7 @@ const HomeScreen = () => {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: 'Example App',
+          title: 'AgMart Celender',
           message: 'Example App access to your location ',
         },
       );
@@ -127,7 +127,6 @@ const HomeScreen = () => {
   };
 
   const handleScroll = event => {
-    // alert('call');
     let yOffset = event.nativeEvent.contentOffset.y / 1;
     setScrollPosition(yOffset);
   };
