@@ -268,14 +268,19 @@ const Profile = () => {
                       />
                       <Label title="Comments" style={styles.lbl} />
                     </View>
-                    <View style={styles.view}>
+                    <Pressable
+                      onPress={() => {
+                        global.editCropData = item;
+                        navigation.navigate('Add');
+                      }}
+                      style={styles.view}>
                       <Icon3
                         size={scale(20)}
                         color={theme.colors.gray2}
-                        name="message-processing-outline"
+                        name="circle-edit-outline"
                       />
-                      <Label title="Chat" style={styles.lbl} />
-                    </View>
+                      <Label title="Edit" style={styles.lbl} />
+                    </Pressable>
                     <Pressable
                       onPress={() => {
                         Alert.alert('', 'Are you sure you want to delete?', [
@@ -294,9 +299,9 @@ const Profile = () => {
                       <Icon3
                         size={scale(20)}
                         color={theme.colors.gray2}
-                        name="dots-vertical-circle-outline"
+                        name="delete-circle-outline"
                       />
-                      <Label title="More" style={styles.lbl} />
+                      <Label title="Delete" style={styles.lbl} />
                     </Pressable>
                   </View>
                 </View>

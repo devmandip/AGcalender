@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {Header, SubmitBtn, TxtInput} from './addCrop_components';
 import {useNavigation} from '@react-navigation/core';
 import {scale, theme} from '../../utils';
@@ -18,7 +18,7 @@ import MapModal from '../../components/appModel/MapModel';
 import {useToast} from 'react-native-toast-notifications';
 import moment from 'moment';
 import {ApiList} from '../../api/ApiList';
-import {postServiceCall} from '../../api/Webservice';
+import {postServiceCall, putServiceCall} from '../../api/Webservice';
 
 const data = [
   {label: 'Item 1', value: '1'},
@@ -30,10 +30,13 @@ const data = [
   {label: 'Item 7', value: '7'},
   {label: 'Item 8', value: '8'},
 ];
-const AddCrop = () => {
+const AddCrop = ({route}) => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
-  const [selectedCrop, setSelectedCrop] = useState(null);
+  const [markedDates, setMarkedDates] = useState(null);
+  const [selectedCrop, setSelectedCrop] = useState(
+    global.editCropData?.cropName ?? null,
+  );
   const [isFocus, setIsFocus] = useState(false);
   const hideMenu = (text = '') => {
     setUnits(text);
@@ -46,17 +49,73 @@ const AddCrop = () => {
   const userReducer = useSelector(state => state.UserReducer);
   const [fName, setFName] = useState(userReducer?.userDetails?.username);
   const [mNo, setMNo] = useState(userReducer?.userDetails?.mobileNumber);
-  const [variety, setVariety] = useState('');
-  const [Volume, setVolume] = useState('');
-  const [area, setArea] = useState('');
+  const [submitType, setSubmitType] = useState(
+    global.editCropData != null ? global.editCropData?.cropListingId : null,
+  );
+  const [variety, setVariety] = useState(global.editCropData?.variety ?? '');
+  const [Volume, setVolume] = useState(
+    global.editCropData?.volume.toString() ?? '',
+  );
+  const [area, setArea] = useState(global.editCropData?.area ?? '');
   const [showMap, setShowMap] = useState(false);
-  const [farmLocation, setFarmLocation] = useState('');
+  const [farmLocation, setFarmLocation] = useState(
+    global.editCropData != null
+      ? {
+          latitude: global.editCropData?.latitude,
+          longitude: global.editCropData?.longitude,
+        }
+      : '',
+  );
   const [placeLocation, setPlaceLocation] = useState('');
-  const [units, setUnits] = useState('');
-  const [endDay, setEndDay] = useState('');
-  const [startDay, setStartDay] = useState('');
-
+  const [units, setUnits] = useState(global.editCropData?.unit ?? '');
+  const [endDay, setEndDay] = useState(
+    global.editCropData?.harvestEndDate ?? '',
+  );
+  const [startDay, setStartDay] = useState(
+    global.editCropData?.harvestStartDate ?? '',
+  );
+  const currentDate = moment().format('YYYY-MM-DD');
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
   useEffect(() => {
+    console.log(submitType + ' DATA  ' + JSON.stringify(global.editCropData));
+    if (global.editCropData != null) {
+      var date = {};
+      for (
+        const d = moment(global.editCropData?.harvestStartDate);
+        d.isSameOrBefore(global.editCropData?.harvestEndDate);
+        d.add(1, 'days')
+      ) {
+        date[d.format('YYYY-MM-DD')] = {
+          marked: true,
+          color: 'green',
+          textColor: 'white',
+        };
+
+        if (d.format('YYYY-MM-DD') === global.editCropData?.harvestStartDate)
+          date[d.format('YYYY-MM-DD')].startingDay = true;
+        if (d.format('YYYY-MM-DD') === global.editCropData?.harvestEndDate)
+          date[d.format('YYYY-MM-DD')].endingDay = true;
+      }
+      setMarkedDates(date);
+      fetch(
+        'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+          global.editCropData?.latitude +
+          ',' +
+          global.editCropData?.longitude +
+          '&key=' +
+          'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
+      )
+        .then(response => response.json())
+        .then(responseJson => {
+          const place = JSON.stringify(
+            responseJson?.results[0]?.formatted_address,
+          )?.replace(/"/g, '');
+          setPlaceLocation(place);
+          console.log('name of location ', place);
+          global.editCropData = null;
+        });
+    }
     dispatch(getCropData(userReducer));
   }, []);
 
@@ -76,7 +135,7 @@ const AddCrop = () => {
       ToastMessage('Farm name is required', 'danger');
     } else if (mNo === '') {
       ToastMessage('Mobile number is required', 'danger');
-    } else if (farmLocation === '') {
+    } else if (placeLocation === '') {
       ToastMessage('Farm location is required', 'danger');
     } else if (selectedCrop === '') {
       ToastMessage('Crop name is required', 'danger');
@@ -109,23 +168,52 @@ const AddCrop = () => {
           harvestEndDate: moment(endDay).format('DD/MM/YYYY') ?? '', //"22/03/2023"
           media: '',
         };
-        postServiceCall(ApiList.ADD_CROP, params)
-          .then(async responseJson => {
-            if (responseJson?.data != '') {
-              navigation.navigate('Home');
+        if (submitType != null) {
+          putServiceCall(ApiList.ADD_CROP + '/' + submitType, params)
+            .then(async responseJson => {
+              if (responseJson?.data != '') {
+                navigation.navigate('User');
+                setLoader(false);
+                ToastMessage(responseJson?.data?.message, 'success');
+              }
               setLoader(false);
-              ToastMessage(responseJson?.data?.message, 'success');
-            }
-            setLoader(false);
-          })
-          .catch(error => {
-            setLoader(false);
-          });
+            })
+            .catch(error => {
+              setLoader(false);
+            });
+        } else {
+          postServiceCall(ApiList.ADD_CROP, params)
+            .then(async responseJson => {
+              if (responseJson?.data != '') {
+                navigation.navigate('Home');
+                setLoader(false);
+                ToastMessage(responseJson?.data?.message, 'success');
+              }
+              setLoader(false);
+            })
+            .catch(error => {
+              setLoader(false);
+            });
+        }
       } catch (error) {
         console.log(error);
       }
     }
   };
+  const CalenderViewComponent = useCallback(
+    () => (
+      <Range_Calender
+        markedDates={markedDates}
+        endDay={day => {
+          setEndDay(day);
+        }}
+        startDay={day => {
+          setStartDay(day);
+        }}
+      />
+    ),
+    [markedDates, startDay, endDay],
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -267,14 +355,7 @@ const AddCrop = () => {
             Select Harvesting Start and End Dates
           </Text>
           {/* <CalenderView showheader={false} /> */}
-          <Range_Calender
-            endDay={day => {
-              setEndDay(day);
-            }}
-            startDay={day => {
-              setStartDay(day);
-            }}
-          />
+          {CalenderViewComponent()}
 
           <View style={[styles.input_view, {marginTop: scale(10)}]}>
             <TxtInput

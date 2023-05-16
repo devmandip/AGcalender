@@ -7,6 +7,8 @@ import {ToastProvider} from 'react-native-toast-notifications';
 
 global.currentLocation;
 
+global.editCropData = null;
+
 const App = () => {
   useEffect(() => {
     // LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message

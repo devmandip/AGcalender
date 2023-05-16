@@ -1,5 +1,5 @@
 import {StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
 import moment from 'moment';
 
@@ -9,6 +9,10 @@ const Range_Calender = props => {
   const [endDay, setEndDay] = useState('');
 
   const currentDate = moment().format('YYYY-MM-DD');
+
+  useEffect(() => {
+    setSelectedDate(props.markedDates ?? null);
+  }, [props.markedDates]);
 
   console.log(startDay, endDay);
 
