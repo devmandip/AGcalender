@@ -142,24 +142,26 @@ const MapModal = props => {
               {'Save Location'}
             </Text>
           </TouchableOpacity>
-          <MapView
-            provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-            style={styles.map}
-            onPress={e => {
-              setPosition({
-                latitude: e.nativeEvent.coordinate.latitude,
-                longitude: e.nativeEvent.coordinate.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              });
-            }}
-            region={position}>
-            <Marker
-              coordinate={{
-                latitude: Number(position?.latitude),
-                longitude: Number(position?.longitude),
-              }}></Marker>
-          </MapView>
+          {position != '' && (
+            <MapView
+              provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+              style={styles.map}
+              onPress={e => {
+                setPosition({
+                  latitude: e.nativeEvent.coordinate.latitude,
+                  longitude: e.nativeEvent.coordinate.longitude,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                });
+              }}
+              region={position}>
+              <Marker
+                coordinate={{
+                  latitude: Number(position?.latitude),
+                  longitude: Number(position?.longitude),
+                }}></Marker>
+            </MapView>
+          )}
         </View>
       </View>
     </Modal>
