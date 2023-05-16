@@ -10,7 +10,7 @@ const TxtInput = props => {
       <TextInput
         {...props}
         onTouchStart={onTouchStart}
-        style={[styles.txtinput, {width: width}]}
+        style={[styles.txtinput, props.style, {width: width}]}
       />
     </View>
   );

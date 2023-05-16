@@ -267,19 +267,20 @@ const AddCrop = ({route}) => {
 
           <View style={styles.input_view}>
             <TxtInput
+              style={{fontSize: scale(11)}}
               onTouchStart={() => {
-                if (placeLocation == '') {
-                  toast.show(
-                    "Seed once sown can't be uprooted, Location once fixed can't be modified. Please select location of your crop accurately",
-                    {
-                      type: 'success',
-                      placement: 'bottom',
-                      duration: 3000,
-                      animationType: 'zoom-in',
-                    },
-                  );
-                  setShowMap(true);
-                }
+                // if (placeLocation == '') {
+                // toast.show(
+                //   "Seed once sown can't be uprooted, Location once fixed can't be modified. Please select location of your crop accurately",
+                //   {
+                //     type: 'success',
+                //     placement: 'bottom',
+                //     duration: 3000,
+                //     animationType: 'zoom-in',
+                //   },
+                // );
+                setShowMap(true);
+                // }
               }}
               value={placeLocation}
               width={theme.SCREENWIDTH * 0.43}

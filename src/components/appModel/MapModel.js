@@ -25,6 +25,7 @@ const MapModal = props => {
   const [cropsList, setCropList] = useState([]);
   const [searchtxt, setSearch] = useState('');
   const [position, setPosition] = useState('');
+  const [region, setRegion] = useState('');
 
   useEffect(() => {
     setCropList(cropList);
@@ -60,6 +61,12 @@ const MapModal = props => {
       const crd = pos.coords;
       console.log(crd);
       setPosition({
+        latitude: crd.latitude,
+        longitude: crd.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+      setRegion({
         latitude: crd.latitude,
         longitude: crd.longitude,
         latitudeDelta: 0.0922,
@@ -146,7 +153,16 @@ const MapModal = props => {
             <MapView
               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
               style={styles.map}
+              onRegionChangeComplete={e => {
+                setRegion({
+                  latitude: e.latitude,
+                  longitude: e.longitude,
+                  latitudeDelta: e.latitudeDelta,
+                  longitudeDelta: e.longitudeDelta,
+                });
+              }}
               onPress={e => {
+                console.log('e>>>> ', e);
                 setPosition({
                   latitude: e.nativeEvent.coordinate.latitude,
                   longitude: e.nativeEvent.coordinate.longitude,
@@ -154,7 +170,7 @@ const MapModal = props => {
                   longitudeDelta: 0.0421,
                 });
               }}
-              region={position}>
+              region={region}>
               <Marker
                 coordinate={{
                   latitude: Number(position?.latitude),
