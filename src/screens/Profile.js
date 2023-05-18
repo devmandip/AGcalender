@@ -25,6 +25,7 @@ import axios from 'axios';
 import {ApiList} from '../api/ApiList';
 import {deleteServiceCall} from '../api/Webservice';
 import {useToast} from 'react-native-toast-notifications';
+import {launchCamera} from 'react-native-image-picker';
 
 const Profile = () => {
   const [selTab, setTab] = useState(0);
@@ -75,6 +76,23 @@ const Profile = () => {
       .catch(error => {
         console.log(error);
       });
+  };
+
+  const cameraHandler = () => {
+    const option = {
+      includeBase64: false,
+      mediaType: 'photo',
+      quality: 0.8,
+    };
+    launchCamera(option, async response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        console.log(response);
+      }
+    });
   };
 
   return (
@@ -219,7 +237,11 @@ const Profile = () => {
                         );
                       })}
                     </ScrollView>
-                    <TouchableOpacity style={styles.addIcon}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        cameraHandler();
+                      }}
+                      style={styles.addIcon}>
                       <Icon1
                         name="add-circle-outline"
                         size={scale(25)}

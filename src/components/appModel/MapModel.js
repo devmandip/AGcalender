@@ -119,7 +119,7 @@ const MapModal = props => {
             <Icon
               name="x"
               size={scale(30)}
-              color={theme.colors.black}
+              color={theme.colors.white}
               onPress={() => close()}
               // style={styles.closeIcon}
             />
@@ -151,6 +151,7 @@ const MapModal = props => {
           </TouchableOpacity>
           {position != '' && (
             <MapView
+              mapType="satellite"
               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
               style={styles.map}
               onRegionChangeComplete={e => {
