@@ -40,7 +40,7 @@ const Signup = () => {
   };
 
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('calendar@yopmail.com');
   const [selectedProff, setSelectedProff] = useState('');
   const [showProff, setShowProff] = useState(false);
   const [proffList, setProffList] = useState([
@@ -78,20 +78,24 @@ const Signup = () => {
     },
   ]);
   const [mobile, setMobile] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('123456');
 
   const [loader, setLoader] = useState(false);
 
   const OnSignup_press = async () => {
     if (name === '') {
       ToastMessage('Username is required', 'danger');
-    } else if (email === '') {
-      ToastMessage('Email is required', 'danger');
-    } else if (mobile === '') {
+    }
+    // else if (email === '') {
+    //   ToastMessage('Email is required', 'danger');
+    // }
+    else if (mobile === '') {
       ToastMessage('Mobile number is required', 'danger');
-    } else if (password === '') {
-      ToastMessage('Password is required', 'danger');
-    } else {
+    }
+    // else if (password === '') {
+    //   ToastMessage('Password is required', 'danger');
+    // }
+    else {
       setLoader(true);
       try {
         var params = {
@@ -161,8 +165,8 @@ const Signup = () => {
             <Label title="Name" style={styles.title} />
             <InputBox value={name} onChangeText={value => setName(value)} />
 
-            <Label title="Email" style={styles.title} />
-            <InputBox value={email} onChangeText={value => setEmail(value)} />
+            {/* <Label title="Email" style={styles.title} />
+            <InputBox value={email} onChangeText={value => setEmail(value)} /> */}
 
             <Label title="Mobile" style={styles.title} />
             <InputBox
@@ -213,12 +217,12 @@ const Signup = () => {
                 );
               })}
             </ScrollView>
-            <Label title="Password" value={password} style={styles.title} />
+            {/* <Label title="Password" value={password} style={styles.title} />
             <InputBox
               secureTextEntry
               value={password}
               onChangeText={value => setPassword(value)}
-            />
+            /> */}
 
             {loader ? (
               <ActivityIndicator size="large" color={theme.colors.white} />

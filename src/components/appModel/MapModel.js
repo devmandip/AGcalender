@@ -176,7 +176,8 @@ const MapModal = props => {
                 coordinate={{
                   latitude: Number(position?.latitude),
                   longitude: Number(position?.longitude),
-                }}></Marker>
+                }}
+                anchor={{x: 0.5, y: 0.5}}></Marker>
             </MapView>
           )}
         </View>

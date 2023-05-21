@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(10),
     fontSize: scale(14),
     color: theme.colors.black,
+    width: '100%',
   },
   regex: {
     top: scale(10),
