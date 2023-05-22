@@ -2,6 +2,7 @@ import {
   Alert,
   FlatList,
   Image,
+  PermissionsAndroid,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -23,9 +24,10 @@ import {isLogin, userData, userWiseDetails} from '../redux/Actions/UserActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {ApiList} from '../api/ApiList';
-import {deleteServiceCall} from '../api/Webservice';
+import {deleteServiceCall, putServiceCall} from '../api/Webservice';
 import {useToast} from 'react-native-toast-notifications';
 import {launchCamera} from 'react-native-image-picker';
+import {RNS3} from 'react-native-aws3';
 
 const Profile = () => {
   const [selTab, setTab] = useState(0);
@@ -78,21 +80,109 @@ const Profile = () => {
       });
   };
 
-  const cameraHandler = () => {
-    const option = {
-      includeBase64: false,
-      mediaType: 'photo',
-      quality: 0.8,
-    };
-    launchCamera(option, async response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        console.log(response);
-      }
+  const uploadImgApicall = (item, response) => {
+    try {
+      var params = {
+        userId: loginUserData?.userDetails?.userId,
+        cropName: item?.cropName,
+        latitude: item?.latitude,
+        longitude: item?.longitude,
+        variety: item?.variety,
+        area: item?.area,
+        volume: item?.volume,
+        unit: item?.unit,
+        sowingDate: item?.sowingDate,
+        harvestStartDate:
+          moment(item?.harvestStartDate).format('DD/MM/YYYY') ?? '', //"22/03/2023"
+        harvestEndDate: moment(item?.harvestEndDate).format('DD/MM/YYYY') ?? '', //"22/03/2023"
+        media: response?.location,
+      };
+      putServiceCall(ApiList.ADD_CROP + '/' + item.cropListingId, params)
+        .then(async responseJson => {
+          if (responseJson?.data != '') {
+            ToastMessage(responseJson?.data?.message, 'success');
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const ToastMessage = (message, type) => {
+    toast.show(message, {
+      type: type === undefined ? 'normal' : type,
+      placement: 'bottom',
+      duration: 1000,
+      animationType: 'zoom-in',
     });
+  };
+
+  const cameraHandler = async item => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'App Camera Permission',
+          message: 'App needs access to your camera ',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        const option = {
+          includeBase64: false,
+          mediaType: 'photo',
+          quality: 0.8,
+        };
+        launchCamera(option, async response => {
+          if (response.didCancel) {
+            console.log('User cancelled image picker');
+          } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+          } else {
+            console.log(response);
+            const file = {
+              uri: response.assets[0].uri,
+              name: response.assets[0].fileName,
+              type: response.assets[0].type,
+            };
+            const options = {
+              keyPrefix: '/croplistings',
+              bucket: 'agmart-img-bucket',
+              region: 'ap-south-1',
+              accessKey: 'AKIA4MBMDR3Z4P3MDDM4',
+              secretKey: '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',
+              successActionStatus: 201,
+            };
+            RNS3.put(file, options).then(response => {
+              console.log(response);
+              if (response.status !== 201)
+                throw new Error('Failed to upload image to S3');
+              uploadImgApicall(item, response.body);
+              console.log(response);
+              /**
+               * {
+               *   postResponse: {
+               *     bucket: "your-bucket",
+               *     etag : "9f620878e06d28774406017480a59fd4",
+               *     key: "uploads/image.png",
+               *     location: "https://your-bucket.s3.amazonaws.com/***.png"
+               *   }
+               * }
+               */
+            });
+          }
+        });
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
   };
 
   return (
@@ -239,7 +329,7 @@ const Profile = () => {
                     </ScrollView>
                     <TouchableOpacity
                       onPress={() => {
-                        cameraHandler();
+                        cameraHandler(item);
                       }}
                       style={styles.addIcon}>
                       <Icon1

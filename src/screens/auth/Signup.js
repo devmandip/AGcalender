@@ -40,7 +40,7 @@ const Signup = () => {
   };
 
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('calendar@yopmail.com');
+  const [email, setEmail] = useState('');
   const [selectedProff, setSelectedProff] = useState('');
   const [showProff, setShowProff] = useState(false);
   const [proffList, setProffList] = useState([
@@ -78,7 +78,7 @@ const Signup = () => {
     },
   ]);
   const [mobile, setMobile] = useState('');
-  const [password, setPassword] = useState('123456');
+  const [password, setPassword] = useState('');
 
   const [loader, setLoader] = useState(false);
 
