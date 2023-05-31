@@ -24,7 +24,11 @@ import {isLogin, userData, userWiseDetails} from '../redux/Actions/UserActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {ApiList} from '../api/ApiList';
-import {deleteServiceCall, putServiceCall} from '../api/Webservice';
+import {
+  deleteServiceCall,
+  postServiceCall,
+  putServiceCall,
+} from '../api/Webservice';
 import {useToast} from 'react-native-toast-notifications';
 import {launchCamera} from 'react-native-image-picker';
 import {RNS3} from 'react-native-aws3';
@@ -80,28 +84,27 @@ const Profile = () => {
       });
   };
 
-  const uploadImgApicall = (item, response) => {
+  const uploadImgApicall = (item, file) => {
     try {
-      var params = {
-        userId: loginUserData?.userDetails?.userId,
-        cropName: item?.cropName,
-        latitude: item?.latitude,
-        longitude: item?.longitude,
-        variety: item?.variety,
-        area: item?.area,
-        volume: item?.volume,
-        unit: item?.unit,
-        sowingDate: item?.sowingDate,
-        harvestStartDate:
-          moment(item?.harvestStartDate).format('DD/MM/YYYY') ?? '', //"22/03/2023"
-        harvestEndDate: moment(item?.harvestEndDate).format('DD/MM/YYYY') ?? '', //"22/03/2023"
-        media: response?.location,
-      };
-      putServiceCall(ApiList.ADD_CROP + '/' + item.cropListingId, params)
+      // var params = {
+      //   title: item.cropName,
+      //   description: item?.description,
+      //   file: file,
+      // };
+      var data = new FormData();
+      data.append('title', item?.cropName);
+      data.append('description', item?.description);
+      data.append('file', file);
+
+      postServiceCall(
+        ApiList.ADD_CROP + '/' + item.cropListingId + '/image',
+        data,
+        false,
+        true,
+      )
         .then(async responseJson => {
-          if (responseJson?.data != '') {
-            ToastMessage(responseJson?.data?.message, 'success');
-          }
+          ToastMessage('Image upload successfully.', 'success');
+          dispatch(userWiseDetails(loginUserData));
         })
         .catch(error => {
           console.log(error);
@@ -150,31 +153,7 @@ const Profile = () => {
               name: response.assets[0].fileName,
               type: response.assets[0].type,
             };
-            const options = {
-              keyPrefix: '/croplistings',
-              bucket: 'agmart-img-bucket',
-              region: 'ap-south-1',
-              accessKey: 'AKIA4MBMDR3Z4P3MDDM4',
-              secretKey: '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',
-              successActionStatus: 201,
-            };
-            RNS3.put(file, options).then(response => {
-              console.log(response);
-              if (response.status !== 201)
-                throw new Error('Failed to upload image to S3');
-              uploadImgApicall(item, response.body);
-              console.log(response);
-              /**
-               * {
-               *   postResponse: {
-               *     bucket: "your-bucket",
-               *     etag : "9f620878e06d28774406017480a59fd4",
-               *     key: "uploads/image.png",
-               *     location: "https://your-bucket.s3.amazonaws.com/***.png"
-               *   }
-               * }
-               */
-            });
+            uploadImgApicall(item, file);
           }
         });
       } else {
@@ -320,7 +299,7 @@ const Profile = () => {
                         return (
                           <Image
                             source={{
-                              uri: img,
+                              uri: img?.imagePathOrig,
                             }}
                             style={styles.cropImg}
                           />

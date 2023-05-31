@@ -127,7 +127,7 @@ const YardVew = () => {
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
 
-  const getYardDetailsByID = async (id = '') => {
+  const getYardDetailsByID = async (id = '0') => {
     try {
       var params = {
         cropId: id,

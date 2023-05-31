@@ -52,7 +52,7 @@ const HomeScreen = () => {
   const [drawerModal, setDrawerModel] = useState(false);
 
   const [listData, setListData] = useState([]);
-  const [selectedCrop, setSelectedCrop] = useState('');
+  const [selectedCrop, setSelectedCrop] = useState('all');
   const [selectedCate, setSelectedCate] = useState('');
   const [isFocus, setIsFocus] = useState(false);
 

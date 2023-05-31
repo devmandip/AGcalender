@@ -9,9 +9,9 @@ import {
 import React, {useState} from 'react';
 import {Veg} from '../../../dummyData/Veg';
 import {scale, theme} from '../../../utils';
-import { Label } from '../../../components';
+import {Label} from '../../../components';
 
-const Story = (props) => {
+const Story = props => {
   const [selectCat, setCategory] = useState(null);
   const renderItem = ({item, index}) => {
     return (
@@ -27,7 +27,10 @@ const Story = (props) => {
             padding: scale(3),
             borderRadius: scale(35),
           }}>
-          <Image source={item?.imageUrl  ??require('../../../assets/Images/veges/coriander.png')} style={styles.renderItem_img} />
+          <Image
+            source={require('../../../assets/Images/veges/coriander.png')}
+            style={styles.renderItem_img}
+          />
         </TouchableOpacity>
         <Label title={item.name} />
       </View>

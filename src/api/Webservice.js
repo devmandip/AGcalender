@@ -32,16 +32,28 @@ export const getServiceCall = async (endpoint, params, auth = false) => {
     });
 };
 
-export const postServiceCall = async (endpoint, params, auth = false) => {
+export const postServiceCall = async (
+  endpoint,
+  params,
+  auth = false,
+  multipart = false,
+) => {
   let token = await AsyncStorage.getItem('token');
 
   var headers = {
     'Content-Type': 'application/json',
   };
   if (!auth) {
-    headers = {
-      Authorization: 'Bearer ' + token,
-    };
+    if (multipart) {
+      headers = {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'multipart/form-data',
+      };
+    } else {
+      headers = {
+        Authorization: 'Bearer ' + token,
+      };
+    }
   }
 
   console.log('REQUEST URL:', endpoint);
