@@ -32,6 +32,7 @@ import {
 import {useToast} from 'react-native-toast-notifications';
 import {launchCamera} from 'react-native-image-picker';
 import {RNS3} from 'react-native-aws3';
+import moment from 'moment';
 
 const Profile = () => {
   const [selTab, setTab] = useState(0);
@@ -92,7 +93,10 @@ const Profile = () => {
       //   file: file,
       // };
       var data = new FormData();
-      data.append('title', item?.cropName);
+      data.append(
+        'title',
+        'cl_' + item?.cropName + '_' + moment().format('MM-DD-YYYYHH:mm'),
+      );
       data.append('description', item?.description);
       data.append('file', file);
 
@@ -139,7 +143,7 @@ const Profile = () => {
         const option = {
           includeBase64: false,
           mediaType: 'photo',
-          quality: 0.8,
+          quality: 0.5,
         };
         launchCamera(option, async response => {
           if (response.didCancel) {
@@ -148,9 +152,17 @@ const Profile = () => {
             console.log('ImagePicker Error: ', response.error);
           } else {
             console.log(response);
+            let ext = getExtention(response.assets[0].uri);
+
             const file = {
               uri: response.assets[0].uri,
-              name: response.assets[0].fileName,
+              name:
+                'cl_' +
+                item?.cropName +
+                '_' +
+                moment().format('MM-DD-YYYYHH:mm') +
+                '.' +
+                ext,
               type: response.assets[0].type,
             };
             uploadImgApicall(item, file);
@@ -162,6 +174,11 @@ const Profile = () => {
     } catch (err) {
       console.warn(err);
     }
+  };
+
+  const getExtention = filename => {
+    // To get the file extension
+    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
   };
 
   return (

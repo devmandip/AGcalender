@@ -87,11 +87,14 @@ const PostSection = props => {
   const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity style={styles.img_container} key={index}>
-        {item?.type === 'image' ? (
-          <Image source={{uri: item.uri}} style={styles.post_imgStyle} />
+        <Image
+          source={{uri: item?.imagePathSmall}}
+          style={styles.post_imgStyle}
+        />
+        {/* {item?.type === 'image' ? (
         ) : (
           <VideoShow url={item?.uri} style={styles.video_View} />
-        )}
+        )} */}
       </TouchableOpacity>
     );
   };

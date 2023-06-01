@@ -1,5 +1,12 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Header from './Header';
 import Video from 'react-native-video';
 import {scale, theme} from '../../../utils';
@@ -7,61 +14,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 
-const Details_section = () => {
-  return (
-    <View style={styles.details_container}>
-      <View style={styles.details_view1}>
-        <View style={styles.upView}>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={styles.primary_txt}>Corp Name </Text>
-            <Text> Corp Variety </Text>
-          </View>
-          <Text>Area</Text>
-        </View>
-
-        <View style={{height: scale(75)}}></View>
-
-        <View
-          style={[styles.upView, {borderTopWidth: 1, borderBottomWidth: 0}]}>
-          <Text style={styles.primary_txt}>Listing ID :</Text>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Entypo size={20} name="stopwatch" />
-            <Text> 5 Days</Text>
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.details_view2}>
-        <TouchableOpacity style={styles.btn} onPress={() => {}}>
-          <AntDesign name="hearto" size={25} color={theme.colors.gray2} />
-          <Text style={styles.btn_txt}>Like</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.btn} onPress={() => {}}>
-          <FontAwesome
-            name="share-square-o"
-            size={25}
-            color={theme.colors.gray2}
-          />
-          <Text style={styles.btn_txt}>Share</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.btn} onPress={() => {}}>
-          <AntDesign name="download" size={25} color={theme.colors.gray2} />
-          <Text style={styles.btn_txt}>Download</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
-
 const ImageView = ({route}) => {
-  const {imgURI, Time, videoURL} = route.params;
+  const {imgURI, Time, videoURL, item} = route.params;
+  const [locationName, setLocationName] = useState('');
 
   var date = new Date().getDate();
   var month = new Date().getMonth() + 1;
@@ -69,8 +24,80 @@ const ImageView = ({route}) => {
 
   const CurrentDate = `${date}/${month}/${year}`;
 
-  console.log('image url', imgURI);
-  console.log('video url', videoURL);
+  useEffect(() => {
+    fetch(
+      'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+        item?.latitude +
+        ',' +
+        item?.longitude +
+        '&key=' +
+        'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        const place = JSON.stringify(
+          responseJson?.results[0]?.address_components[4]?.long_name,
+        )?.replace(/"/g, '');
+        setLocationName(place);
+      });
+  }, []);
+
+  console.log('POST  ITEM', item);
+
+  const Details_section = () => {
+    return (
+      <View style={styles.details_container}>
+        <View style={styles.details_view1}>
+          <View style={styles.upView}>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.primary_txt}>{item?.cropName}</Text>
+              <Text>{' ' + item?.variety + ' '}</Text>
+            </View>
+            <Text> {item?.area}</Text>
+          </View>
+
+          <View style={{height: scale(75)}}></View>
+
+          <View
+            style={[styles.upView, {borderTopWidth: 1, borderBottomWidth: 0}]}>
+            <Text style={styles.primary_txt}>
+              {'Listing ID :' + item?.cropListingId}
+            </Text>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Entypo size={20} name="stopwatch" />
+              <Text> 5 Days</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.details_view2}>
+          <TouchableOpacity style={styles.btn} onPress={() => {}}>
+            <AntDesign name="hearto" size={25} color={theme.colors.gray2} />
+            <Text style={styles.btn_txt}>Like</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.btn} onPress={() => {}}>
+            <FontAwesome
+              name="share-square-o"
+              size={25}
+              color={theme.colors.gray2}
+            />
+            <Text style={styles.btn_txt}>Share</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.btn} onPress={() => {}}>
+            <AntDesign name="download" size={25} color={theme.colors.gray2} />
+            <Text style={styles.btn_txt}>Download</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -78,13 +105,29 @@ const ImageView = ({route}) => {
 
       <View style={styles.view1}>
         <View style={{flexDirection: 'row'}}>
-          <Text style={styles.txt}>{CurrentDate}</Text>
+          <Text style={styles.txt}>{item?.harvestStartDate}</Text>
           <Text style={[styles.txt, {left: 20}]}>{Time}</Text>
         </View>
-        <Text style={styles.txt}>Ludhiyana</Text>
+        <Text style={styles.txt}>{locationName}</Text>
       </View>
 
-      {imgURI === undefined ? (
+      <View>
+        <ScrollView
+          horizontal
+          bounces={false}
+          showsHorizontalScrollIndicator={false}>
+          {item?.images.map(obj => {
+            return (
+              <Image
+                source={{uri: obj?.imagePathSmall}}
+                style={styles.ImageView}
+              />
+            );
+          })}
+        </ScrollView>
+      </View>
+
+      {/* {imgURI === undefined ? (
         <View style={{alignItems: 'center', marginTop: scale(15)}}>
           <Video
             source={{
@@ -96,7 +139,7 @@ const ImageView = ({route}) => {
         </View>
       ) : (
         <Image source={{uri: imgURI}} style={styles.ImageView} />
-      )}
+      )} */}
 
       <Details_section />
     </View>
@@ -119,7 +162,10 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   ImageView: {
-    height: scale(400),
+    marginHorizontal: scale(10),
+    width: scale(250),
+    height: scale(350),
+    borderRadius: 10,
     marginTop: 15,
   },
   video_View: {

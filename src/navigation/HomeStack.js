@@ -1,7 +1,7 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {HomeScreen} from '../screens';
-import ImageView from '../screens/home/components/postComponents/ImageView';
+import {ImageView} from '../screens/addCrop/addCrop_components';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +16,7 @@ const HomeStack = () => {
       <Stack.Screen
         name="ImageView"
         component={ImageView}
-        // options={{headerShown: false}}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );

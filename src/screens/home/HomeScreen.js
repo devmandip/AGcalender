@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   PermissionsAndroid,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import React, {useEffect, useCallback, useState} from 'react';
 import {CalenderView, Header, PostSection, Story} from './components';
@@ -21,33 +22,7 @@ import {getServiceCall} from '../../api/Webservice';
 import {ApiList} from '../../api/ApiList';
 import moment from 'moment';
 
-const renderItem = ({item}) => {
-  return (
-    <PostSection
-      postImages={[
-        {
-          id: 5,
-          uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
-          type: 'image',
-        },
-        {
-          id: 8,
-          uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
-          type: 'image',
-        },
-      ]}
-      proicePic={require('../../assets/Images/postImages/profileImage.png')}
-      name={item.username}
-      description={
-        'Srinivas rao from Manvi cultivating Supreme varietyChilli in 4 ac. Expected to harvest 20 Quintalson/after 29-01-23'
-      }
-      view_count={'221'}
-      like_count={'167'}
-    />
-  );
-};
-
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   const [scrollPosition, setScrollPosition] = React.useState(0);
   const [drawerModal, setDrawerModel] = useState(false);
 
@@ -65,13 +40,14 @@ const HomeScreen = () => {
         dispatch(getCropData(selectedCate?.id));
         dispatch(getCategoriesData());
         await requestLocationPermission();
+        setTimeout(() => {
+          callListApi(global.currentLocation, moment().format('DD/MM/YYYY'));
+        }, 1000);
       })();
     }, []),
   );
 
-  useEffect(() => {
-    callListApi(global.currentLocation, moment().format('DD/MM/YYYY'));
-  }, []);
+  useEffect(() => {}, []);
 
   const requestLocationPermission = async () => {
     try {
@@ -94,6 +70,26 @@ const HomeScreen = () => {
     }
   };
 
+  const renderItem = ({item}) => {
+    return (
+      <Pressable
+        onPress={() => {
+          navigation.navigate('ImageView', {item});
+        }}>
+        <PostSection
+          postImages={item?.images}
+          proicePic={require('../../assets/Images/postImages/profileImage.png')}
+          name={item.username}
+          description={
+            'Srinivas rao from Manvi cultivating Supreme varietyChilli in 4 ac. Expected to harvest 20 Quintalson/after 29-01-23'
+          }
+          view_count={'221'}
+          like_count={'167'}
+        />
+      </Pressable>
+    );
+  };
+
   const GetLocation = () => {
     Geolocation.getCurrentPosition(pos => {
       const crd = pos.coords;
@@ -105,8 +101,8 @@ const HomeScreen = () => {
 
   const callListApi = async (farmLocation, date) => {
     try {
-      const lat = farmLocation.latitude;
-      const long = farmLocation.longitude;
+      const lat = farmLocation?.latitude;
+      const long = farmLocation?.longitude;
       var params = {
         cropName: selectedCrop,
         latitude: lat,
