@@ -86,7 +86,7 @@ const PostSection = props => {
 
   const renderItem = ({item, index}) => {
     return (
-      <TouchableOpacity style={styles.img_container} key={index}>
+      <View style={styles.img_container} key={index}>
         <Image
           source={{uri: item?.imagePathSmall}}
           style={styles.post_imgStyle}
@@ -95,7 +95,7 @@ const PostSection = props => {
         ) : (
           <VideoShow url={item?.uri} style={styles.video_View} />
         )} */}
-      </TouchableOpacity>
+      </View>
     );
   };
 
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
   post_imgStyle: {
     height: scale(200),
     width: scale(170),
+    resizeMode: 'stretch',
   },
   img_container: {
     marginRight: 2,

@@ -36,12 +36,12 @@ const DrawerModal = props => {
             //  setCategory(index);
           }}
           style={styles.cropcard}>
-          <Image
+          {/* <Image
             source={{
               uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Triticum_aestivum_-_Kia_Gardens.jpg/220px-Triticum_aestivum_-_Kia_Gardens.jpg',
             }}
             style={styles.renderItem_img}
-          />
+          /> */}
           <Label title={item.name} />
         </TouchableOpacity>
       </View>
@@ -85,26 +85,31 @@ const DrawerModal = props => {
             // style={styles.closeIcon}
           />
         </View>
-        <SearchBar
-          placeholder={category ? 'Search Category' : 'Search Crop'}
-          style={{
-            width: theme.SCREENWIDTH * 0.9,
-            marginTop: scale(10),
-            alignSelf: 'center',
-            marginVertical: scale(5),
-          }}
-          value={searchtxt}
-          onChangeText={txt => {
-            handleSearch(txt);
-          }}
-          inputStyle={{
-            fontFamily: theme.fonts.InterMedium,
-            width: '100%',
-            fontSize: scale(13),
-          }}
-        />
+        <View>
+          <SearchBar
+            placeholder={category ? 'Search Category' : 'Search Crop'}
+            style={{
+              width: theme.SCREENWIDTH * 0.9,
+              marginTop: scale(10),
+              alignSelf: 'center',
+              marginVertical: scale(5),
+            }}
+            value={searchtxt}
+            onChangeText={txt => {
+              handleSearch(txt);
+            }}
+            inputStyle={{
+              fontFamily: theme.fonts.InterMedium,
+              width: '100%',
+              fontSize: scale(13),
+            }}
+          />
+        </View>
         <FlatList
+          showsVerticalScrollIndicator={false}
+          style={{marginVertical: scale(10)}}
           contentContainerStyle={{width: '93%', alignSelf: 'center'}}
+          ItemSeparatorComponent={<View style={{marginBottom: scale(5)}} />}
           data={cropsList}
           renderItem={renderItem}
           // horizontal={true}
@@ -189,16 +194,22 @@ const styles = StyleSheet.create({
     borderRadius: scale(15),
   },
   cropcard: {
-    borderColor: theme.colors.green,
     flexDirection: 'row',
-    borderWidth: scale(1),
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: scale(3),
+    padding: scale(10),
     margin: scale(2),
     paddingHorizontal: scale(10),
-
-    borderRadius: scale(3),
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    backgroundColor: theme.colors.white,
+    elevation: 2,
+    borderRadius: scale(5),
   },
   renderItem_container: {},
 });

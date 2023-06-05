@@ -101,8 +101,6 @@ const Signup = () => {
         var params = {
           username: name,
           mobileNumber: mobile,
-          password: password,
-          email: email,
           role: ['mod', 'user'],
           profession: selectedProff,
           latitude: global.currentLocation?.latitude ?? '',

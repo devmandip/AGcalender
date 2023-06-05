@@ -111,7 +111,7 @@ const ImageView = ({route}) => {
         <Text style={styles.txt}>{locationName}</Text>
       </View>
 
-      <View>
+      <View style={{flex: 0.9}}>
         <ScrollView
           horizontal
           bounces={false}

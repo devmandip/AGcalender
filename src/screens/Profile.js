@@ -230,37 +230,39 @@ const Profile = () => {
 
         <View style={styles.divider} />
 
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          horizontal
-          style={styles.tabContainer}>
-          {optionsData?.map((item, idx) => {
-            return (
-              <TouchableOpacity
-                key={idx.toString()}
-                style={[
-                  styles.tabBar,
-                  {
-                    borderBottomWidth: idx === selTab ? 2 : 0,
-                    borderColor:
-                      idx === selTab ? theme.colors.primary : 'transparent',
-                    height: scale(30),
-                  },
-                ]}
-                onPress={() => {
-                  setTab(idx);
-                }}>
-                <Label
-                  title={item.title}
+        <View>
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            style={styles.tabContainer}>
+            {optionsData?.map((item, idx) => {
+              return (
+                <TouchableOpacity
+                  key={idx.toString()}
                   style={[
-                    styles.tabTxt,
-                    {fontWeight: idx === selTab ? '600' : '400'},
+                    styles.tabBar,
+                    {
+                      borderBottomWidth: idx === selTab ? 2 : 0,
+                      borderColor:
+                        idx === selTab ? theme.colors.primary : 'transparent',
+                      height: scale(30),
+                    },
                   ]}
-                />
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+                  onPress={() => {
+                    setTab(idx);
+                  }}>
+                  <Label
+                    title={item.title}
+                    style={[
+                      styles.tabTxt,
+                      {fontWeight: idx === selTab ? '600' : '400'},
+                    ]}
+                  />
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+        </View>
 
         {/* farmer crops */}
 
@@ -308,20 +310,30 @@ const Profile = () => {
                   />
                   <View style={styles.row}>
                     <ScrollView
-                      style={styles.imgContainer}
+                      style={[styles.imgContainer]}
                       horizontal
                       showsHorizontalScrollIndicator={false}
                       nestedScrollEnabled>
-                      {item?.images?.map((img, i) => {
-                        return (
-                          <Image
-                            source={{
-                              uri: img?.imagePathOrig,
-                            }}
-                            style={styles.cropImg}
-                          />
-                        );
-                      })}
+                      {item?.images && item?.images?.length === 0 ? (
+                        <View
+                          style={{
+                            alignItems: 'center',
+                            width: theme.SCREENWIDTH * 0.75,
+                          }}>
+                          <Label title="No crop image found" />
+                        </View>
+                      ) : (
+                        item?.images?.map((img, i) => {
+                          return (
+                            <Image
+                              source={{
+                                uri: img?.imagePathOrig,
+                              }}
+                              style={styles.cropImg}
+                            />
+                          );
+                        })
+                      )}
                     </ScrollView>
                     <TouchableOpacity
                       onPress={() => {

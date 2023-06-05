@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useCallback, useState} from 'react';
 import {CalenderView, Header, PostSection, Story} from './components';
-import {DrawerModal, SelectCropModel} from '../../components';
+import {DrawerModal, Loader, SelectCropModel} from '../../components';
 import {theme} from '../../utils';
 import Toast from '../../components/Toast';
 import {useDispatch, useSelector} from 'react-redux';
@@ -33,7 +33,7 @@ const HomeScreen = ({navigation}) => {
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
-
+  const [loading, setLoading] = useState(false);
   useFocusEffect(
     useCallback(() => {
       (async () => {
@@ -41,12 +41,16 @@ const HomeScreen = ({navigation}) => {
         dispatch(getCategoriesData());
         await requestLocationPermission();
         setTimeout(() => {
-          callListApi(global.currentLocation, moment().format('DD/MM/YYYY'));
+          setLoading(
+            () => true,
+            callListApi(global.currentLocation, moment().format('DD/MM/YYYY')),
+          );
         }, 1000);
       })();
     }, []),
   );
 
+  console.log(loading);
   useEffect(() => {}, []);
 
   const requestLocationPermission = async () => {
@@ -113,12 +117,15 @@ const HomeScreen = ({navigation}) => {
       getServiceCall(ApiList.ADD_CROP, params)
         .then(async responseJson => {
           if (responseJson?.data != '') {
+            setLoading(false);
             setListData(responseJson?.data?.data);
           }
+          setLoading(false);
         })
         .catch(error => {});
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -196,7 +203,7 @@ const HomeScreen = ({navigation}) => {
         }}>
         <Text>press me</Text>
       </TouchableOpacity>
-      {/* <Loader /> */}
+      {/* <Loader loading={loading} /> */}
     </SafeAreaView>
   );
 };

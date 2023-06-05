@@ -161,21 +161,19 @@ const MapModal = props => {
                   latitudeDelta: e.latitudeDelta,
                   longitudeDelta: e.longitudeDelta,
                 });
-              }}
-              onPress={e => {
-                console.log('e>>>> ', e);
+
                 setPosition({
-                  latitude: e.nativeEvent.coordinate.latitude,
-                  longitude: e.nativeEvent.coordinate.longitude,
-                  latitudeDelta: 0.0922,
-                  longitudeDelta: 0.0421,
+                  latitude: e.latitude,
+                  longitude: e.longitude,
+                  latitudeDelta: e.latitudeDelta,
+                  longitudeDelta: e.longitudeDelta,
                 });
               }}
               region={region}>
               <Marker
                 coordinate={{
-                  latitude: Number(position?.latitude),
-                  longitude: Number(position?.longitude),
+                  latitude: Number(region?.latitude),
+                  longitude: Number(region?.longitude),
                 }}
                 anchor={{x: 0.5, y: 0.5}}></Marker>
             </MapView>
