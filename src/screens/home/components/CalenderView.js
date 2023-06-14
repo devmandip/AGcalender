@@ -21,7 +21,7 @@ import {ApiList} from '../../../api/ApiList';
 
 const CalenderHeader = props => {
   const {scrollPosition, cropName} = props;
-  const [dateViewShow, setDateViewShow] = useState(false);
+  const [dateViewShow, setDateViewShow] = useState(true);
   const [dateData, setDateData] = useState([]);
   const [showMap, setShowMap] = useState(false);
   const [farmLocation, setFarmLocation] = useState('');
@@ -36,11 +36,11 @@ const CalenderHeader = props => {
     JSON.stringify(global.currentLocation) + ' ' + JSON.stringify(farmLocation),
   );
 
-  useEffect(() => {
-    if (scrollPosition > 80) {
-      setDateViewShow(false);
-    }
-  }, [scrollPosition]);
+  // useEffect(() => {
+  //   if (scrollPosition > 80) {
+  //     setDateViewShow(false);
+  //   }
+  // }, [scrollPosition]);
 
   useEffect(() => {
     setFarmLocation(global.currentLocation);
@@ -118,6 +118,7 @@ const CalenderHeader = props => {
                 console.log('name of location ', place);
               });
           }
+          apiCall();
           setShowMap(false);
         }}
         isVisible={showMap}
@@ -163,11 +164,7 @@ const CalenderHeader = props => {
           title={moment(dateSelected).format('MMM DD, YYYY')}
           style={styles.dateTxt}
         />
-        <TouchableOpacity
-          onPress={() => {
-            apiCall();
-            setDateViewShow(!dateViewShow);
-          }}>
+        <TouchableOpacity>
           <Icon
             name={dateViewShow ? 'chevron-up' : 'chevron-down'}
             color={theme.colors.black}
@@ -178,7 +175,7 @@ const CalenderHeader = props => {
 
       {dateViewShow && (
         <Calendar
-          hideArrows={false}
+          hideArrows={true}
           onDayPress={day => {}}
           onMonthChange={month => {
             setShowPopup(false);

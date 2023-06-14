@@ -5,9 +5,10 @@ import {
   FlatList,
   SafeAreaView,
   Platform,
+  Image,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {scale, theme} from '../../../utils';
+import {images, scale, theme} from '../../../utils';
 import Header from './Header';
 import Story from './Story';
 import {useDispatch, useSelector} from 'react-redux';
@@ -25,22 +26,48 @@ const Yard_header = () => {
         borderBottomColor: 'lightgray',
       }}>
       <View
-        style={[styles.headerView, , {borderLeftWidth: 1, borderTopWidth: 1}]}>
+        style={[
+          styles.headerView,
+          ,
+          {
+            flexDirection: 'row',
+            borderLeftWidth: 1,
+            borderTopWidth: 1,
+          },
+        ]}>
+        <Image source={images.pin} style={styles.icon} />
         <Text style={styles.header_txt}>APMC Yard</Text>
       </View>
       <View
-        style={[styles.headerView, , {borderLeftWidth: 1, borderTopWidth: 1}]}>
+        style={[
+          styles.headerView,
+          ,
+          {
+            flexDirection: 'row',
+            borderLeftWidth: 1,
+            borderTopWidth: 1,
+          },
+        ]}>
+        <Image source={images.pin} style={styles.icon} />
         <Text style={styles.header_txt}> Arrival Quantity </Text>
       </View>
       <View
         style={[
           styles.headerView,
           ,
-          {borderLeftWidth: 1, borderTopWidth: 1, borderRightWidth: 1},
+          {
+            flexDirection: 'row',
+            borderLeftWidth: 1,
+            borderTopWidth: 1,
+            borderRightWidth: 1,
+          },
         ]}>
-        <Text style={styles.header_txt}>Modal Price</Text>
-        <Text style={[styles.header_txt, {fontSize: scale(11)}]}>
-          (Min/max)
+        <Image source={images.pin} style={styles.icon} />
+        <Text style={styles.header_txt}>
+          Modal Price
+          <Text style={[styles.header_txt, {fontSize: scale(11)}]}>
+            {' Min/max'}
+          </Text>
         </Text>
       </View>
     </View>
@@ -205,6 +232,10 @@ const styles = StyleSheet.create({
     borderRadius: scale(10),
     paddingBottom: scale(10),
   },
+  icon: {
+    width: scale(30),
+    height: scale(30),
+  },
   headerView: {
     width: scale(108),
     height: scale(65),
@@ -215,6 +246,7 @@ const styles = StyleSheet.create({
     paddingVertical: scale(5),
   },
   header_txt: {
+    flex: 1,
     color: 'black',
     fontSize: 16,
     fontWeight: '600',

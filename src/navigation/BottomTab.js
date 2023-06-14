@@ -65,7 +65,7 @@ const BottomTab = () => {
           color: theme.colors.white,
         },
       }}>
-      <Tab.Screen
+      <Tab.Screen 
         name="Home"
         component={HomeStack}
         options={{
