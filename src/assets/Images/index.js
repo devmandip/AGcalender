@@ -6,6 +6,9 @@ const images = {
   fb: require('./facebook.png'),
   linkedin: require('./linkedin.png'),
   background: require('./background.png'),
+  bullock: require('./bullock.png'),
+  map: require('./map.png'),
+  ruppe: require('./rupee.png'),
 };
 
 export default images;

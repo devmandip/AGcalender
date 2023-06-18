@@ -32,7 +32,7 @@ const Story = props => {
             style={styles.renderItem_img}
           />
         </TouchableOpacity>
-        <Label title={item.name} />
+        <Label title={item.name} style={{width: '75%', textAlign: 'center'}} />
       </View>
     );
   };

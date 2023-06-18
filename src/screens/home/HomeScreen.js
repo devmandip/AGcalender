@@ -190,6 +190,7 @@ const HomeScreen = ({navigation}) => {
             keyExtractor={(item, index) => item?.id}
           />
         </View>
+        {console.log('listData >>>>> ', listData)}
         <DrawerModal
           isVisible={drawerModal}
           close={() => {
@@ -197,13 +198,8 @@ const HomeScreen = ({navigation}) => {
           }}
         />
       </ScrollView>
-      <TouchableOpacity
-        onPress={() => {
-          Toast.show('this is long text', Toast.LONG);
-        }}>
-        <Text>press me</Text>
-      </TouchableOpacity>
-      {/* <Loader loading={loading} /> */}
+
+      <Loader loading={loading} />
     </SafeAreaView>
   );
 };

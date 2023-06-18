@@ -270,7 +270,9 @@ const MapModal = props => {
           </View>
           {position != '' && (
             <MapView
-              mapType="satellite"
+              showsMyLocationButton={true}
+              mapType="hybrid"
+              showsCompass={true}
               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
               style={styles.map}
               onRegionChangeComplete={e => {

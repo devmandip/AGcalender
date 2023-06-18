@@ -15,7 +15,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {getServiceCall} from '../../../api/Webservice';
 import {ApiList} from '../../../api/ApiList';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
 const Yard_header = () => {
   return (
     <View
@@ -35,7 +35,7 @@ const Yard_header = () => {
             borderTopWidth: 1,
           },
         ]}>
-        <Image source={images.pin} style={styles.icon} />
+        <Image source={images.map} style={styles.icon} />
         <Text style={styles.header_txt}>APMC Yard</Text>
       </View>
       <View
@@ -48,7 +48,7 @@ const Yard_header = () => {
             borderTopWidth: 1,
           },
         ]}>
-        <Image source={images.pin} style={styles.icon} />
+        <Image source={images.bullock} style={styles.icon} />
         <Text style={styles.header_txt}> Arrival Quantity </Text>
       </View>
       <View
@@ -62,12 +62,12 @@ const Yard_header = () => {
             borderRightWidth: 1,
           },
         ]}>
-        <Image source={images.pin} style={styles.icon} />
+        <Image source={images.ruppe} style={styles.icon} />
         <Text style={styles.header_txt}>
           Modal Price
-          <Text style={[styles.header_txt, {fontSize: scale(11)}]}>
+          {/* <Text style={[styles.header_txt, {fontSize: scale(11)}]}>
             {' Min/max'}
-          </Text>
+          </Text> */}
         </Text>
       </View>
     </View>
@@ -105,21 +105,21 @@ const Yard_list = props => {
         ]}>
         <Text style={styles.yard_txt}>Rs, {Rs}/Q</Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          {/* <AntDesign
+          <AntDesign
             name="arrowdown"
             size={scale(15)}
             style={{right: scale(3)}}
             color="red"
-          /> */}
+          />
           <Text style={styles.yard_txt}>
             {down} - {up}
           </Text>
-          {/* <AntDesign
+          <AntDesign
             name="arrowup"
             size={scale(15)}
             style={{left: scale(3)}}
             color="#56AB2F"
-          /> */}
+          />
         </View>
       </View>
     </View>
@@ -175,13 +175,13 @@ const YardVew = () => {
   };
   return (
     <SafeAreaView>
-      <Header />
+      <Header hideFliiter={true} />
       <Story
         selectPress={item => {
           setYardData([]);
           getYardDetailsByID(item?.id);
         }}
-        listData={userReducer?.categoryList}
+        listData={userReducer?.cropsList}
       />
       <View
         style={{
@@ -235,6 +235,7 @@ const styles = StyleSheet.create({
   icon: {
     width: scale(30),
     height: scale(30),
+    resizeMode: 'contain',
   },
   headerView: {
     width: scale(108),

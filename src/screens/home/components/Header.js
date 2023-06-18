@@ -6,7 +6,7 @@ import SearchBar from './SearchBar';
 import {scale, theme} from '../../../utils';
 
 const Header = props => {
-  const {basket, onPressMenu} = props;
+  const {basket, onPressMenu, hideFliiter} = props;
   const logoImg = '../../../assets/Images/logo.png';
 
   return (
@@ -25,7 +25,11 @@ const Header = props => {
           />
         )}
         {!basket && (
-          <Ionicons name="options-outline" size={scale(22)} color="black" />
+          <Ionicons
+            name="options-outline"
+            size={scale(22)}
+            color={hideFliiter ? '#f2f2f2' : 'black'}
+          />
         )}
       </TouchableOpacity>
     </View>
