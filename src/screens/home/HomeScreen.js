@@ -122,7 +122,9 @@ const HomeScreen = ({navigation}) => {
           }
           setLoading(false);
         })
-        .catch(error => {});
+        .catch(error => {
+          setLoading(false);
+        });
     } catch (error) {
       console.log(error);
       setLoading(false);

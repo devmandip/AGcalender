@@ -159,23 +159,10 @@ const CalenderHeader = props => {
           />
         </View>
       </View>
-      <View style={styles.dateView}>
-        <Label
-          title={moment(dateSelected).format('MMM DD, YYYY')}
-          style={styles.dateTxt}
-        />
-        <TouchableOpacity>
-          <Icon
-            name={dateViewShow ? 'chevron-up' : 'chevron-down'}
-            color={theme.colors.black}
-            size={scale(22)}
-          />
-        </TouchableOpacity>
-      </View>
-
       {dateViewShow && (
         <Calendar
-          hideArrows={true}
+          monthFormat={'MMM dd, yyyy'}
+          hideArrows={false}
           onDayPress={day => {}}
           onMonthChange={month => {
             setShowPopup(false);
@@ -187,7 +174,6 @@ const CalenderHeader = props => {
             [today]: {selected: true, selectedColor: theme.colors.primary},
           }}
           hideExtraDays={true}
-          renderHeader={date => {}}
           theme={{
             selectedDayBackgroundColor: theme.colors.primary,
             selectedDayTextColor: 'white',

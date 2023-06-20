@@ -177,7 +177,20 @@ const MapModal = props => {
                   },
                 }}
                 fetchDetails={true}
-                onPress={(data, details = null) => console.log(data, details)}
+                onPress={(data, details = null) => {
+                  setRegion({
+                    latitude: details?.geometry?.location?.lat,
+                    longitude: details?.geometry?.location?.lng,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                  });
+                  setPosition({
+                    latitude: details?.geometry?.location?.lat,
+                    longitude: details?.geometry?.location?.lng,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                  });
+                }}
                 onFail={error => console.log(error)}
                 onNotFound={() => console.log('no results')}
                 placeholder="Search for area, Street name..."
