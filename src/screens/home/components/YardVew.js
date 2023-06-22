@@ -6,6 +6,9 @@ import {
   SafeAreaView,
   Platform,
   Image,
+  Pressable,
+  ActivityIndicator,
+  PermissionsAndroid,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {images, scale, theme} from '../../../utils';
@@ -16,63 +19,7 @@ import moment from 'moment';
 import {getServiceCall} from '../../../api/Webservice';
 import {ApiList} from '../../../api/ApiList';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-const Yard_header = () => {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        marginTop: scale(12),
-        borderBottomWidth: 3,
-        borderBottomColor: 'lightgray',
-      }}>
-      <View
-        style={[
-          styles.headerView,
-          ,
-          {
-            flexDirection: 'row',
-            borderLeftWidth: 1,
-            borderTopWidth: 1,
-          },
-        ]}>
-        <Image source={images.map} style={styles.icon} />
-        <Text style={styles.header_txt}>APMC Yard</Text>
-      </View>
-      <View
-        style={[
-          styles.headerView,
-          ,
-          {
-            flexDirection: 'row',
-            borderLeftWidth: 1,
-            borderTopWidth: 1,
-          },
-        ]}>
-        <Image source={images.bullock} style={styles.icon} />
-        <Text style={styles.header_txt}> Arrival Quantity </Text>
-      </View>
-      <View
-        style={[
-          styles.headerView,
-          ,
-          {
-            flexDirection: 'row',
-            borderLeftWidth: 1,
-            borderTopWidth: 1,
-            borderRightWidth: 1,
-          },
-        ]}>
-        <Image source={images.ruppe} style={styles.icon} />
-        <Text style={styles.header_txt}>
-          Modal Price
-          {/* <Text style={[styles.header_txt, {fontSize: scale(11)}]}>
-            {' Min/max'}
-          </Text> */}
-        </Text>
-      </View>
-    </View>
-  );
-};
+import Geolocation from '@react-native-community/geolocation';
 
 const Yard_list = props => {
   const {date, landMark, km, state, product, weight, Rs, up, down} = props;
@@ -111,7 +58,7 @@ const Yard_list = props => {
             style={{right: scale(3)}}
             color="red"
           />
-          <Text style={styles.yard_txt}>
+          <Text style={[styles.yard_txt, {textAlign: 'center', flex: 1}]}>
             {down} - {up}
           </Text>
           <AntDesign
@@ -144,44 +91,239 @@ const renderItem = ({item}) => {
   );
 };
 
+var page = 1;
+var limit = 10;
+
 const YardVew = () => {
   const [yardData, setYardData] = useState([]);
 
   useEffect(() => {
-    getYardDetailsByID();
+    (async () => {
+      await requestLocationPermission();
+      setTimeout(() => {
+        getYardDetailsByID('refresh');
+      }, 1000);
+    })();
   }, []);
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
 
-  const getYardDetailsByID = async (id = '0') => {
+  const [tempCropList, setTempCropList] = useState(userReducer?.cropsList);
+  const [search, setSearch] = useState('');
+  const [yardFilter, setYardFilter] = useState(false);
+  const [modaPFilter, setModaPFilter] = useState(false);
+  const [arrivalQFilter, setArrivalQFilter] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+  const [selectedItemId, setSelectedItemId] = useState('0');
+  const [loadmore, setLoadmore] = useState(false);
+
+  const requestLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'AgMart Celender',
+          message: 'Example App access to your location ',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        GetLocation();
+        // alert('You can use the location');
+      } else {
+        console.log('location permission denied');
+        alert('Location permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const GetLocation = () => {
+    Geolocation.getCurrentPosition(pos => {
+      const crd = pos.coords;
+      global.currentLocation = crd;
+    }).catch(err => {
+      console.log(err);
+    });
+  };
+
+  const getYardDetailsByID = async (
+    type = '',
+    id = selectedItemId,
+    y = 'asc',
+    a = 'asc',
+    m = 'asc',
+  ) => {
+    if (type == 'refresh') {
+      page = 1;
+      setYardData([]);
+      setTotalCount(0);
+    }
     try {
       var params = {
         cropId: id,
         latitude: global.currentLocation?.latitude,
         longitude: global.currentLocation?.longitude,
         radius: 1000000,
+        page: page,
+        size: limit,
       };
       getServiceCall(ApiList.MARKET_RATES, params)
         .then(async responseJson => {
           if (responseJson?.data != '') {
-            setYardData(responseJson?.data.data);
+            setTotalCount(responseJson?.data?.totalCount);
+            if (type == 'refresh') {
+              setYardData(responseJson?.data.data);
+            } else {
+              const mergeData = [...yardData, ...responseJson?.data?.data];
+              setYardData(mergeData);
+            }
+            setLoadmore(false);
           }
+          setLoadmore(false);
         })
-        .catch(error => {});
+        .catch(error => {
+          setLoadmore(false);
+        });
     } catch (error) {
       console.log(error);
     }
   };
+
+  const Yard_header = props => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: scale(12),
+          borderBottomWidth: 3,
+          borderBottomColor: 'lightgray',
+        }}>
+        <Pressable
+          onPress={() => {
+            setYardFilter(!yardFilter);
+          }}
+          style={[
+            styles.headerView,
+            ,
+            {
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              borderLeftWidth: 1,
+              borderTopWidth: 1,
+            },
+          ]}>
+          <Image source={images.map} style={styles.icon} />
+          <Text style={styles.header_txt}>APMC Yard</Text>
+          <AntDesign name={yardFilter ? 'arrowdown' : 'arrowup'} size={25} />
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            setArrivalQFilter(!arrivalQFilter);
+          }}
+          style={[
+            styles.headerView,
+            ,
+            {
+              flexDirection: 'row',
+              borderLeftWidth: 1,
+              borderTopWidth: 1,
+            },
+          ]}>
+          <Image source={images.bullock} style={styles.icon} />
+          <Text style={styles.header_txt}> Arrival Quantity </Text>
+          <AntDesign
+            name={arrivalQFilter ? 'arrowdown' : 'arrowup'}
+            size={25}
+          />
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            setModaPFilter(!modaPFilter);
+          }}
+          style={[
+            styles.headerView,
+            ,
+            {
+              flexDirection: 'row',
+              borderLeftWidth: 1,
+              borderTopWidth: 1,
+              borderRightWidth: 1,
+            },
+          ]}>
+          <Image source={images.ruppe} style={styles.icon} />
+          <Text style={styles.header_txt}>
+            Modal Price
+            {/* <Text style={[styles.header_txt, {fontSize: scale(11)}]}>
+              {' Min/max'}
+            </Text> */}
+          </Text>
+          <AntDesign name={modaPFilter ? 'arrowdown' : 'arrowup'} size={25} />
+        </Pressable>
+      </View>
+    );
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (search.length == 0) {
+        setTempCropList(userReducer?.cropsList);
+      } else {
+        const newData = userReducer?.cropsList.filter(item => {
+          const itemData = `${item.name.toUpperCase()}`;
+          const textData = search.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        });
+        setTempCropList(newData);
+      }
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [search]);
+
+  const loadmoreHandler = (type = '') => {
+    page = page + 1;
+    setLoadmore(() => true, getYardDetailsByID('loadmore'));
+  };
+
+  const LoadmoreSpinner = () =>
+    loadmore && (
+      <View
+        style={{
+          height: scale(30),
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <ActivityIndicator
+          size="small"
+          color={theme.colors.primary}
+          animating={loadmore}
+        />
+      </View>
+    );
+
+  console.log(
+    page + ' TOTAL PAGE ' + totalCount + '  YARD LENGTH ' + yardData.length,
+  );
+
   return (
     <SafeAreaView>
-      <Header hideFliiter={true} />
+      <Header
+        value={search}
+        onChangeText={text => {
+          setSearch(text);
+        }}
+        hideFliiter={true}
+      />
+
       <Story
         selectPress={item => {
           setYardData([]);
-          getYardDetailsByID(item?.id);
+          setSelectedItemId(item?.id);
+          getYardDetailsByID('refresh', item?.id);
         }}
-        listData={userReducer?.cropsList}
+        listData={tempCropList}
       />
       <View
         style={{
@@ -207,6 +349,14 @@ const YardVew = () => {
             contentContainerStyle={{paddingVertical: scale(10)}}
             data={yardData}
             renderItem={renderItem}
+            ListFooterComponent={LoadmoreSpinner}
+            onEndReachedThreshold={0.05}
+            onEndReached={() =>
+              totalCount != 0 &&
+              yardData.length < totalCount &&
+              !loadmore &&
+              loadmoreHandler()
+            }
           />
         </View>
       </View>
@@ -233,8 +383,8 @@ const styles = StyleSheet.create({
     paddingBottom: scale(10),
   },
   icon: {
-    width: scale(30),
-    height: scale(30),
+    width: scale(25),
+    height: scale(25),
     resizeMode: 'contain',
   },
   headerView: {
@@ -249,8 +399,9 @@ const styles = StyleSheet.create({
   header_txt: {
     flex: 1,
     color: 'black',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
+    textAlign: 'center',
   },
   yard_txt: {
     color: 'black',

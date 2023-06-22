@@ -37,7 +37,7 @@ const Comman = () => {
 const BottomTab = () => {
   return (
     <Tab.Navigator
-      // initialRouteName="User"
+      initialRouteName="Rupee"
       screenOptions={{
         tabBarHideOnKeyboard: true,
         headerShown: false,
@@ -65,23 +65,6 @@ const BottomTab = () => {
           color: theme.colors.white,
         },
       }}>
-      <Tab.Screen 
-        name="Home"
-        component={HomeStack}
-        options={{
-          tabBarIcon: ({focused}) => {
-            return (
-              <Icon
-                name="calendar"
-                size={scale(25)}
-                color={theme.colors.white}
-              />
-            );
-          },
-          tabBarLabel: 'Calender',
-        }}
-      />
-
       <Tab.Screen
         name="Rupee"
         component={YardVew}
@@ -99,6 +82,22 @@ const BottomTab = () => {
         }}
       />
 
+      <Tab.Screen
+        name="Home"
+        component={HomeStack}
+        options={{
+          tabBarIcon: ({focused}) => {
+            return (
+              <Icon
+                name="calendar"
+                size={scale(25)}
+                color={theme.colors.white}
+              />
+            );
+          },
+          tabBarLabel: 'Calender',
+        }}
+      />
       <Tab.Screen
         name="Add"
         component={AddCropStack}

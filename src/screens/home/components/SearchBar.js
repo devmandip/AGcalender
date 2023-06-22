@@ -10,7 +10,7 @@ const SearchBar = props => {
       <AntDesign name="search1" size={15} />
       <TextInput
         value={value}
-        onChangeText={onChangeText}
+        onChangeText={ (text)=>onChangeText(text)}
         style={[styles.TextInput_style, inputStyle]}
         placeholder={placeholder ? placeholder : 'Mere Desh Ki Dharti'}
       />

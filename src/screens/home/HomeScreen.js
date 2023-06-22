@@ -34,16 +34,17 @@ const HomeScreen = ({navigation}) => {
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
+  const [tempCropList, setTempCropList] = useState(userReducer?.cropsList);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   useFocusEffect(
     useCallback(() => {
       (async () => {
         dispatch(getCropData(selectedCate?.id));
         dispatch(getCategoriesData());
-        await requestLocationPermission();
         setTimeout(() => {
           setLoading(
-            () => true,
+            () => false,
             callListApi(global.currentLocation, moment().format('DD/MM/YYYY')),
           );
         }, 1000);
@@ -51,30 +52,23 @@ const HomeScreen = ({navigation}) => {
     }, []),
   );
 
-  console.log(loading);
-  useEffect(() => {}, []);
-
-  const requestLocationPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'AgMart Celender',
-          message: 'Example App access to your location ',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        GetLocation();
-        // alert('You can use the location');
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (search.length == 0) {
+        setTempCropList(userReducer?.cropsList);
       } else {
-        console.log('location permission denied');
-        alert('Location permission denied');
+        const newData = userReducer?.cropsList.filter(item => {
+          const itemData = `${item.name.toUpperCase()}`;
+          const textData = search.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        });
+        setTempCropList(newData);
       }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [search]);
 
+ 
   const initiateWhatsApp = mobileNumber => {
     // Check for perfect 10 digit length
     if (mobileNumber.length != 10) {
@@ -117,14 +111,6 @@ const HomeScreen = ({navigation}) => {
     );
   };
 
-  const GetLocation = () => {
-    Geolocation.getCurrentPosition(pos => {
-      const crd = pos.coords;
-      global.currentLocation = crd;
-    }).catch(err => {
-      console.log(err);
-    });
-  };
 
   const callListApi = async (farmLocation, date) => {
     try {
@@ -176,6 +162,10 @@ const HomeScreen = ({navigation}) => {
         onScroll={event => handleScroll(event)}>
         <View style={styles.container}>
           <Header
+            value={search}
+            onChangeText={text => {
+              setSearch(text);
+            }}
             onRightPress={() => {
               setIsFocus(true);
             }}
@@ -188,7 +178,7 @@ const HomeScreen = ({navigation}) => {
             selectPress={item => {
               setSelectedCrop(item?.name);
             }}
-            listData={userReducer?.cropsList}
+            listData={tempCropList}
           />
           <CalenderView
             callListAPi={(location, date) => {
