@@ -30,17 +30,21 @@ const PostBottom = props => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.btn} onPress={oncommentPress}>
-        <Feather name="message-square" size={25} color={theme.colors.gray2} />
-        <Text style={styles.btn_txt}>Comments</Text>
+        <MaterialCommunityIcons
+          name="whatsapp"
+          size={25}
+          color={theme.colors.gray2}
+        />
+        <Text style={styles.btn_txt}>whatsapp</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.btn} onPress={onMessagePress}>
         <MaterialCommunityIcons
-          name="message-processing-outline"
+          name="phone"
           size={25}
           color={theme.colors.gray2}
         />
-        <Text style={styles.btn_txt}>chat</Text>
+        <Text style={styles.btn_txt}>Phone</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.btn} onPress={onSharePress}>

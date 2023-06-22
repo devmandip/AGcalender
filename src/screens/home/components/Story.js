@@ -28,11 +28,14 @@ const Story = props => {
             borderRadius: scale(35),
           }}>
           <Image
-            source={require('../../../assets/Images/veges/coriander.png')}
+            source={{uri: item?.imageUrlSmall}}
             style={styles.renderItem_img}
           />
         </TouchableOpacity>
-        <Label title={item.name} style={{width: '75%', textAlign: 'center'}} />
+        <Label
+          title={item.displayName}
+          style={{width: '75%', textAlign: 'center'}}
+        />
       </View>
     );
   };

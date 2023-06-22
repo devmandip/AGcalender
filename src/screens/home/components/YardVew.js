@@ -165,7 +165,7 @@ const YardVew = () => {
       getServiceCall(ApiList.MARKET_RATES, params)
         .then(async responseJson => {
           if (responseJson?.data != '') {
-            setYardData(responseJson?.data);
+            setYardData(responseJson?.data.data);
           }
         })
         .catch(error => {});

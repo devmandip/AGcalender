@@ -77,8 +77,16 @@ const ImageSection = props => {
 };
 
 const PostSection = props => {
-  const {postImages, proicePic, name, description, view_count, like_count} =
-    props;
+  const {
+    postImages,
+    proicePic,
+    name,
+    description,
+    view_count,
+    like_count,
+    oncommentPress,
+    onMessagePress,
+  } = props;
 
   const navigation = useNavigation();
 
@@ -117,7 +125,12 @@ const PostSection = props => {
         setIsVisible={setIsVisible}
       /> */}
       {/* )} */}
-      <PostBottom like_count={like_count} view_count={view_count} />
+      <PostBottom
+        like_count={like_count}
+        view_count={view_count}
+        oncommentPress={oncommentPress}
+        onMessagePress={onMessagePress}
+      />
       {/* <ImageView
         images={postImages}
         imageIndex={0}

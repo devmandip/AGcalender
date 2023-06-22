@@ -8,6 +8,7 @@ import {
   PermissionsAndroid,
   TouchableOpacity,
   Pressable,
+  Linking,
 } from 'react-native';
 import React, {useEffect, useCallback, useState} from 'react';
 import {CalenderView, Header, PostSection, Story} from './components';
@@ -74,6 +75,24 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
+  const initiateWhatsApp = mobileNumber => {
+    // Check for perfect 10 digit length
+    if (mobileNumber.length != 10) {
+      alert('Please insert correct WhatsApp number');
+      return;
+    }
+    // Using 91 for India
+    // You can change 91 with your country code
+    let url = 'whatsapp://send?text=' + 'Hello ' + '&phone=91' + mobileNumber;
+    Linking.openURL(url)
+      .then(data => {
+        console.log('WhatsApp Opened');
+      })
+      .catch(() => {
+        alert('Make sure Whatsapp installed on your device');
+      });
+  };
+
   const renderItem = ({item}) => {
     return (
       <Pressable
@@ -89,6 +108,10 @@ const HomeScreen = ({navigation}) => {
           }
           view_count={'221'}
           like_count={'167'}
+          oncommentPress={() => initiateWhatsApp(item.mobileNumber)}
+          onMessagePress={() => {
+            Linking.openURL(`tel:${item.mobileNumber}`);
+          }}
         />
       </Pressable>
     );
@@ -192,7 +215,6 @@ const HomeScreen = ({navigation}) => {
             keyExtractor={(item, index) => item?.id}
           />
         </View>
-        {console.log('listData >>>>> ', listData)}
         <DrawerModal
           isVisible={drawerModal}
           close={() => {

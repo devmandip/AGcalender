@@ -177,7 +177,9 @@ const MapModal = props => {
                   },
                 }}
                 fetchDetails={true}
+                debounce={200}
                 onPress={(data, details = null) => {
+                  alert('call');
                   setRegion({
                     latitude: details?.geometry?.location?.lat,
                     longitude: details?.geometry?.location?.lng,
@@ -194,7 +196,10 @@ const MapModal = props => {
                 onFail={error => console.log(error)}
                 onNotFound={() => console.log('no results')}
                 placeholder="Search for area, Street name..."
-                query={{key: 'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc'}}
+                query={{
+                  key: 'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
+                  language: 'en',
+                }}
                 listEmptyComponent={() => (
                   <View style={{flex: 1, backgroundColor: 'white'}}>
                     <Text>No results were found</Text>

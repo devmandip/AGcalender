@@ -31,11 +31,7 @@ const CalenderHeader = props => {
   const date = new Date(today);
   const options = {day: 'numeric', month: 'long', year: 'numeric'};
 
-  console.log(
-    '>>>>>>>>>>>>>> GLOBAL CURRENT ',
-    JSON.stringify(global.currentLocation) + ' ' + JSON.stringify(farmLocation),
-  );
-
+ 
   // useEffect(() => {
   //   if (scrollPosition > 80) {
   //     setDateViewShow(false);
