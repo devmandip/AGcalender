@@ -170,6 +170,7 @@ const MapModal = props => {
                 styles={{
                   container: {
                     flex: 0,
+                    zIndex: 1,
                   },
                   description: {
                     color: '#000',
@@ -179,7 +180,6 @@ const MapModal = props => {
                 fetchDetails={true}
                 debounce={200}
                 onPress={(data, details = null) => {
-                  alert('call');
                   setRegion({
                     latitude: details?.geometry?.location?.lat,
                     longitude: details?.geometry?.location?.lng,
@@ -309,14 +309,27 @@ const MapModal = props => {
                 useGoogleGetAddress(e);
               }}
               region={region}>
-              <Marker
+              {/* <Marker
                 coordinate={{
                   latitude: Number(region?.latitude),
                   longitude: Number(region?.longitude),
                 }}
-                anchor={{x: 0.5, y: 0.5}}></Marker>
+                centerOffset={{x: 0.5, y: 0.5}} // Adjust the centerOffset values as needed
+                // anchor={{x: 0.5, y: 0.5}}
+              ></Marker> */}
             </MapView>
           )}
+          <Image
+            source={images.Marker}
+            style={{
+              height: scale(70),
+              width: scale(70),
+              position: 'absolute',
+              alignSelf: 'center',
+              top: '47%',
+              resizeMode: 'contain',
+            }}
+          />
         </View>
       </View>
     </Modal>

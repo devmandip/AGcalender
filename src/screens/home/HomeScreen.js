@@ -68,7 +68,6 @@ const HomeScreen = ({navigation}) => {
     return () => clearTimeout(timeout);
   }, [search]);
 
- 
   const initiateWhatsApp = mobileNumber => {
     // Check for perfect 10 digit length
     if (mobileNumber.length != 10) {
@@ -110,7 +109,6 @@ const HomeScreen = ({navigation}) => {
       </Pressable>
     );
   };
-
 
   const callListApi = async (farmLocation, date) => {
     try {
@@ -159,7 +157,8 @@ const HomeScreen = ({navigation}) => {
       <ScrollView
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
-        onScroll={event => handleScroll(event)}>
+        // onScroll={event => handleScroll(event)}
+      >
         <View style={styles.container}>
           <Header
             value={search}

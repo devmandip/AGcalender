@@ -31,7 +31,6 @@ const CalenderHeader = props => {
   const date = new Date(today);
   const options = {day: 'numeric', month: 'long', year: 'numeric'};
 
- 
   // useEffect(() => {
   //   if (scrollPosition > 80) {
   //     setDateViewShow(false);
@@ -81,15 +80,19 @@ const CalenderHeader = props => {
         month: month, //"22/03/2023"
         year: year, //"22/03/2023"
       };
+      console.log('params ----', params);
       getServiceCall(ApiList.LISITNG_CALENDER, params)
         .then(async responseJson => {
+          console.log('responseJson >>>> ', responseJson);
           if (responseJson?.data != '') {
             setDateData(responseJson?.data?.data[0]?.cropListingsByDate);
           }
         })
-        .catch(error => {});
+        .catch(error => {
+          console.log('error in api calll ', error.response);
+        });
     } catch (error) {
-      console.log(error);
+      console.log('error in cal', error);
     }
   };
   return (

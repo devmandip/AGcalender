@@ -6,6 +6,7 @@ const initialState = {
   userWiseDetails: '',
   categoryList: [],
   cropsList: [],
+  currentLoc: '',
 };
 
 export default (state = initialState, action) => {
@@ -37,6 +38,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         cropsList: action.payload,
+      };
+    }
+
+    case types.CURRENT_LOCATION: {
+      return {
+        ...state,
+        currentLoc: action.payload,
       };
     }
     case types.LOGOUT:

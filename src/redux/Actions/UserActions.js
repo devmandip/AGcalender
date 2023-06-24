@@ -77,3 +77,9 @@ export const getCropData = (id = '') => {
     }
   };
 };
+
+export const setCurrentLocation = payload => {
+  return dispatch => {
+    dispatch({type: types.CURRENT_LOCATION, payload: payload});
+  };
+};

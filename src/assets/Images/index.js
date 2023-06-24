@@ -9,6 +9,7 @@ const images = {
   bullock: require('./bullock.png'),
   map: require('./map.png'),
   ruppe: require('./rupee.png'),
+  Marker: require('./Marker.png'),
 };
 
 export default images;
