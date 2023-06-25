@@ -180,6 +180,10 @@ const HomeScreen = ({navigation}) => {
             listData={tempCropList}
           />
           <CalenderView
+            setResultBlur={tag => {
+              setShowMapHome(tag);
+            }}
+            showMapHome={true}
             callListAPi={(location, date) => {
               callListApi(location, date);
             }}

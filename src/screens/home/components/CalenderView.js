@@ -98,6 +98,8 @@ const CalenderHeader = props => {
   return (
     <View style={styles.header_container}>
       <MapModal
+        setResultBlur={props.setResultBlur}
+        showMapHome={props.showMapHome}
         close={data => {
           if (data != null) {
             setFarmLocation(data);
@@ -228,6 +230,8 @@ const CalenderView = props => {
     <View style={styles.container}>
       {showheader === false ? null : (
         <CalenderHeader
+          setResultBlur={props.setResultBlur}
+          showMapHome={props.showMapHome}
           callBack={props.callListAPi}
           cropName={props.cropName}
           scrollPosition={scrollPosition}

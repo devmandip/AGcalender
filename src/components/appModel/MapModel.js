@@ -179,6 +179,7 @@ const MapModal = props => {
                 }}
                 fetchDetails={true}
                 debounce={200}
+                keepResultsAfterBlur={props.showMapHome ?? false}
                 onPress={(data, details = null) => {
                   setRegion({
                     latitude: details?.geometry?.location?.lat,

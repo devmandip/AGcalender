@@ -117,6 +117,7 @@ const YardVew = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [selectedItemId, setSelectedItemId] = useState('0');
   const [loadmore, setLoadmore] = useState(false);
+  const [sortBy, setSortBy] = useState('');
 
   const requestLocationPermission = async () => {
     try {
@@ -148,12 +149,28 @@ const YardVew = () => {
     });
   };
 
+  const dynamicOrder = () => {
+    switch (sortBy) {
+      case 'distance':
+        return !yardFilter ? 'asc' : 'desc';
+      case 'arrivals':
+        return !arrivalQFilter ? 'asc' : 'desc';
+      case 'modalPrice':
+        return !modaPFilter ? 'asc' : 'desc';
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      getYardDetailsByID('refresh');
+    }, 1000);
+  }, [sortBy, modaPFilter, yardFilter, arrivalQFilter]);
+
   const getYardDetailsByID = async (
     type = '',
     id = selectedItemId,
-    y = 'asc',
-    a = 'asc',
-    m = 'asc',
+    filterByt = sortBy,
+    sortOrder = dynamicOrder() ?? '',
   ) => {
     if (type == 'refresh') {
       page = 1;
@@ -168,6 +185,8 @@ const YardVew = () => {
         radius: 1000000,
         page: page,
         size: limit,
+        sortBy: filterByt,
+        sortOrder: sortOrder,
       };
       getServiceCall(ApiList.MARKET_RATES, params)
         .then(async responseJson => {
@@ -202,6 +221,7 @@ const YardVew = () => {
         }}>
         <Pressable
           onPress={() => {
+            setSortBy('distance');
             setYardFilter(!yardFilter);
           }}
           style={[
@@ -221,6 +241,7 @@ const YardVew = () => {
         </Pressable>
         <Pressable
           onPress={() => {
+            setSortBy('arrivals');
             setArrivalQFilter(!arrivalQFilter);
           }}
           style={[
@@ -241,6 +262,7 @@ const YardVew = () => {
         </Pressable>
         <Pressable
           onPress={() => {
+            setSortBy('modalPrice');
             setModaPFilter(!modaPFilter);
           }}
           style={[
