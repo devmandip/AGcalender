@@ -22,7 +22,7 @@ import {
 } from '../../utils/MockData';
 
 const DrawerModal = props => {
-  const {isVisible, close, } = props;
+  const {isVisible, close} = props;
   const navigation = useNavigation();
   return (
     <Modal

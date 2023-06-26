@@ -203,7 +203,7 @@ const MapModal = props => {
                 }}
                 listEmptyComponent={() => (
                   <View style={{flex: 1, backgroundColor: 'white'}}>
-                    <Text>No results were found</Text>
+                    {/* <Text>No results were found</Text> */}
                   </View>
                 )}
               />

@@ -86,6 +86,7 @@ const BottomTab = () => {
         name="Home"
         component={HomeStack}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({focused}) => {
             return (
               <Icon

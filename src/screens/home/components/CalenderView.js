@@ -80,7 +80,6 @@ const CalenderHeader = props => {
         month: month, //"22/03/2023"
         year: year, //"22/03/2023"
       };
-      console.log('params ----', params);
       getServiceCall(ApiList.LISITNG_CALENDER, params)
         .then(async responseJson => {
           console.log('responseJson >>>> ', responseJson);

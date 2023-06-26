@@ -24,7 +24,7 @@ import {
   getCategoriesData,
   getCropData,
 } from '../../../redux/Actions/UserActions';
-import {Loader} from '../../../components';
+import {DrawerModal, Loader} from '../../../components';
 
 const Yard_list = props => {
   const {date, landMark, km, state, product, weight, Rs, up, down} = props;
@@ -55,23 +55,33 @@ const Yard_list = props => {
           styles.headerView,
           {borderLeftWidth: 1, borderBottomWidth: 1, borderRightWidth: 1},
         ]}>
-        <Text style={styles.yard_txt}>Rs, {Rs}/Q</Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <AntDesign
+        <Text style={styles.yard_txt}>Rs.{up}/Q</Text>
+        <View style={{alignItems: 'center'}}>
+          {/* <AntDesign
             name="arrowdown"
             size={scale(15)}
             style={{right: scale(3)}}
             color="red"
-          />
-          <Text style={[styles.yard_txt, {textAlign: 'center', flex: 1}]}>
-            {down} - {up}
+          /> */}
+          <Text style={{color: 'red', fontSize: scale(10)}}>
+            {'Down '}
+            <Text style={[styles.yard_txt, {textAlign: 'center', flex: 1}]}>
+              - {down}
+            </Text>
           </Text>
-          <AntDesign
+
+          <Text style={{color: '#56AB2F', fontSize: scale(10)}}>
+            {'Up '}
+            <Text style={[styles.yard_txt, {textAlign: 'center', flex: 1}]}>
+              - {up}
+            </Text>
+          </Text>
+          {/* <AntDesign
             name="arrowup"
             size={scale(15)}
             style={{left: scale(3)}}
             color="#56AB2F"
-          />
+          /> */}
         </View>
       </View>
     </View>
@@ -124,7 +134,8 @@ const YardVew = () => {
   const [selectedItemId, setSelectedItemId] = useState('0');
   const [loadmore, setLoadmore] = useState(false);
   const [sortBy, setSortBy] = useState('');
-
+  const [drawerModal, setDrawerModel] = useState(false);
+  const [load, setLoad] = useState(false);
   const requestLocationPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -206,8 +217,10 @@ const YardVew = () => {
         sortBy: filterByt,
         sortOrder: sortOrder,
       };
+      setLoad(true);
       getServiceCall(ApiList.MARKET_RATES, params)
         .then(async responseJson => {
+          setLoad(false);
           if (responseJson?.data != '') {
             setTotalCount(responseJson?.data?.totalCount);
             if (type == 'refresh') {
@@ -231,12 +244,14 @@ const YardVew = () => {
           setEmptyYardData(true);
           setLoading(false);
           setLoadmore(false);
+          setLoad(false);
         });
     } catch (error) {
       setEmptyYardData(true);
       setLoadmore(false);
       setLoading(false);
       console.log(error);
+      setLoad(false);
     }
   };
 
@@ -362,13 +377,21 @@ const YardVew = () => {
   return (
     <SafeAreaView>
       <Header
+        onPressMenu={() => {
+          setDrawerModel(true);
+        }}
         value={search}
         onChangeText={text => {
           setSearch(text);
         }}
         hideFliiter={true}
       />
-
+      <DrawerModal
+        isVisible={drawerModal}
+        close={() => {
+          setDrawerModel(false);
+        }}
+      />
       <Story
         selectPress={item => {
           setYardData([]);

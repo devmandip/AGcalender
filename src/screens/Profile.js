@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import UserAvatar from 'react-native-user-avatar';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon1 from 'react-native-vector-icons/Ionicons';
@@ -186,14 +187,20 @@ const Profile = () => {
       <View style={styles.profileHeader} />
 
       <View style={styles.imageContainer}>
-        <Image
+        <UserAvatar
+          size={60}
+          name={loginUserData?.userWiseDetails?.username}
+          // src="https://dummyimage.com/100x100/000/fff"
+          style={styles.userImage}
+        />
+        {/* <Image
           style={styles.userImage}
           source={{
             uri:
               loginUserData?.userWiseDetails?.imageURI ??
               'https://media.istockphoto.com/id/1319254635/photo/latin-american-farmer-working-in-agriculture-at-a-farm.jpg?s=612x612&w=0&k=20&c=uSUaq4iNJB1TYt4RCCtf9sp6FdPyJyHbXqmKa9AqFHY=',
           }}
-        />
+        /> */}
       </View>
 
       <Icon
@@ -492,7 +499,7 @@ const styles = StyleSheet.create({
     height: '15%',
   },
   imageContainer: {
-    borderWidth: scale(1),
+    // borderWidth: scale(1),
     width: scale(100),
     borderRadius: scale(50),
     overflow: 'hidden',
@@ -504,7 +511,7 @@ const styles = StyleSheet.create({
     height: scale(100),
     width: scale(100),
     resizeMode: 'cover',
-    backgroundColor: theme.colors.gray,
+    // backgroundColor: theme.colors.gray,
   },
   bodyContainer: {
     padding: moderatedScale(12),
