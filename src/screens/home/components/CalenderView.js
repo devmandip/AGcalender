@@ -57,7 +57,7 @@ const CalenderHeader = props => {
     const tempData = [...dateData];
     tempData.map(obj => {
       if (obj.harvestStartDate == date?.dateString) {
-        setShowTag(obj?.volume + ' ' + cropName);
+        setShowTag(obj?.percentage);
         setShowPopup(true);
       }
     });
@@ -162,7 +162,7 @@ const CalenderHeader = props => {
       </View>
       {dateViewShow && (
         <Calendar
-          monthFormat={'MMM dd, yyyy'}
+          monthFormat={'MMM, yyyy'}
           hideArrows={false}
           onDayPress={day => {}}
           onMonthChange={month => {
@@ -176,15 +176,19 @@ const CalenderHeader = props => {
           }}
           hideExtraDays={true}
           theme={{
+            dotColor: 'green',
+            arrowColor: 'black',
             selectedDayBackgroundColor: theme.colors.primary,
             selectedDayTextColor: 'white',
           }}
           dayComponent={({date}) => {
             var showProgreshBar = false;
+            var tempObj = {};
             const tempData = [...dateData];
             tempData.map(obj => {
               if (obj.harvestStartDate == date?.dateString) {
                 showProgreshBar = true;
+                tempObj = obj;
               }
             });
 
@@ -193,7 +197,7 @@ const CalenderHeader = props => {
                 <TouchableOpacity onPress={() => callListApi(date)}>
                   {showProgreshBar ? (
                     <ProgressCircle
-                      percent={10}
+                      percent={tempObj?.percentage}
                       radius={20}
                       borderWidth={2}
                       color="#FFD580"

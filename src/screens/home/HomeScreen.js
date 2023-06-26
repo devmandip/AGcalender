@@ -28,6 +28,7 @@ const HomeScreen = ({navigation}) => {
   const [drawerModal, setDrawerModel] = useState(false);
 
   const [listData, setListData] = useState([]);
+  const [emptyListData, setEmptyListData] = useState(null);
   const [selectedCrop, setSelectedCrop] = useState('all');
   const [selectedCate, setSelectedCate] = useState('');
   const [isFocus, setIsFocus] = useState(false);
@@ -40,6 +41,7 @@ const HomeScreen = ({navigation}) => {
   useFocusEffect(
     useCallback(() => {
       (async () => {
+        setEmptyListData(null);
         dispatch(getCropData(selectedCate?.id));
         dispatch(getCategoriesData());
         setTimeout(() => {
@@ -126,14 +128,20 @@ const HomeScreen = ({navigation}) => {
           if (responseJson?.data != '') {
             setLoading(false);
             setListData(responseJson?.data?.data);
+            setEmptyListData(
+              responseJson?.data?.data.length == 0 ? true : false,
+            );
           }
+          setEmptyListData(true);
           setLoading(false);
         })
         .catch(error => {
           setLoading(false);
+          setEmptyListData(true);
         });
     } catch (error) {
       console.log(error);
+      setEmptyListData(true);
       setLoading(false);
     }
   };
@@ -191,22 +199,24 @@ const HomeScreen = ({navigation}) => {
             hideCal
             scrollPosition={scrollPosition}
           />
-          <FlatList
-            ListEmptyComponent={
-              <View
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: 100,
-                }}>
-                <Text>{'No data found'}</Text>
-              </View>
-            }
-            nestedScrollEnabled={true}
-            data={listData}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => item?.id}
-          />
+          {emptyListData == null ? null : (
+            <FlatList
+              ListEmptyComponent={
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: 100,
+                  }}>
+                  <Text>{'No data found'}</Text>
+                </View>
+              }
+              nestedScrollEnabled={true}
+              data={listData}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => item?.id}
+            />
+          )}
         </View>
         <DrawerModal
           isVisible={drawerModal}
@@ -215,7 +225,6 @@ const HomeScreen = ({navigation}) => {
           }}
         />
       </ScrollView>
-
       <Loader loading={loading} />
     </SafeAreaView>
   );

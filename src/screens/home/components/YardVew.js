@@ -20,6 +20,11 @@ import {getServiceCall} from '../../../api/Webservice';
 import {ApiList} from '../../../api/ApiList';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Geolocation from '@react-native-community/geolocation';
+import {
+  getCategoriesData,
+  getCropData,
+} from '../../../redux/Actions/UserActions';
+import {Loader} from '../../../components';
 
 const Yard_list = props => {
   const {date, landMark, km, state, product, weight, Rs, up, down} = props;
@@ -96,13 +101,14 @@ var limit = 10;
 
 const YardVew = () => {
   const [yardData, setYardData] = useState([]);
+  const [emptyyardData, setEmptyYardData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
+      dispatch(getCropData());
+      dispatch(getCategoriesData());
       await requestLocationPermission();
-      setTimeout(() => {
-        getYardDetailsByID('refresh');
-      }, 1000);
     })();
   }, []);
 
@@ -133,9 +139,14 @@ const YardVew = () => {
         // alert('You can use the location');
       } else {
         console.log('location permission denied');
-        alert('Location permission denied');
+        setTimeout(() => {
+          setLoading(() => true, getYardDetailsByID('refresh'));
+        }, 1000);
       }
     } catch (err) {
+      setTimeout(() => {
+        setLoading(() => true, getYardDetailsByID('refresh'));
+      }, 1000);
       console.warn(err);
     }
   };
@@ -144,7 +155,13 @@ const YardVew = () => {
     Geolocation.getCurrentPosition(pos => {
       const crd = pos.coords;
       global.currentLocation = crd;
+      setTimeout(() => {
+        setLoading(() => true, getYardDetailsByID('refresh'));
+      }, 1000);
     }).catch(err => {
+      setTimeout(() => {
+        setLoading(() => true, getYardDetailsByID('refresh'));
+      }, 1000);
       console.log(err);
     });
   };
@@ -176,6 +193,7 @@ const YardVew = () => {
       page = 1;
       setYardData([]);
       setTotalCount(0);
+      setEmptyYardData(null);
     }
     try {
       var params = {
@@ -194,18 +212,30 @@ const YardVew = () => {
             setTotalCount(responseJson?.data?.totalCount);
             if (type == 'refresh') {
               setYardData(responseJson?.data.data);
+              setEmptyYardData(
+                responseJson?.data.data.length == 0 ? true : false,
+              );
+              setLoading(false);
             } else {
               const mergeData = [...yardData, ...responseJson?.data?.data];
               setYardData(mergeData);
+              setLoading(false);
             }
+            setLoading(false);
             setLoadmore(false);
           }
           setLoadmore(false);
+          setLoading(false);
         })
         .catch(error => {
+          setEmptyYardData(true);
+          setLoading(false);
           setLoadmore(false);
         });
     } catch (error) {
+      setEmptyYardData(true);
+      setLoadmore(false);
+      setLoading(false);
       console.log(error);
     }
   };
@@ -356,32 +386,35 @@ const YardVew = () => {
         }}>
         <View style={styles.container}>
           <Yard_header />
-          <FlatList
-            ListEmptyComponent={
-              <View
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: 100,
-                }}>
-                <Text>{'No data found'}</Text>
-              </View>
-            }
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{paddingVertical: scale(10)}}
-            data={yardData}
-            renderItem={renderItem}
-            ListFooterComponent={LoadmoreSpinner}
-            onEndReachedThreshold={0.05}
-            onEndReached={() =>
-              totalCount != 0 &&
-              yardData.length < totalCount &&
-              !loadmore &&
-              loadmoreHandler()
-            }
-          />
+          {emptyyardData == null ? null : (
+            <FlatList
+              ListEmptyComponent={
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: 100,
+                  }}>
+                  <Text>{'No data found'}</Text>
+                </View>
+              }
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{paddingVertical: scale(10)}}
+              data={yardData}
+              renderItem={renderItem}
+              ListFooterComponent={LoadmoreSpinner}
+              onEndReachedThreshold={0.05}
+              onEndReached={() =>
+                totalCount != 0 &&
+                yardData.length < totalCount &&
+                !loadmore &&
+                loadmoreHandler()
+              }
+            />
+          )}
         </View>
       </View>
+      <Loader loading={loading} />
     </SafeAreaView>
   );
 };
