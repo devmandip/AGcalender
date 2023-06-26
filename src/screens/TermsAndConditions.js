@@ -5,10 +5,14 @@ import {Label, Title} from '../components';
 import {scale} from '../utils';
 import {temars1, temars2} from '../utils/MockData';
 
-const TermsAndConditions = () => {
+const TermsAndConditions = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
+      <Header
+        onPressMenu={() => {
+          navigation.goBack();
+        }}
+      />
       <Title title="Terms And Conditions" />
       <Label title="Welcome to AgMart" style={styles.subTitle} />
       <Label title={temars1} style={styles.bodytxt} />

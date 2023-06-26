@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Share} from 'react-native';
 import React from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -11,12 +11,32 @@ const PostBottom = props => {
     onLikePress,
     onViewPress,
     onMessagePress,
-    onSharePress,
+    // onSharePress,
     oncommentPress,
     view_count,
     like_count,
   } = props;
-
+  const onSharePress = async () => {
+    try {
+      const result = await Share.share({
+        title: 'App link',
+        message:
+          'Please install this app and stay safe , AppLink :https://play.google.com',
+        url: 'https://play.google.com',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.btn} onPress={onViewPress}>

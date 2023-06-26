@@ -95,10 +95,14 @@ const HomeScreen = ({navigation}) => {
         <PostSection
           postImages={item?.images}
           proicePic={require('../../assets/Images/postImages/profileImage.png')}
-          name={item.username}
-          description={
-            'Srinivas rao from Manvi cultivating Supreme varietyChilli in 4 ac. Expected to harvest 20 Quintalson/after 29-01-23'
-          }
+          name={item?.username}
+          description={` ${item?.distance}km to ${
+            item?.locationName === null ? '' : item?.locationName
+          } cultivating ${item?.variety} ${item?.cropName} in ${
+            item?.area
+          } acres. Expected to Harvest ${item?.volume} Tons" on/after ${
+            item.harvestStartDate
+          }.`}
           view_count={'221'}
           like_count={'167'}
           oncommentPress={() => initiateWhatsApp(item.mobileNumber)}

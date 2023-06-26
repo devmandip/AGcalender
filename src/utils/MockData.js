@@ -3,14 +3,14 @@ const optionsData = [
     id: 1,
     title: 'Your Corps',
   },
-  {
-    id: 2,
-    title: 'Your Chat',
-  },
-  {
-    id: 3,
-    title: 'Your Activity',
-  },
+  // {
+  //   id: 2,
+  //   title: 'Your Chat',
+  // },
+  // {
+  //   id: 3,
+  //   title: 'Your Activity',
+  // },
 ];
 
 const chatData = [
