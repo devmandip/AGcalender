@@ -16,6 +16,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/Fontisto';
 import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {images, moderatedScale, scale, theme} from '../utils';
 import {Label, Title} from '../components';
 import {chatData, cropData, optionsData} from '../utils/MockData';
@@ -184,7 +185,9 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.profileHeader} />
+      <View>
+        <Image source={images.cover} style={styles.profileHeader} />
+      </View>
 
       <View style={styles.imageContainer}>
         <UserAvatar
@@ -203,10 +206,10 @@ const Profile = () => {
         /> */}
       </View>
 
-      <Icon
-        name="more-vertical"
+      <AntDesign
+        name="logout"
         color={theme.colors.black}
-        size={scale(20)}
+        size={scale(22)}
         style={styles.menu}
         onPress={async () => {
           navigation.replace('authStack');
@@ -495,8 +498,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileHeader: {
-    backgroundColor: theme.colors.gray,
-    height: '15%',
+    // backgroundColor: theme.colors.gray,
+    height: scale(100),
+    width: '100%',
+    resizeMode: 'cover',
   },
   imageContainer: {
     // borderWidth: scale(1),
@@ -519,7 +524,8 @@ const styles = StyleSheet.create({
   },
   menu: {
     alignSelf: 'flex-end',
-    paddingTop: scale(5),
+    paddingRight: scale(10),
+    paddingTop: scale(10),
   },
   nameContainer: {
     flexDirection: 'row',

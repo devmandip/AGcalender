@@ -74,6 +74,7 @@ export const getCropData = (id = '') => {
         .catch(error => {});
     } catch (error) {
       console.log(error);
+      getCropData();
     }
   };
 };

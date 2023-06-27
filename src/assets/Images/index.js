@@ -10,6 +10,7 @@ const images = {
   map: require('./map.png'),
   ruppe: require('./rupee.png'),
   Marker: require('./Marker.png'),
+  cover: require('./cover.jpg'),
 };
 
 export default images;

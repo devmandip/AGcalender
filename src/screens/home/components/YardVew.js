@@ -25,7 +25,6 @@ import {
   getCropData,
 } from '../../../redux/Actions/UserActions';
 import {DrawerModal, Loader} from '../../../components';
-import {getCropData} from '../../../redux/Actions/UserActions';
 
 const Yard_list = props => {
   const {date, landMark, km, state, product, weight, Rs, up, down} = props;
@@ -66,14 +65,22 @@ const Yard_list = props => {
           /> */}
           <Text style={{color: 'red', fontSize: scale(10)}}>
             {'Min '}
-            <Text style={[styles.yard_txt, {textAlign: 'center', flex: 1}]}>
+            <Text
+              style={[
+                styles.yard_txt,
+                {textAlign: 'center', fontSize: scale(12), fontWeight: '600'},
+              ]}>
               - {down}
             </Text>
           </Text>
 
           <Text style={{color: '#56AB2F', fontSize: scale(10)}}>
             {'Max '}
-            <Text style={[styles.yard_txt, {textAlign: 'center', flex: 1}]}>
+            <Text
+              style={[
+                styles.yard_txt,
+                {textAlign: 'center', fontSize: scale(12), fontWeight: '600'},
+              ]}>
               - {up}
             </Text>
           </Text>
@@ -114,7 +121,9 @@ const YardVew = () => {
   const [yardData, setYardData] = useState([]);
   const [emptyyardData, setEmptyYardData] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  useEffect(() => {
+    dispatch(getCropData());
+  }, []);
   useEffect(() => {
     (async () => {
       dispatch(getCropData());
@@ -125,9 +134,7 @@ const YardVew = () => {
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
-  useEffect(() => {
-    dispatch(getCropData());
-  }, []);
+
   const [tempCropList, setTempCropList] = useState(userReducer?.cropsList);
   const [search, setSearch] = useState('');
   const [yardFilter, setYardFilter] = useState(false);
@@ -138,6 +145,7 @@ const YardVew = () => {
   const [loadmore, setLoadmore] = useState(false);
   const [sortBy, setSortBy] = useState('');
   const [drawerModal, setDrawerModel] = useState(false);
+  const [at, setAT] = useState(0);
   const [load, setLoad] = useState(false);
   const requestLocationPermission = async () => {
     try {
@@ -257,7 +265,6 @@ const YardVew = () => {
       setLoad(false);
     }
   };
-
   const Yard_header = props => {
     return (
       <View
@@ -271,6 +278,7 @@ const YardVew = () => {
           onPress={() => {
             setSortBy('distance');
             setYardFilter(!yardFilter);
+            setAT(1);
           }}
           style={[
             styles.headerView,
@@ -279,8 +287,8 @@ const YardVew = () => {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-              borderLeftWidth: 1,
-              borderTopWidth: 1,
+              borderWidth: 1,
+              borderColor: at === 1 ? theme.colors.green : 'lightgray',
             },
           ]}>
           <Image source={images.map} style={styles.icon} />
@@ -291,14 +299,15 @@ const YardVew = () => {
           onPress={() => {
             setSortBy('arrivals');
             setArrivalQFilter(!arrivalQFilter);
+            setAT(2);
           }}
           style={[
             styles.headerView,
             ,
             {
               flexDirection: 'row',
-              borderLeftWidth: 1,
-              borderTopWidth: 1,
+              borderWidth: 1,
+              borderColor: at === 2 ? theme.colors.green : 'lightgray',
             },
           ]}>
           <Image source={images.bullock} style={styles.icon} />
@@ -312,15 +321,15 @@ const YardVew = () => {
           onPress={() => {
             setSortBy('modalPrice');
             setModaPFilter(!modaPFilter);
+            setAT(3);
           }}
           style={[
             styles.headerView,
             ,
             {
               flexDirection: 'row',
-              borderLeftWidth: 1,
-              borderTopWidth: 1,
-              borderRightWidth: 1,
+              borderWidth: 1,
+              borderColor: at === 3 ? theme.colors.green : 'lightgray',
             },
           ]}>
           <Image source={images.ruppe} style={styles.icon} />

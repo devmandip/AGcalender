@@ -89,6 +89,11 @@ const HomeScreen = ({navigation}) => {
   };
 
   const renderItem = ({item}) => {
+    // console.log('itemitemitemitem >>> ', item);
+    const firstLine = `(${item?.distance}km to ${
+      item?.nearestMarket === null ? '' : item?.nearestMarket
+    })`;
+    console.log(' item?.nearestMarket>> .,', firstLine);
     return (
       <Pressable
         onPress={() => {
@@ -98,8 +103,8 @@ const HomeScreen = ({navigation}) => {
           postImages={item?.images}
           proicePic={require('../../assets/Images/postImages/profileImage.png')}
           name={item?.username}
-          description={` ${item?.distance}km to ${
-            item?.locationName === null ? '' : item?.locationName
+          description={` ${
+            item?.nearestMarket == null ? '' : firstLine
           } cultivating ${item?.variety} ${item?.cropName} in ${
             item?.area
           } acres. Expected to Harvest ${item?.volume} Tons" on/after ${

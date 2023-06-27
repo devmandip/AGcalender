@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Pressable,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
@@ -18,6 +19,7 @@ import MapModal from '../../../components/appModel/MapModel';
 import {useSelector} from 'react-redux';
 import {getServiceCall} from '../../../api/Webservice';
 import {ApiList} from '../../../api/ApiList';
+import {color} from 'react-native-reanimated';
 
 const CalenderHeader = props => {
   const {scrollPosition, cropName} = props;
@@ -66,7 +68,7 @@ const CalenderHeader = props => {
 
   useEffect(() => {
     apiCall();
-  }, [dateSelected]);
+  }, [dateSelected, cropName]);
 
   const apiCall = async () => {
     try {
@@ -82,7 +84,6 @@ const CalenderHeader = props => {
       };
       getServiceCall(ApiList.LISITNG_CALENDER, params)
         .then(async responseJson => {
-          console.log('responseJson >>>> ', responseJson);
           if (responseJson?.data != '') {
             setDateData(responseJson?.data?.data[0]?.cropListingsByDate);
           }
@@ -207,7 +208,18 @@ const CalenderHeader = props => {
                       </Text>
                     </ProgressCircle>
                   ) : (
-                    <Text style={{fontSize: 18, textAlign: 'center'}}>
+                    <Text
+                      style={{
+                        fontSize: scale(14),
+                        textAlign: 'center',
+                        backgroundColor:
+                          dateSelected == date?.dateString
+                            ? theme.colors.gray
+                            : 'transprent',
+                        paddingHorizontal: scale(6),
+                        paddingVertical: scale(3),
+                        borderRadius: scale(30),
+                      }}>
                       {date.day}
                     </Text>
                   )}

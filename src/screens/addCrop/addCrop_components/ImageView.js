@@ -5,6 +5,9 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  PermissionsAndroid,
+  Platform,
+  Share,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Header from './Header';
@@ -13,11 +16,13 @@ import {scale, theme} from '../../../utils';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const ImageView = ({route}) => {
   const {imgURI, Time, videoURL, item} = route.params;
   const [locationName, setLocationName] = useState('');
-
+  const [imgPath, setImgPath] = useState(item?.images[0]?.imagePathSmall);
+  const [selIndex, setIndex] = useState(0);
   var date = new Date().getDate();
   var month = new Date().getMonth() + 1;
   var year = new Date().getFullYear();
@@ -44,6 +49,60 @@ const ImageView = ({route}) => {
 
   console.log('POST  ITEM', item);
 
+  const downloadImage = () => {
+    let date = new Date();
+    let image_URL = imgPath;
+    // let ext = getExtention(image_URL);
+    // ext = '.' + ext[0];
+    const {config, fs} = RNFetchBlob;
+    let PictureDir = fs.dirs.DocumentDir;
+    let options = {
+      fileCache: true,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        path:
+          PictureDir +
+          '/image_' +
+          Math.floor(date.getTime() + date.getSeconds() / 2) +
+          '.png',
+        description: 'Image',
+      },
+    };
+    config(options)
+      .fetch('GET', image_URL)
+      .then(res => {
+        console.log('res -> ', JSON.stringify(res));
+        alert('Image Downloaded Successfully.');
+      });
+  };
+
+  const getExtention = filename => {
+    // To get the file extension
+    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
+  };
+
+  const onSharePress = async () => {
+    try {
+      const result = await Share.share({
+        title: 'App link',
+        message:
+          'Please install this app and stay safe , AppLink :https://play.google.com',
+        url: 'https://play.google.com',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   const Details_section = () => {
     return (
       <View style={styles.details_container}>
@@ -81,7 +140,7 @@ const ImageView = ({route}) => {
             <Text style={styles.btn_txt}>Like</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.btn} onPress={() => {}}>
+          <TouchableOpacity style={styles.btn} onPress={onSharePress}>
             <FontAwesome
               name="share-square-o"
               size={25}
@@ -90,7 +149,15 @@ const ImageView = ({route}) => {
             <Text style={styles.btn_txt}>Share</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.btn} onPress={() => {}}>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => {
+              if (imgPath === '') {
+                alert('pleae select image which you want download');
+              } else {
+                downloadImage();
+              }
+            }}>
             <AntDesign name="download" size={25} color={theme.colors.gray2} />
             <Text style={styles.btn_txt}>Download</Text>
           </TouchableOpacity>
@@ -101,7 +168,7 @@ const ImageView = ({route}) => {
 
   return (
     <View style={styles.container}>
-      <Header title="Add Corp Photos/Videos" />
+      <Header title=" Corp Photos/Videos" />
 
       <View style={styles.view1}>
         <View style={{flexDirection: 'row'}}>
@@ -116,12 +183,25 @@ const ImageView = ({route}) => {
           horizontal
           bounces={false}
           showsHorizontalScrollIndicator={false}>
-          {item?.images.map(obj => {
+          {item?.images.map((obj, index) => {
+            console.log('objz....', obj);
             return (
-              <Image
-                source={{uri: obj?.imagePathSmall}}
-                style={styles.ImageView}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  setImgPath(obj?.imagePathSmall);
+                  setIndex(index);
+                }}>
+                <Image
+                  source={{uri: obj?.imagePathSmall}}
+                  style={[
+                    styles.ImageView,
+                    {
+                      borderWidth: selIndex === index ? 1 : 0,
+                      borderColor: theme.colors.green,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
             );
           })}
         </ScrollView>

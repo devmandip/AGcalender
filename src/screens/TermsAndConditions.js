@@ -1,11 +1,33 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, Share, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import Icon from 'react-native-vector-icons/Feather';
 import {Header} from './home/components';
 import {Label, Title} from '../components';
 import {scale} from '../utils';
 import {temars1, temars2} from '../utils/MockData';
 
 const TermsAndConditions = ({navigation}) => {
+  const onSharePress = async () => {
+    try {
+      const result = await Share.share({
+        title: 'App link',
+        message:
+          'Please install this app and stay safe , AppLink :https://play.google.com',
+        url: 'https://play.google.com',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -13,10 +35,20 @@ const TermsAndConditions = ({navigation}) => {
           navigation.goBack();
         }}
       />
-      <Title title="Terms And Conditions" />
-      <Label title="Welcome to AgMart" style={styles.subTitle} />
-      <Label title={temars1} style={styles.bodytxt} />
-      <Label title={temars2} style={styles.bodytxt} />
+      <View style={{flex: 0.8}}>
+        <Title title="Terms And Conditions" />
+        <Label title="Welcome to AgMart" style={styles.subTitle} />
+        <Label title={temars1} style={styles.bodytxt} />
+        <Label title={temars2} style={styles.bodytxt} />
+      </View>
+      <Icon
+        name="share-2"
+        size={scale(30)}
+        style={{alignSelf: 'center'}}
+        onPress={() => {
+          onSharePress();
+        }}
+      />
     </SafeAreaView>
   );
 };
