@@ -28,7 +28,7 @@ const Story = props => {
             borderRadius: scale(35),
           }}>
           <Image
-            source={{uri: item?.imageUrlSmall}}
+            source={{uri: item?.imageUrlOrig}}
             style={styles.renderItem_img}
           />
         </TouchableOpacity>
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     width: scale(60),
     // borderWidth: 1,
     borderRadius: 50,
+    resizeMode: 'contain',
     // borderColor: "#56AB2F"
   },
   renderItem_txt: {

@@ -25,6 +25,7 @@ import {
   getCropData,
 } from '../../../redux/Actions/UserActions';
 import {DrawerModal, Loader} from '../../../components';
+import {getCropData} from '../../../redux/Actions/UserActions';
 
 const Yard_list = props => {
   const {date, landMark, km, state, product, weight, Rs, up, down} = props;
@@ -64,14 +65,14 @@ const Yard_list = props => {
             color="red"
           /> */}
           <Text style={{color: 'red', fontSize: scale(10)}}>
-            {'Down '}
+            {'Min '}
             <Text style={[styles.yard_txt, {textAlign: 'center', flex: 1}]}>
               - {down}
             </Text>
           </Text>
 
           <Text style={{color: '#56AB2F', fontSize: scale(10)}}>
-            {'Up '}
+            {'Max '}
             <Text style={[styles.yard_txt, {textAlign: 'center', flex: 1}]}>
               - {up}
             </Text>
@@ -124,7 +125,9 @@ const YardVew = () => {
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
-
+  useEffect(() => {
+    dispatch(getCropData());
+  }, []);
   const [tempCropList, setTempCropList] = useState(userReducer?.cropsList);
   const [search, setSearch] = useState('');
   const [yardFilter, setYardFilter] = useState(false);
@@ -375,8 +378,9 @@ const YardVew = () => {
   );
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor: theme.colors.white}}>
       <Header
+        placeholder={'APMC Mandi Rates'}
         onPressMenu={() => {
           setDrawerModel(true);
         }}
@@ -384,7 +388,8 @@ const YardVew = () => {
         onChangeText={text => {
           setSearch(text);
         }}
-        hideFliiter={true}
+        basket
+        // hideFliiter={true}
       />
       <DrawerModal
         isVisible={drawerModal}

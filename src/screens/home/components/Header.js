@@ -15,7 +15,11 @@ const Header = props => {
         <Image source={require(logoImg)} style={styles.logoImg_style} />
       </TouchableOpacity>
 
-      <SearchBar onChangeText={props?.onChangeText} value={props?.value} />
+      <SearchBar
+        placeholder={props?.placeholder}
+        onChangeText={props?.onChangeText}
+        value={props?.value}
+      />
       <TouchableOpacity onPress={props.onRightPress}>
         {basket && (
           <Fontisto

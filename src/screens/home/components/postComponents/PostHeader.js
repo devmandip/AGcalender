@@ -1,13 +1,19 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
-
+import UserAvatar from 'react-native-user-avatar';
 const PostHeader = props => {
   const {proicePic, name, description} = props;
 
   return (
     <View style={styles.container}>
       <View style={styles.first_section}>
-        <Image source={proicePic} style={styles.proileImg_style} />
+        <UserAvatar
+          size={60}
+          name={name}
+          // src="https://dummyimage.com/100x100/000/fff"
+          style={styles.proileImg_style}
+        />
+        {/* <Image source={proicePic} style={styles.proileImg_style} /> */}
       </View>
 
       <View style={styles.second_Section}>
