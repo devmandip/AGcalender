@@ -2,11 +2,13 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {scale, theme} from '../utils';
 
-const Toast = (props) => {
+const Toast = props => {
   return (
     <>
       <View style={styles.container}>
-        <Text style={{color: 'black'}}>{props.tagName}</Text>
+        <Text style={{color: 'black', fontSize: scale(10)}}>
+          {props.tagName}
+        </Text>
       </View>
       <View
         style={{

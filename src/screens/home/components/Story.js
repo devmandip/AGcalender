@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
+import UserAvatar from 'react-native-user-avatar';
 import React, {useState} from 'react';
 import {Veg} from '../../../dummyData/Veg';
 import {scale, theme} from '../../../utils';
@@ -27,13 +28,19 @@ const Story = props => {
             padding: scale(3),
             borderRadius: scale(35),
           }}>
-          <Image
-            source={{uri: item?.imageUrlOrig}}
+          <UserAvatar
+            size={60}
+            name={item?.displayName}
+            src={item?.imageUrlOrig}
             style={styles.renderItem_img}
           />
+          {/* <Image
+            source={{uri: item?.imageUrlOrig}}
+            style={styles.renderItem_img}
+          /> */}
         </TouchableOpacity>
         <Label
-          title={item.displayName}
+          title={item?.displayName}
           style={{width: '75%', textAlign: 'center'}}
         />
       </View>

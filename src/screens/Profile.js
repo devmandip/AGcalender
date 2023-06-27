@@ -314,6 +314,7 @@ const Profile = () => {
                     </Text>
                     <Label title={'Area : ' + item?.area} />
                   </View>
+                  {console.log('itemitemitemitemitemitem', item)}
                   <Label
                     title={'Harvesting Start From : ' + item?.harvestStartDate}
                     style={styles.date}
@@ -372,7 +373,7 @@ const Profile = () => {
                         color={theme.colors.gray2}
                         name="stopwatch"
                       />
-                      <Label title="10/01/2023" style={styles.lbl} />
+                      <Label title={item?.harvestEndDate} style={styles.lbl} />
                     </View>
                     <View style={styles.view}>
                       <Icon
@@ -380,7 +381,7 @@ const Profile = () => {
                         color={theme.colors.gray2}
                         name="eye"
                       />
-                      <Label title="10/01/2023" style={styles.lbl} />
+                      <Label title="Views" style={styles.lbl} />
                     </View>
                     <View style={styles.view}>
                       <Icon
@@ -388,16 +389,16 @@ const Profile = () => {
                         color={theme.colors.gray2}
                         name="heart"
                       />
-                      <Label title="500" style={styles.lbl} />
+                      <Label title="Likes" style={styles.lbl} />
                     </View>
-                    <View style={styles.view}>
+                    {/* <View style={styles.view}>
                       <Icon
                         size={scale(20)}
                         color={theme.colors.gray2}
                         name="message-square"
                       />
                       <Label title="Comments" style={styles.lbl} />
-                    </View>
+                    </View> */}
                     <Pressable
                       onPress={() => {
                         global.editCropData = item;

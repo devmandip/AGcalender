@@ -24,11 +24,10 @@ import {
   getCategoriesData,
   getCropData,
 } from '../../../redux/Actions/UserActions';
-import {DrawerModal, Loader} from '../../../components';
+import {DrawerModal, Label, Loader, SelectCropModel} from '../../../components';
 
 const Yard_list = props => {
-  const {date, landMark, km, state, product, weight, Rs, up, down} = props;
-
+  const {date, landMark, km, state, product, weight, item, up, down} = props;
   return (
     <View
       style={{
@@ -47,6 +46,10 @@ const Yard_list = props => {
       </View>
       <View
         style={[styles.headerView, {borderLeftWidth: 1, borderBottomWidth: 1}]}>
+        <Label
+          title={item?.cropName}
+          style={{color: theme.colors.gray2, fontSize: scale(9)}}
+        />
         <Text style={styles.yard_txt}>{product}</Text>
         <Text style={styles.yard_txt}> {weight} </Text>
       </View>
@@ -55,7 +58,9 @@ const Yard_list = props => {
           styles.headerView,
           {borderLeftWidth: 1, borderBottomWidth: 1, borderRightWidth: 1},
         ]}>
-        <Text style={styles.yard_txt}>Rs.{up}/Q</Text>
+        <Text style={[styles.yard_txt, {fontWeight: '600'}]}>
+          Rs.{item?.modal_price}/Q
+        </Text>
         <View style={{alignItems: 'center'}}>
           {/* <AntDesign
             name="arrowdown"
@@ -68,7 +73,7 @@ const Yard_list = props => {
             <Text
               style={[
                 styles.yard_txt,
-                {textAlign: 'center', fontSize: scale(12), fontWeight: '600'},
+                {textAlign: 'center', fontSize: scale(12)},
               ]}>
               - {down}
             </Text>
@@ -79,7 +84,7 @@ const Yard_list = props => {
             <Text
               style={[
                 styles.yard_txt,
-                {textAlign: 'center', fontSize: scale(12), fontWeight: '600'},
+                {textAlign: 'center', fontSize: scale(12)},
               ]}>
               - {up}
             </Text>
@@ -97,11 +102,12 @@ const Yard_list = props => {
 };
 
 const renderItem = ({item}) => {
+  // console.log('itemitemitem>> ', item);
   return (
     <View>
       <Yard_list
         date={item.arrivalDate}
-        landMark={item?.districtName}
+        landMark={item?.marketName}
         state={item?.state}
         km={item.distance}
         product={item.variety}
@@ -109,6 +115,7 @@ const renderItem = ({item}) => {
         Rs={item?.price_unit}
         up={item.min_price}
         down={item.max_price}
+        item={item}
       />
     </View>
   );
@@ -146,6 +153,7 @@ const YardVew = () => {
   const [sortBy, setSortBy] = useState('');
   const [drawerModal, setDrawerModel] = useState(false);
   const [at, setAT] = useState(0);
+  const [isFocus, setIsFocus] = useState(false);
   const [load, setLoad] = useState(false);
   const requestLocationPermission = async () => {
     try {
@@ -398,6 +406,9 @@ const YardVew = () => {
           setSearch(text);
         }}
         basket
+        onRightPress={() => {
+          setIsFocus(true);
+        }}
         // hideFliiter={true}
       />
       <DrawerModal
@@ -452,6 +463,16 @@ const YardVew = () => {
         </View>
       </View>
       <Loader loading={loading} />
+      <SelectCropModel
+        category={true}
+        selectedItem={item => {
+          // setSelectedCate(item);
+          dispatch(getCropData(item?.id));
+        }}
+        listData={userReducer?.categoryList}
+        isVisible={isFocus}
+        close={() => setIsFocus(false)}
+      />
     </SafeAreaView>
   );
 };
@@ -481,7 +502,7 @@ const styles = StyleSheet.create({
   },
   headerView: {
     width: scale(108),
-    height: scale(65),
+    // height: scale(65),
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: 'lightgray',

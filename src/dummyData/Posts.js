@@ -22,8 +22,8 @@ export default Posts = [
         type: 'image',
       },
     ],
-    likeCount: 167,
-    ViewCount: 221,
+    likeCount: '167',
+    ViewCount: 'Views',
     totalWidth: 500,
     percantahe: '40%',
     comments: [

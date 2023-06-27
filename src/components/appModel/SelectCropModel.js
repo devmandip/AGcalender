@@ -16,7 +16,7 @@ import {useNavigation} from '@react-navigation/core';
 import {SearchBar} from '../../screens/home/components';
 import {Label, Title} from '../Label';
 
-const DrawerModal = props => {
+const SelectCropModel = props => {
   const {isVisible, close, category} = props;
   const [cropsList, setCropList] = useState([]);
   const [searchtxt, setSearch] = useState('');
@@ -120,7 +120,7 @@ const DrawerModal = props => {
   );
 };
 
-export default DrawerModal;
+export default SelectCropModel;
 
 const styles = StyleSheet.create({
   modalBackground: {

@@ -65,7 +65,7 @@ const ImageView = ({route}) => {
           PictureDir +
           '/image_' +
           Math.floor(date.getTime() + date.getSeconds() / 2) +
-          '.png',
+          'png',
         description: 'Image',
       },
     };

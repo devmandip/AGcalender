@@ -59,7 +59,7 @@ const CalenderHeader = props => {
     const tempData = [...dateData];
     tempData.map(obj => {
       if (obj.harvestStartDate == date?.dateString) {
-        setShowTag(obj?.percentage);
+        setShowTag(obj?.volume + ' ' + obj?.unit);
         setShowPopup(true);
       }
     });
@@ -144,25 +144,16 @@ const CalenderHeader = props => {
         /> */}
         <View style={styles.calCon}>
           <View style={styles.monthcon}>
-            <Label
-              title={moment(dateSelected).format('MMMM')}
-              style={styles.month}
-            />
+            <Label title={moment().format('MMMM')} style={styles.month} />
           </View>
 
-          <Label
-            title={moment(dateSelected).format('DD')}
-            style={styles.date}
-          />
-          <Label
-            title={moment(dateSelected).format('dddd')}
-            style={styles.daytxt}
-          />
+          <Label title={moment().format('DD')} style={styles.date} />
+          <Label title={moment().format('dddd')} style={styles.daytxt} />
         </View>
       </View>
       {dateViewShow && (
         <Calendar
-          monthFormat={'MMM, yyyy'}
+          monthFormat={'MMMM, yyyy'}
           hideArrows={false}
           onDayPress={day => {}}
           onMonthChange={month => {
