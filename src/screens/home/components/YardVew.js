@@ -128,9 +128,10 @@ const YardVew = () => {
   const [yardData, setYardData] = useState([]);
   const [emptyyardData, setEmptyYardData] = useState(null);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    dispatch(getCropData());
-  }, []);
+
+  const dispatch = useDispatch();
+  const userReducer = useSelector(state => state.UserReducer);
+
   useEffect(() => {
     (async () => {
       dispatch(getCropData());
@@ -138,9 +139,6 @@ const YardVew = () => {
       await requestLocationPermission();
     })();
   }, []);
-
-  const dispatch = useDispatch();
-  const userReducer = useSelector(state => state.UserReducer);
 
   const [tempCropList, setTempCropList] = useState(userReducer?.cropsList);
   const [search, setSearch] = useState('');

@@ -49,9 +49,9 @@ const Profile = () => {
   useEffect(() => {
     fetch(
       'https://maps.googleapis.com/maps/api/geocode/json?address=' +
-        loginUserData?.userWiseDetails.latitude +
+        global.currentLocation?.latitude +
         ',' +
-        loginUserData?.userWiseDetails.longitude +
+        global.currentLocation?.longitude +
         '&key=' +
         'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
     )
@@ -212,16 +212,26 @@ const Profile = () => {
         size={scale(22)}
         style={styles.menu}
         onPress={async () => {
-          navigation.replace('authStack');
-          await AsyncStorage.removeItem('token');
-          dispatch(isLogin(false));
-          dispatch(userData(null));
+          Alert.alert('', 'Are you sure you want to logout?', [
+            {
+              text: 'No',
+            },
+            {
+              text: 'Yes',
+              onPress: async () => {
+                navigation.replace('authStack');
+                await AsyncStorage.removeItem('token');
+                dispatch(isLogin(false));
+                dispatch(userData(null));
+              },
+            },
+          ]);
         }}
       />
 
       <View style={styles.bodyContainer}>
         <View style={styles.nameContainer}>
-          <View style={styles.row}>
+          <View style={[styles.row, {flex: 0.6}]}>
             <Title
               title={`${loginUserData?.userWiseDetails?.username}, `}
               style={styles.title}
@@ -232,7 +242,7 @@ const Profile = () => {
             />
           </View>
 
-          <View style={styles.row}>
+          <View style={[styles.row, {flex: 0.4, justifyContent: 'flex-end'}]}>
             <Title title={userLocation} style={styles.title} />
             <Image source={images.pin} style={styles.pin} />
           </View>

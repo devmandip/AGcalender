@@ -50,6 +50,7 @@ const Story = props => {
     <View style={styles.container}>
       <FlatList
         data={props.listData}
+        extraData={props.listData}
         renderItem={renderItem}
         horizontal={true}
         showsHorizontalScrollIndicator={false}

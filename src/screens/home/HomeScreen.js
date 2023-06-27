@@ -159,13 +159,14 @@ const HomeScreen = ({navigation}) => {
     let yOffset = event.nativeEvent.contentOffset.y / 1;
     setScrollPosition(yOffset);
   };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: theme.colors.white}}>
       <SelectCropModel
         category={true}
-        selectedItem={item => {
+        selectedItem={async item => {
+          await dispatch(getCropData(item?.id));
           setSelectedCate(item);
-          dispatch(getCropData(item?.id));
         }}
         listData={userReducer?.categoryList}
         isVisible={isFocus}

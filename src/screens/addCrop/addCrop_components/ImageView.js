@@ -5,13 +5,11 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  PermissionsAndroid,
-  Platform,
   Share,
+  Linking,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Header from './Header';
-import Video from 'react-native-video';
 import {scale, theme} from '../../../utils';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -46,41 +44,6 @@ const ImageView = ({route}) => {
         setLocationName(place);
       });
   }, []);
-
-  console.log('POST  ITEM', item);
-
-  const downloadImage = () => {
-    let date = new Date();
-    let image_URL = imgPath;
-    // let ext = getExtention(image_URL);
-    // ext = '.' + ext[0];
-    const {config, fs} = RNFetchBlob;
-    let PictureDir = fs.dirs.DocumentDir;
-    let options = {
-      fileCache: true,
-      addAndroidDownloads: {
-        useDownloadManager: true,
-        notification: true,
-        path:
-          PictureDir +
-          '/image_' +
-          Math.floor(date.getTime() + date.getSeconds() / 2) +
-          'png',
-        description: 'Image',
-      },
-    };
-    config(options)
-      .fetch('GET', image_URL)
-      .then(res => {
-        console.log('res -> ', JSON.stringify(res));
-        alert('Image Downloaded Successfully.');
-      });
-  };
-
-  const getExtention = filename => {
-    // To get the file extension
-    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
-  };
 
   const onSharePress = async () => {
     try {
@@ -151,11 +114,11 @@ const ImageView = ({route}) => {
 
           <TouchableOpacity
             style={styles.btn}
-            onPress={() => {
+            onPress={async () => {
               if (imgPath === '') {
                 alert('pleae select image which you want download');
               } else {
-                downloadImage();
+                Linking.openURL(imgPath);
               }
             }}>
             <AntDesign name="download" size={25} color={theme.colors.gray2} />

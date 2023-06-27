@@ -62,7 +62,10 @@ export const getCategoriesData = () => {
 export const getCropData = (id = '') => {
   return async dispatch => {
     try {
-      getServiceCall(ApiList.CROPS + '?categoryId=' + id, '')
+      getServiceCall(
+        id == '' ? ApiList.CROPS : ApiList.CROPS + '?categoryId=' + id,
+        '',
+      )
         .then(async responseJson => {
           if (responseJson?.data != '') {
             dispatch({
