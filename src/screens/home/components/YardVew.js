@@ -128,6 +128,7 @@ const YardVew = () => {
   const [yardData, setYardData] = useState([]);
   const [emptyyardData, setEmptyYardData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [firstTime, setFirstTime] = useState(true);
 
   const dispatch = useDispatch();
   const userReducer = useSelector(state => state.UserReducer);
@@ -135,6 +136,16 @@ const YardVew = () => {
   useEffect(() => {
     (async () => {
       dispatch(getCropData());
+      if (firstTime) {
+        getServiceCall(ApiList.CROPS, '')
+          .then(async responseJson => {
+            if (responseJson?.data != '') {
+              setTempCropList(responseJson?.data?.data);
+              setFirstTime(false);
+            }
+          })
+          .catch(error => {});
+      }
       dispatch(getCategoriesData());
       await requestLocationPermission();
     })();
@@ -207,6 +218,7 @@ const YardVew = () => {
 
   useEffect(() => {
     setTimeout(() => {
+      if (sortBy == '') return;
       getYardDetailsByID('refresh');
     }, 1000);
   }, [sortBy, modaPFilter, yardFilter, arrivalQFilter]);

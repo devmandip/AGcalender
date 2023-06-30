@@ -31,7 +31,7 @@ const Story = props => {
           <UserAvatar
             size={60}
             name={item?.displayName}
-            src={item?.imageUrlOrig}
+            src={item?.imageUrlOrig ?? null}
             style={styles.renderItem_img}
           />
           {/* <Image
