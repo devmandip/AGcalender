@@ -9,6 +9,7 @@ import {
   Pressable,
   ActivityIndicator,
   PermissionsAndroid,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {images, scale, theme} from '../../../utils';
@@ -28,7 +29,7 @@ import {DrawerModal, Label, Loader, SelectCropModel} from '../../../components';
 
 const Yard_list = props => {
   const {date, landMark, km, state, product, weight, item, up, down} = props;
-  console.log('weight>>> ', weight);  
+  console.log('weight>>> ', weight);
   return (
     <View
       style={{
@@ -39,9 +40,23 @@ const Yard_list = props => {
           styles.headerView,
           {alignItems: 'center', borderLeftWidth: 1, borderBottomWidth: 1},
         ]}>
-        <Text style={styles.yard_txt}>{moment(date).format('DD-MM-YYYY')}</Text>
+        <Text
+          style={[
+            styles.yard_txt,
+            {
+              fontSize: 11,
+            },
+          ]}>
+          {moment(date).format('DD-MM-YYYY')}
+        </Text>
         <Text style={[styles.header_txt, {color: '#56AB2F'}]}>{landMark}</Text>
-        <Text style={styles.yard_txt}>
+        <Text
+          style={[
+            styles.yard_txt,
+            {
+              fontSize: 11,
+            },
+          ]}>
           {km} Km, {state}
         </Text>
       </View>
@@ -404,7 +419,7 @@ const YardVew = () => {
   return (
     <SafeAreaView style={{backgroundColor: theme.colors.white}}>
       <Header
-        placeholder={'APMC Mandi Rates'}
+        placeholder={'APMC Market Rates'}
         onPressMenu={() => {
           setDrawerModel(true);
         }}
@@ -457,6 +472,17 @@ const YardVew = () => {
               contentContainerStyle={{paddingVertical: scale(10)}}
               data={yardData}
               renderItem={renderItem}
+              refreshControl={
+                <RefreshControl
+                  refreshing={false}
+                  onRefresh={() => {
+                    setLoading(() => true, getYardDetailsByID('refresh'));
+                  }}
+                  tintColor={theme.colors.green}
+                  progressBackgroundColor={theme.colors.white}
+                  colors={[theme.colors.green]}
+                />
+              }
               ListFooterComponent={LoadmoreSpinner}
               onEndReachedThreshold={0.05}
               onEndReached={() =>

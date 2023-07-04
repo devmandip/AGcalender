@@ -44,7 +44,12 @@ const Story = props => {
         </TouchableOpacity>
         <Label
           title={item?.displayName}
-          style={{width: '75%', textAlign: 'center'}}
+          style={{
+            fontFamily: theme.fonts.InterMedium,
+            color: selectCat === index ? 'black' : 'gray',
+            width: '75%',
+            textAlign: 'center',
+          }}
         />
       </View>
     );

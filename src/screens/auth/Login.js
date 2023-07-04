@@ -91,6 +91,9 @@ const Login = () => {
           setLoad(false);
         })
         .catch(error => {
+          if (error.message.includes('400')) {
+            navigation.navigate('SignUp', {pNumber});
+          }
           setLoad(false);
         });
     }

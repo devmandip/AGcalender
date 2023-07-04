@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Pressable,
   Linking,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useCallback, useState} from 'react';
 import {CalenderView, Header, PostSection, Story} from './components';
@@ -173,6 +174,23 @@ const HomeScreen = ({navigation}) => {
         close={() => setIsFocus(false)}
       />
       <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={() => {
+              setLoading(
+                () => false,
+                callListApi(
+                  global.currentLocation,
+                  moment().format('DD/MM/YYYY'),
+                ),
+              );
+            }}
+            tintColor={theme.colors.green}
+            progressBackgroundColor={theme.colors.white}
+            colors={[theme.colors.green]}
+          />
+        }
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
         // onScroll={event => handleScroll(event)}

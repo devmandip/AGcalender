@@ -21,7 +21,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {ApiList} from '../../api/ApiList';
 import {postServiceCall} from '../../api/Webservice';
 
-const Signup = () => {
+const Signup = ({route}) => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
 
@@ -77,7 +77,7 @@ const Signup = () => {
       tag: 'Others (Specify your profession)',
     },
   ]);
-  const [mobile, setMobile] = useState('');
+  const [mobile, setMobile] = useState(route?.params?.pNumber ?? '');
   const [password, setPassword] = useState('');
 
   const [loader, setLoader] = useState(false);

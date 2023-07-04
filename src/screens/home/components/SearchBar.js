@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     // width: '95%',
     // textAlign: '',
-    fontFamily: theme.fonts.poetic,
     // fontWeight: '',
     fontVariant: 'italic',
   },
