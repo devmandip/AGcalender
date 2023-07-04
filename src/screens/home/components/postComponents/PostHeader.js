@@ -8,7 +8,7 @@ const PostHeader = props => {
     <View style={styles.container}>
       <View style={styles.first_section}>
         <UserAvatar
-          size={60}
+          size={70}
           name={name}
           // src="https://dummyimage.com/100x100/000/fff"
           style={styles.proileImg_style}

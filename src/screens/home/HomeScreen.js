@@ -93,7 +93,7 @@ const HomeScreen = ({navigation}) => {
     const firstLine = `(${item?.distance}km to ${
       item?.nearestMarket === null ? '' : item?.nearestMarket
     })`;
-    console.log(' item?.nearestMarket>> .,', firstLine);
+    console.log(' item?.nearestMarket>> .,', item);
     return (
       <Pressable
         onPress={() => {

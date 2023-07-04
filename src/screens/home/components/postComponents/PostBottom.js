@@ -41,12 +41,12 @@ const PostBottom = props => {
     <View style={styles.container}>
       <TouchableOpacity style={styles.btn} onPress={onViewPress}>
         <AntDesign name="eyeo" size={25} color={theme.colors.gray2} />
-        <Text style={styles.btn_txt}>{'Views'}</Text>
+        <Text style={styles.btn_txt}>{'---'}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.btn} onPress={onLikePress}>
         <AntDesign name="hearto" size={25} color={theme.colors.gray2} />
-        <Text style={styles.btn_txt}>{'Likes'}</Text>
+        <Text style={styles.btn_txt}>{'Like'}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.btn} onPress={oncommentPress}>

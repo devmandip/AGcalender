@@ -9,7 +9,7 @@ import {
 import UserAvatar from 'react-native-user-avatar';
 import React, {useState} from 'react';
 import {Veg} from '../../../dummyData/Veg';
-import {scale, theme} from '../../../utils';
+import {images, scale, theme} from '../../../utils';
 import {Label} from '../../../components';
 
 const Story = props => {
@@ -28,12 +28,15 @@ const Story = props => {
             padding: scale(3),
             borderRadius: scale(35),
           }}>
-          <UserAvatar
-            size={60}
-            name={item?.displayName}
-            src={item?.imageUrlOrig ?? null}
-            style={styles.renderItem_img}
-          />
+          {item?.displayName && (
+            <UserAvatar
+              // bgColors={{backgroundColor: '#FFF'}}
+              size={70}
+              name={item?.displayName}
+              src={item?.imageUrlOrig ?? null}
+              style={styles.renderItem_img}
+            />
+          )}
           {/* <Image
             source={{uri: item?.imageUrlOrig}}
             style={styles.renderItem_img}

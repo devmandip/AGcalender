@@ -42,9 +42,9 @@ const BottomTab = () => {
         tabBarHideOnKeyboard: true,
         headerShown: false,
         // tabBarShowLabel: false,
-        // tabBarActiveTintColor: theme.colors.white,
-        // tabBarInactiveTintColor: '#555',
-        // tabBarActiveBackgroundColor: theme.colors.green,
+        tabBarActiveTintColor: '#383838',
+        tabBarInactiveTintColor: theme.colors.white,
+        tabBarActiveBackgroundColor: theme.colors.green,
         tabBarStyle: {
           height: Platform.OS === 'ios' ? scale(85) : scale(55),
           position: 'absolute',
@@ -62,7 +62,7 @@ const BottomTab = () => {
         },
         tabBarLabelStyle: {
           fontSize: scale(12),
-          color: theme.colors.white,
+          // color: theme.colors.white,
         },
       }}>
       <Tab.Screen
@@ -74,7 +74,7 @@ const BottomTab = () => {
               <FontAwesome
                 name="rupee"
                 size={scale(25)}
-                color={theme.colors.white}
+                color={focused ? '#383838' : theme.colors.white}
               />
             );
           },
@@ -92,7 +92,7 @@ const BottomTab = () => {
               <Icon
                 name="calendar"
                 size={scale(25)}
-                color={theme.colors.white}
+                color={focused ? '#383838' : theme.colors.white}
               />
             );
           },
@@ -109,7 +109,7 @@ const BottomTab = () => {
               <Icon
                 name="add-circle-outline"
                 size={scale(25)}
-                color={theme.colors.white}
+                color={focused ? '#383838' : theme.colors.white}
               />
             );
           },
@@ -125,7 +125,7 @@ const BottomTab = () => {
               <Feather
                 name="user"
                 size={scale(25)}
-                color={theme.colors.white}
+                color={focused ? '#383838' : theme.colors.white}
               />
             );
           },
@@ -142,7 +142,7 @@ const BottomTab = () => {
               <Feather
                 name="share-2"
                 size={scale(25)}
-                color={theme.colors.white}
+                color={focused ? '#383838' : theme.colors.white}
               />
             );
           },

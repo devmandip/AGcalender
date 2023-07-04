@@ -191,7 +191,7 @@ const Profile = () => {
 
       <View style={styles.imageContainer}>
         <UserAvatar
-          size={60}
+          size={70}
           name={loginUserData?.userWiseDetails?.username}
           // src="https://dummyimage.com/100x100/000/fff"
           style={styles.userImage}
@@ -345,6 +345,7 @@ const Profile = () => {
                         </View>
                       ) : (
                         item?.images?.map((img, i) => {
+                          console.log('img >>>> ', img);
                           return (
                             <Image
                               source={{

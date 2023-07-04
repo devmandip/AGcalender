@@ -28,6 +28,7 @@ import {DrawerModal, Label, Loader, SelectCropModel} from '../../../components';
 
 const Yard_list = props => {
   const {date, landMark, km, state, product, weight, item, up, down} = props;
+  console.log('weight>>> ', weight);  
   return (
     <View
       style={{
@@ -36,7 +37,7 @@ const Yard_list = props => {
       <View
         style={[
           styles.headerView,
-          {alignItems: 'flex-start', borderLeftWidth: 1, borderBottomWidth: 1},
+          {alignItems: 'center', borderLeftWidth: 1, borderBottomWidth: 1},
         ]}>
         <Text style={styles.yard_txt}>{moment(date).format('DD-MM-YYYY')}</Text>
         <Text style={[styles.header_txt, {color: '#56AB2F'}]}>{landMark}</Text>
@@ -75,7 +76,7 @@ const Yard_list = props => {
                 styles.yard_txt,
                 {textAlign: 'center', fontSize: scale(12)},
               ]}>
-              - {down}
+              - {up}
             </Text>
           </Text>
 
@@ -86,7 +87,7 @@ const Yard_list = props => {
                 styles.yard_txt,
                 {textAlign: 'center', fontSize: scale(12)},
               ]}>
-              - {up}
+              - {down}
             </Text>
           </Text>
           {/* <AntDesign
@@ -377,7 +378,7 @@ const YardVew = () => {
       }
     }, 500);
     return () => clearTimeout(timeout);
-  }, [search]);
+  }, [search, userReducer?.cropsList]);
 
   const loadmoreHandler = (type = '') => {
     page = page + 1;
@@ -399,10 +400,6 @@ const YardVew = () => {
         />
       </View>
     );
-
-  console.log(
-    page + ' TOTAL PAGE ' + totalCount + '  YARD LENGTH ' + yardData.length,
-  );
 
   return (
     <SafeAreaView style={{backgroundColor: theme.colors.white}}>
@@ -440,7 +437,7 @@ const YardVew = () => {
           height:
             Platform.OS === 'ios'
               ? theme.SCREENHEIGHT * 0.53
-              : theme.SCREENHEIGHT * 0.57,
+              : theme.SCREENHEIGHT * 0.6,
         }}>
         <View style={styles.container}>
           <Yard_header />
