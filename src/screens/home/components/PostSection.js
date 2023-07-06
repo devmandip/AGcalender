@@ -1,19 +1,16 @@
+import {useNavigation} from '@react-navigation/core';
+import React, {useState} from 'react';
 import {
-  StyleSheet,
-  View,
   FlatList,
   Image,
-  TouchableOpacity,
+  StyleSheet,
   Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import React, {useState} from 'react';
-import PostHeader from './postComponents/PostHeader';
-import PostBottom from './postComponents/PostBottom';
-import {useNavigation} from '@react-navigation/core';
-import Video from 'react-native-video';
-import ImageView from 'react-native-image-viewing';
 import {scale, theme} from '../../../utils';
-import {VideoShow} from '../../../components';
+import PostBottom from './postComponents/PostBottom';
+import PostHeader from './postComponents/PostHeader';
 
 const imgArr = [];
 

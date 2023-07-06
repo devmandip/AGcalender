@@ -48,10 +48,10 @@ const ImageView = ({route}) => {
   const onSharePress = async () => {
     try {
       const result = await Share.share({
-        title: 'App link',
-        message:
-          'Please install this app and stay safe , AppLink :https://play.google.com',
-        url: 'https://play.google.com',
+        title: 'Ag Calendar',
+        message: `Amrit kaal me kisan rahe,Samay se aage -Ag Calendar Download the app now...
+                  https://play.google.com/store/apps/details?id=com.agcalender`,
+        url: 'https://play.google.com/store/apps/details?id=com.agcalender',
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {

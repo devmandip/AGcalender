@@ -4,6 +4,7 @@ import {Provider} from 'react-redux';
 import {store, persistor} from './src/redux/Store';
 import {PersistGate} from 'redux-persist/integration/react';
 import {ToastProvider} from 'react-native-toast-notifications';
+import {LogBox} from 'react-native';
 
 global.currentLocation;
 
@@ -11,8 +12,8 @@ global.editCropData = null;
 
 const App = () => {
   useEffect(() => {
-    // LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-    // LogBox.ignoreAllLogs();
+    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+    LogBox.ignoreAllLogs();
   }, []);
   return (
     <Provider store={store}>

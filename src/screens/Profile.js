@@ -35,6 +35,7 @@ import {useToast} from 'react-native-toast-notifications';
 import {launchCamera} from 'react-native-image-picker';
 import {RNS3} from 'react-native-aws3';
 import moment from 'moment';
+import Geolocation from '@react-native-community/geolocation';
 
 const Profile = () => {
   const [selTab, setTab] = useState(0);
@@ -47,25 +48,43 @@ const Profile = () => {
   const [userLocation, setUserLocation] = useState('');
 
   useEffect(() => {
-    fetch(
-      'https://maps.googleapis.com/maps/api/geocode/json?address=' +
-        global.currentLocation?.latitude +
-        ',' +
-        global.currentLocation?.longitude +
-        '&key=' +
-        'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        const place = JSON.stringify(
-          responseJson?.results[0]?.address_components[4]?.long_name,
-        )?.replace(/"/g, '');
-        setUserLocation(place);
-        console.log(
-          'name of location ',
-          responseJson?.results[0]?.address_components[4]?.long_name,
-        );
-      });
+    Geolocation.getCurrentPosition(
+      //Will give you the current location
+      position => {
+        //getting the Longitude from the location json
+        const currentLongitude = JSON.stringify(position.coords.longitude);
+        console.log('first>> ', currentLongitude);
+        //getting the Latitude from the location json
+        const currentLatitude = JSON.stringify(position.coords.latitude);
+        console.log('first>> ', currentLatitude);
+        fetch(
+          'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+            currentLatitude +
+            ',' +
+            currentLongitude +
+            '&key=' +
+            'AIzaSyDENJOf97pAC3V97wgCXHxBr8YSLDeijDc',
+        )
+          .then(response => response.json())
+          .then(responseJson => {
+            const place = JSON.stringify(
+              responseJson?.results[0]?.address_components[4]?.long_name,
+            )?.replace(/"/g, '');
+            setUserLocation(place); 
+            console.log(
+              'name of location ',
+              responseJson?.results[0]?.address_components[4]?.long_name,
+            );
+          });
+      },
+      error => alert(error.message),
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000,
+      },
+    );
+
     dispatch(userWiseDetails(loginUserData));
   }, [isDocus]);
 
@@ -345,7 +364,6 @@ const Profile = () => {
                         </View>
                       ) : (
                         item?.images?.map((img, i) => {
-                          console.log('img >>>> ', img);
                           return (
                             <Image
                               source={{

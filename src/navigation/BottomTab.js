@@ -1,15 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeStack from './HomeStack';
 import Feather from 'react-native-vector-icons/Feather';
 import ProfileStack from './ProfileStack';
+import ExitApp from 'react-native-exit-app';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {scale, theme} from '../utils';
-import {Platform, SafeAreaView, Text, View} from 'react-native';
+import {Platform, SafeAreaView, BackHandler, View, Alert} from 'react-native';
 import {ContactUs, Profile, TermsAndConditions} from '../screens';
 import {Title} from '../components';
 import AddCropStack from './AddCropStack';
@@ -19,22 +20,28 @@ import axios from 'axios';
 
 const Tab = createBottomTabNavigator();
 
-const Comman = () => {
-  return (
-    <SafeAreaView>
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: theme.SCREENHEIGHT,
-        }}>
-        <Title title="Comeing soom" />
-      </View>
-    </SafeAreaView>
-  );
-};
-
 const BottomTab = () => {
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+  const handleBackPress = () => {
+    Alert.alert(
+      'Confirm Exit',
+      'Are you sure you want to exit the app?',
+      [
+        {text: 'Cancel', style: 'cancel'},
+        {text: 'Exit', onPress: () => ExitApp.exitApp()},
+      ],
+      {cancelable: false},
+    );
+
+    return true; // Return true to prevent default back button action
+  };
   return (
     <Tab.Navigator
       initialRouteName="Rupee"

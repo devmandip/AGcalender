@@ -29,7 +29,6 @@ import {DrawerModal, Label, Loader, SelectCropModel} from '../../../components';
 
 const Yard_list = props => {
   const {date, landMark, km, state, product, weight, item, up, down} = props;
-  console.log('weight>>> ', weight);
   return (
     <View
       style={{
@@ -476,7 +475,16 @@ const YardVew = () => {
                 <RefreshControl
                   refreshing={false}
                   onRefresh={() => {
-                    setLoading(() => true, getYardDetailsByID('refresh'));
+                    setLoading(
+                      () => true,
+                      setSelectedItemId('0'),
+                      setSortBy(''),
+                      setAT(null),
+                      setYardFilter(false),
+                      setModaPFilter(false),
+                      setArrivalQFilter(false),
+                      getYardDetailsByID('refresh'),
+                    );
                   }}
                   tintColor={theme.colors.green}
                   progressBackgroundColor={theme.colors.white}

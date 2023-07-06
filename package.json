@@ -29,6 +29,7 @@
     "react-native-circular-progress": "^1.3.8",
     "react-native-circular-progress-indicator": "^4.4.2",
     "react-native-element-dropdown": "^2.8.0",
+    "react-native-exit-app": "^2.0.0",
     "react-native-fs": "^2.20.0",
     "react-native-google-places-autocomplete": "^2.5.1",
     "react-native-image-picker": "^5.3.1",

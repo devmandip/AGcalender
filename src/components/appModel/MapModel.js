@@ -143,13 +143,13 @@ const MapModal = props => {
               </TouchableOpacity>
             </View>
             <View style={{width: '15%', alignItems: 'center'}}>
-              <TouchableOpacity onPress={() => {}}>
+              {/* <TouchableOpacity onPress={() => {}}>
                 <Fontisto
                   name="shopping-basket"
                   size={scale(22)}
                   color={theme.colors.white}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
           <View
