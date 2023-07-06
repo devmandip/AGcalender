@@ -7,13 +7,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import UserAvatar from 'react-native-user-avatar';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Veg} from '../../../dummyData/Veg';
 import {images, scale, theme} from '../../../utils';
 import {Label} from '../../../components';
 
 const Story = props => {
   const [selectCat, setCategory] = useState(null);
+
+  useEffect(() => {
+    setCategory(null);
+  }, [props.refreshData]);
+
   const renderItem = ({item, index}) => {
     return (
       <View style={styles.renderItem_container} key={index}>

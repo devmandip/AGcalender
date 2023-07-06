@@ -39,6 +39,7 @@ const HomeScreen = ({navigation}) => {
   const [tempCropList, setTempCropList] = useState(userReducer?.cropsList);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
+  const [refreshFlag, setRefreshFlag] = useState(0);
   useFocusEffect(
     useCallback(() => {
       (async () => {
@@ -94,7 +95,6 @@ const HomeScreen = ({navigation}) => {
     const firstLine = `(${item?.distance}km to ${
       item?.nearestMarket === null ? '' : item?.nearestMarket
     })`;
-    console.log(' item?.nearestMarket>> .,', item);
     return (
       <Pressable
         onPress={() => {
@@ -122,12 +122,12 @@ const HomeScreen = ({navigation}) => {
     );
   };
 
-  const callListApi = async (farmLocation, date) => {
+  const callListApi = async (cropName = selectedCrop, farmLocation, date) => {
     try {
       const lat = farmLocation?.latitude;
       const long = farmLocation?.longitude;
       var params = {
-        cropName: selectedCrop,
+        cropName: cropName,
         latitude: lat,
         longitude: long,
         radius: 1000,
@@ -178,9 +178,11 @@ const HomeScreen = ({navigation}) => {
           <RefreshControl
             refreshing={false}
             onRefresh={() => {
+              setRefreshFlag(Math.random());
               setLoading(
                 () => false,
                 callListApi(
+                  'all',
                   global.currentLocation,
                   moment().format('DD/MM/YYYY'),
                 ),
@@ -210,6 +212,7 @@ const HomeScreen = ({navigation}) => {
             }}
           />
           <Story
+            refreshData={refreshFlag}
             selectPress={item => {
               setSelectedCrop(item?.name);
             }}

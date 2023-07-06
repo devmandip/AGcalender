@@ -67,7 +67,7 @@ const AddCrop = ({route}) => {
       : '',
   );
   const [placeLocation, setPlaceLocation] = useState('');
-  const [units, setUnits] = useState(global.editCropData?.unit ?? '');
+  const [units, setUnits] = useState(global.editCropData?.unit ?? 'Quintals');
   const [endDay, setEndDay] = useState(
     global.editCropData?.harvestEndDate ?? '',
   );

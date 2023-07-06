@@ -166,6 +166,7 @@ const YardVew = () => {
     })();
   }, []);
 
+  const [refreshFlag, setRefreshFlag] = useState(0);
   const [tempCropList, setTempCropList] = useState(userReducer?.cropsList);
   const [search, setSearch] = useState('');
   const [yardFilter, setYardFilter] = useState(false);
@@ -439,6 +440,7 @@ const YardVew = () => {
         }}
       />
       <Story
+        refreshData={refreshFlag}
         selectPress={item => {
           setYardData([]);
           setSelectedItemId(item?.id);
@@ -475,6 +477,7 @@ const YardVew = () => {
                 <RefreshControl
                   refreshing={false}
                   onRefresh={() => {
+                    setRefreshFlag(Math.random());
                     setLoading(
                       () => true,
                       setSelectedItemId('0'),
