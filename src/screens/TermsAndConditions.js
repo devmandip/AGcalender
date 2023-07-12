@@ -12,7 +12,7 @@ const TermsAndConditions = ({navigation}) => {
       const result = await Share.share({
         title: 'Ag Calendar',
         message: `Amrit kaal me kisan rahe,Samay se aage -Ag Calendar Download the app now...
-                  https://play.google.com/store/apps/details?id=com.agcalender`,
+                  https://drive.google.com/file/d/1x-dfHM8r7h2CvE6Bwfr14iTfxkM0hm7w/view?usp=drivesdk`,
         url: 'https://play.google.com/store/apps/details?id=com.agcalender',
       });
       if (result.action === Share.sharedAction) {

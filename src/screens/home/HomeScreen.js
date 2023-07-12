@@ -122,7 +122,7 @@ const HomeScreen = ({navigation}) => {
     );
   };
 
-  const callListApi = async (cropName = selectedCrop, farmLocation, date) => {
+  const callListApi = async (farmLocation, date, cropName = selectedCrop) => {
     try {
       const lat = farmLocation?.latitude;
       const long = farmLocation?.longitude;
@@ -133,6 +133,7 @@ const HomeScreen = ({navigation}) => {
         radius: 1000,
         harvestingDate: moment(date).format('DD/MM/YYYY') ?? '', //"22/03/2023"
       };
+      console.log('>>>> ', params);
       getServiceCall(ApiList.ADD_CROP, params)
         .then(async responseJson => {
           if (responseJson?.data != '') {
@@ -182,9 +183,9 @@ const HomeScreen = ({navigation}) => {
               setLoading(
                 () => false,
                 callListApi(
-                  'all',
                   global.currentLocation,
                   moment().format('DD/MM/YYYY'),
+                  'all',
                 ),
               );
             }}

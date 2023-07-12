@@ -49,7 +49,7 @@ const BottomTab = () => {
         tabBarHideOnKeyboard: true,
         headerShown: false,
         // tabBarShowLabel: false,
-        tabBarActiveTintColor: '#383838',
+        tabBarActiveTintColor: '#b9ffb6',
         tabBarInactiveTintColor: theme.colors.white,
         tabBarActiveBackgroundColor: theme.colors.green,
         tabBarStyle: {
@@ -81,7 +81,7 @@ const BottomTab = () => {
               <FontAwesome
                 name="rupee"
                 size={scale(25)}
-                color={focused ? '#383838' : theme.colors.white}
+                color={focused ? '#b9ffb6' : theme.colors.white}
               />
             );
           },
@@ -99,7 +99,7 @@ const BottomTab = () => {
               <Icon
                 name="calendar"
                 size={scale(25)}
-                color={focused ? '#383838' : theme.colors.white}
+                color={focused ? '#b9ffb6' : theme.colors.white}
               />
             );
           },
@@ -116,7 +116,7 @@ const BottomTab = () => {
               <Icon
                 name="add-circle-outline"
                 size={scale(25)}
-                color={focused ? '#383838' : theme.colors.white}
+                color={focused ? '#b9ffb6' : theme.colors.white}
               />
             );
           },
@@ -132,7 +132,7 @@ const BottomTab = () => {
               <Feather
                 name="user"
                 size={scale(25)}
-                color={focused ? '#383838' : theme.colors.white}
+                color={focused ? '#b9ffb6' : theme.colors.white}
               />
             );
           },
@@ -149,7 +149,7 @@ const BottomTab = () => {
               <Feather
                 name="share-2"
                 size={scale(25)}
-                color={focused ? '#383838' : theme.colors.white}
+                color={focused ? '#b9ffb6' : theme.colors.white}
               />
             );
           },

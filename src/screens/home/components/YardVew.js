@@ -66,7 +66,17 @@ const Yard_list = props => {
           style={{color: theme.colors.gray2, fontSize: scale(9)}}
         />
         <Text style={styles.yard_txt}>{product}</Text>
-        <Text style={styles.yard_txt}> {weight} </Text>
+        <Text
+          style={[
+            styles.yard_txt,
+            {
+              color:
+                item?.arrivals == 'Not Reported' ? 'red' : theme.colors.black,
+            },
+          ]}>
+          {' '}
+          {weight} {item?.arrivals != 'Not Reported' ? item?.arrivals_unit : ''}
+        </Text>
       </View>
       <View
         style={[
@@ -117,7 +127,6 @@ const Yard_list = props => {
 };
 
 const renderItem = ({item}) => {
-  // console.log('itemitemitem>> ', item);
   return (
     <View>
       <Yard_list
@@ -126,7 +135,7 @@ const renderItem = ({item}) => {
         state={item?.state}
         km={item.distance}
         product={item.variety}
-        weight={item?.arrivals + ' ' + item?.arrivals_unit}
+        weight={item?.arrivals + ' '}
         Rs={item?.price_unit}
         up={item.min_price}
         down={item.max_price}
@@ -488,6 +497,9 @@ const YardVew = () => {
                       setArrivalQFilter(false),
                       getYardDetailsByID('refresh'),
                     );
+                    setTimeout(() => {
+                      setLoading(false);
+                    }, 2000);
                   }}
                   tintColor={theme.colors.green}
                   progressBackgroundColor={theme.colors.white}

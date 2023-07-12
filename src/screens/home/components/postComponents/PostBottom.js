@@ -15,12 +15,15 @@ const PostBottom = props => {
     oncommentPress,
     view_count,
     like_count,
+    description,
+    name,
   } = props;
   const onSharePress = async () => {
     try {
       const result = await Share.share({
         title: 'Ag Calendar',
-        message: `Amrit kaal me kisan rahe,Samay se aage -Ag Calendar Download the app now...
+        message: `${name} ${description}
+        Amrit kaal me kisan rahe,Samay se aage -Ag Calendar Download the app now...
                   https://play.google.com/store/apps/details?id=com.agcalender`,
         url: 'https://play.google.com/store/apps/details?id=com.agcalender',
       });

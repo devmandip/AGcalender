@@ -123,10 +123,12 @@ const PostSection = props => {
       /> */}
       {/* )} */}
       <PostBottom
+        name={name}
         like_count={like_count}
         view_count={view_count}
         oncommentPress={oncommentPress}
         onMessagePress={onMessagePress}
+        description={description}
       />
       {/* <ImageView
         images={postImages}
