@@ -6,11 +6,25 @@ import BottomTab from './BottomTab';
 import LoginStack from '../screens/auth/AuthStack';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
+import messaging from '@react-native-firebase/messaging';
 
 const Stack = createNativeStackNavigator();
 
 const MianStack = () => {
   const isLogin = useSelector(state => state.UserReducer.login);
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
+  useEffect(() => {
+    requestUserPermission();
+  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator

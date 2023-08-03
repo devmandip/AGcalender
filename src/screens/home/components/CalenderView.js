@@ -20,6 +20,7 @@ import {useSelector} from 'react-redux';
 import {getServiceCall} from '../../../api/Webservice';
 import {ApiList} from '../../../api/ApiList';
 import {color} from 'react-native-reanimated';
+import {useIsFocused} from '@react-navigation/core';
 
 const CalenderHeader = props => {
   const {scrollPosition, cropName} = props;
@@ -65,17 +66,19 @@ const CalenderHeader = props => {
     });
     props.callBack(farmLocation, date?.dateString);
   };
-
+  const isFocus = useIsFocused();
   useEffect(() => {
     apiCall();
-  }, [dateSelected, cropName]);
-
+  }, [dateSelected, cropName, isFocus]);
+  useEffect(() => {
+    apiCall();
+  }, []);
   const apiCall = async () => {
     try {
       const month = moment(dateSelected).format('M');
       const year = moment(dateSelected).format('YYYY');
       var params = {
-        cropName: cropName,
+        cropName: cropName === undefined || cropName === '' ? 'all' : cropName,
         latitude: farmLocation?.latitude,
         longitude: farmLocation?.longitude,
         radius: 1000,
@@ -84,6 +87,7 @@ const CalenderHeader = props => {
       };
       getServiceCall(ApiList.LISITNG_CALENDER, params)
         .then(async responseJson => {
+          console.log('resposne >>> ', responseJson);
           if (responseJson?.data != '') {
             setDateData(responseJson?.data?.data[0]?.cropListingsByDate);
           }
@@ -204,8 +208,10 @@ const CalenderHeader = props => {
                         fontSize: scale(14),
                         textAlign: 'center',
                         backgroundColor:
-                          dateSelected == date?.dateString
+                          today === date?.dateString
                             ? theme.colors.gray
+                            : dateSelected === date.dateString
+                            ? '#b9ffb6'
                             : 'transprent',
                         paddingHorizontal: scale(6),
                         paddingVertical: scale(3),

@@ -91,7 +91,6 @@ const HomeScreen = ({navigation}) => {
   };
 
   const renderItem = ({item}) => {
-    // console.log('itemitemitemitem >>> ', item);
     const firstLine = `(${item?.distance}km to ${
       item?.nearestMarket === null ? '' : item?.nearestMarket
     })`;

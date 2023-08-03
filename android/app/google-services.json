@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "482641065662",
+    "project_id": "agmart-calendar",
+    "storage_bucket": "agmart-calendar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:482641065662:android:02d1c9b1e3ef3e50a910ef",
+        "android_client_info": {
+          "package_name": "com.agcalender"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "482641065662-btlujpirpkir2oed2sct50dkpgpqt71o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMPwh7IQQlGv0wq2PFgTDlwI2-u7_7poo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "482641065662-btlujpirpkir2oed2sct50dkpgpqt71o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
