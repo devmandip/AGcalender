@@ -15,4 +15,6 @@ export const ApiList = {
   ADD_CROP: BASE_URL + 'listing',
   LISITNG_CALENDER: BASE_URL + 'listing/calendar',
   MARKET_RATES: BASE_URL + 'market/rates',
+  STORE_FCMTOKEN: BASE_URL + 'user/deviceToken',
+  REFRESH_TOKEN: BASE_URL + 'auth/refresh/',
 };

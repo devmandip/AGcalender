@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import OTPTextView from 'react-native-otp-textinput';
 import {images, scale, theme} from '../../utils';
 import {Button, InputBox, Label} from '../../components';
@@ -21,6 +21,7 @@ import Geolocation from '@react-native-community/geolocation';
 import {postServiceCall} from '../../api/Webservice';
 import {ApiList} from '../../api/ApiList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -28,6 +29,7 @@ const Login = () => {
   const [pNumber, setPNumber] = useState('');
   const [otpSend, setOtpSend] = useState(false);
   const [load, setLoad] = useState(false);
+  const [fcmtkn, setfcmtoken] = useState(null);
   const toast = useToast();
 
   const dispatch = useDispatch();
@@ -39,14 +41,16 @@ const Login = () => {
       })();
     }, []),
   );
-
+  useEffect(() => {
+    requestUserPermission();
+  }, []);
   const requestLocationPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: 'Example App',
-          message: 'Example App access to your location ',
+          title: 'Ag Calendar App',
+          message: 'Ag Calendar App access to your location ',
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -98,6 +102,25 @@ const Login = () => {
         });
     }
   };
+  async function requestUserPermission() {
+    PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+    );
+
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+      const fcmToken = await messaging().getToken();
+      setfcmtoken(fcmToken);
+      if (fcmToken) {
+        console.log('fcm token ', fcmToken);
+      }
+    }
+  }
   const verifyOTP = async () => {
     setLoad(true);
     setLoad(true);
@@ -112,6 +135,15 @@ const Login = () => {
             await AsyncStorage.setItem(
               'token',
               responseJson?.data?.accessToken,
+            );
+            var param = {
+              userId: responseJson?.data?.user?.userId,
+              deviceToken: fcmtkn,
+            };
+            const tknsave = await postServiceCall(
+              ApiList.STORE_FCMTOKEN,
+              param,
+              false,
             );
             dispatch(isLogin(true));
             dispatch(userData(responseJson?.data?.user));

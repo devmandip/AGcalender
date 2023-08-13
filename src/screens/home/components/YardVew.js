@@ -26,6 +26,7 @@ import {
   getCropData,
 } from '../../../redux/Actions/UserActions';
 import {DrawerModal, Label, Loader, SelectCropModel} from '../../../components';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Yard_list = props => {
   const {date, landMark, km, state, product, weight, item, up, down} = props;
@@ -308,6 +309,7 @@ const YardVew = () => {
       setLoad(false);
     }
   };
+
   const Yard_header = props => {
     return (
       <View
@@ -424,7 +426,13 @@ const YardVew = () => {
         />
       </View>
     );
-
+  useEffect(() => {
+    getServiceCall(
+      ApiList.REFRESH_TOKEN + userReducer.userDetails?.userId,
+    ).then(res => {
+      AsyncStorage.setItem('token', res?.data?.accessToken);
+    });
+  }, []);
   return (
     <SafeAreaView style={{backgroundColor: theme.colors.white}}>
       <Header
